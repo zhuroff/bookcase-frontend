@@ -7,7 +7,25 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'HomePage'
+  name: 'HomePage',
+
+  data() {
+    return {
+      obj: {}
+    }
+  },
+
+  async fetch() {
+    this.fetchTestData()
+  },
+
+  methods: {
+    fetchTestData() {
+      this.$axios.get('/api/test')
+        .then((response: any) => console.log(response.data))
+        .catch((error: any) => console.error(error))
+    }
+  }
 })
 
 </script>
