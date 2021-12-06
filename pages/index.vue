@@ -1,13 +1,5 @@
 <template>
-  <div id="container">
-    <button @click="backup(['books'])">Backup books</button>
-    <button @click="backup(['authors'])">Backup authors</button>
-    <button @click="backup(['genres'])">Backup genres</button>
-    <button @click="backup(['lists'])">Backup lists</button>
-    <button @click="backup(['publishers'])">Backup publishers</button>
-    <button @click="backup(['series'])">Backup series</button>
-    <button @click="backup(backupCollections)">Backup all</button>
-  </div>
+  <h1>Index page</h1>
 </template>
 
 <script lang="ts">
@@ -19,15 +11,6 @@ export default Vue.extend({
 
   data() {
     return {
-      backupCollections: [
-        'books',
-        'authors',
-        'genres',
-        'lists',
-        'publishers',
-        'series'
-      ],
-
       readingBooks: {
         isFetched: false,
         data: []
@@ -36,7 +19,7 @@ export default Vue.extend({
   },
 
   async fetch() {
-    // await this.fetchReadingBooks()
+    await this.fetchReadingBooks()
   },
 
   methods: {
@@ -49,21 +32,6 @@ export default Vue.extend({
           isFetched: true,
           data: response.data
         }
-      } catch (error) {
-        console.error(error)
-      }
-    },
-
-    async backup(collection: string[]) {
-      try {
-        const backupQueryMap = collection.map(async (el: string) => {
-          return await this.$axios.post(`/api/backup/${el}`)
-        })
-
-        const response = await Promise.all(backupQueryMap)
-        const responseMessages = response.map((el) => el.data)
-
-        console.log(responseMessages)
       } catch (error) {
         console.error(error)
       }
