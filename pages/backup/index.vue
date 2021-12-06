@@ -1,23 +1,29 @@
 <template>
   <div id="container">
     <div>
-      <button @click="backupSave(['books'])">Backup books</button>
-      <button @click="backupSave(['authors'])">Backup authors</button>
-      <button @click="backupSave(['genres'])">Backup genres</button>
-      <button @click="backupSave(['lists'])">Backup lists</button>
-      <button @click="backupSave(['publishers'])">Backup publishers</button>
-      <button @click="backupSave(['series'])">Backup series</button>
+      <button
+        v-for="(item, index) in backupCollections"
+        :key="index"
+        @click="backupSave([item])"
+      >Backup {{ item }}</button>
       <button @click="backupSave(backupCollections)">Backup all</button>
     </div>
 
     <div>
-      <button @click="backupRestore(['books'])">Restore books</button>
-      <button @click="backupRestore(['authors'])">Restore authors</button>
-      <button @click="backupRestore(['genres'])">Restore genres</button>
-      <button @click="backupRestore(['lists'])">Restore lists</button>
-      <button @click="backupRestore(['publishers'])">Restore publishers</button>
-      <button @click="backupRestore(['series'])">Restore series</button>
-      <button @click="backupRestore(backupCollections)">Restore all</button>
+      <button
+        v-for="(item, index) in backupCollections"
+        :key="index"
+        @click="backupRestore([item])"
+      >Restore {{ item }}</button>
+      <button @click="backupRestore(backupCollections)">Backup all</button>
+    </div>
+
+    <div>
+      <button
+        v-for="(item, index) in backupCollections"
+        :key="index"
+        @click="backupDownload(item)"
+      >Download {{ item }}</button>
     </div>
   </div>
 </template>
@@ -31,22 +37,31 @@ export default Vue.extend({
 
   data() {
     return {
-      backupCollections: [
-        'books',
-        'authors',
-        'genres',
-        'lists',
-        'publishers',
-        'series'
-      ]
+      backupCollections: [] as string[]
     }
   },
 
+  async fetch() {
+    await this.fetchBackupLinks()
+  },
+
   methods: {
+    async fetchBackupLinks() {
+      try {
+        const response = await this.$axios.get('/api/backup/list')
+
+        this.backupCollections = response.data.map((el: string) => {
+          return el.replace(/\.[^/.]+$/, '')
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
     async backupSave(collection: string[]) {
       try {
         const backupQueryMap = collection.map(async (el: string) => {
-          return await this.$axios.post(`/api/backup/${el}/save`)
+          return await this.$axios.post(`/api/backup/save/${el}`)
         })
 
         const response = await Promise.all(backupQueryMap)
@@ -61,13 +76,21 @@ export default Vue.extend({
     async backupRestore(collection: string[]) {
       try {
         const backupQueryMap = collection.map(async (el: string) => {
-          return await this.$axios.post(`/api/backup/${el}/restore`)
+          return await this.$axios.post(`/api/backup/restore/${el}`)
         })
 
         const response = await Promise.all(backupQueryMap)
         const responseMessages = response.map((el) => el.data)
 
         console.log(responseMessages)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async backupDownload(collection: string) {
+      try {
+        await this.$axios.post(`/api/backup/xlsx/${collection}`)
       } catch (error) {
         console.error(error)
       }
