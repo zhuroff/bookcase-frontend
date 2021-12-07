@@ -16,9 +16,11 @@ export default {
   },
 
   css: [
+    '~/scss/auth'
   ],
 
   plugins: [
+    { src: '@/plugins/axios' }
   ],
 
   components: true,

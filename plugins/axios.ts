@@ -14,7 +14,7 @@ const accessor: Plugin = ({ $axios, redirect, store }: Context) => {
   $axios.onError((error: AxiosError) => {
     if (error.response) {
       if (error.response.status === 401) {
-        redirect('/login?message=session')
+        redirect('/auth/login?message=session')
         store.dispatch('auth/logout')
       }
 
