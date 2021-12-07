@@ -1,30 +1,16 @@
 <template>
   <div id="container">
-    <div>
-      <button
-        v-for="(item, index) in backupCollections"
-        :key="index"
-        @click="backupSave([item])"
-      >Backup {{ item }}</button>
-      <button @click="backupSave(backupCollections)">Backup all</button>
-    </div>
-
-    <div>
-      <button
-        v-for="(item, index) in backupCollections"
-        :key="index"
-        @click="backupRestore([item])"
-      >Restore {{ item }}</button>
-      <button @click="backupRestore(backupCollections)">Backup all</button>
-    </div>
-
-    <div>
-      <button
-        v-for="(item, index) in backupCollections"
-        :key="index"
-        @click="backupDownload(item)"
-      >Download {{ item }}</button>
-    </div>
+    <button @click="backupSave()">Backup</button>
+    <ul>
+      <li
+        v-for="item in backupList"
+        :key="item.timestamp"
+      >
+        <span>{{ item.dateCreation }}</span>
+        <button @click="backupRestore(item.timestamp)">Restore</button>
+        <button @click="backupDelete(item.timestamp)">Delete</button>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -32,65 +18,71 @@
 
 import Vue from 'vue'
 
+interface BackupList {
+  timestamp: number
+  dateCreation: string
+}
+
 export default Vue.extend({
   name: 'BackupPage',
 
   data() {
     return {
-      backupCollections: [] as string[]
+      backupList: [] as BackupList[]
     }
   },
 
   async fetch() {
-    await this.fetchBackupLinks()
+    await this.fetchBackupList()
   },
 
   methods: {
-    async fetchBackupLinks() {
+    async fetchBackupList() {
       try {
         const response = await this.$axios.get('/api/backup/list')
-
-        this.backupCollections = response.data.map((el: string) => {
-          return el.replace(/\.[^/.]+$/, '')
-        })
+        this.setBackupList(response.data)
       } catch (error) {
         console.error(error)
       }
     },
 
-    async backupSave(collection: string[]) {
+    setBackupList(data: string[]) {
+      const dateConfig = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      } as const
+
+      this.backupList = data.map((el: string) => ({
+        timestamp: Number(el),
+        dateCreation: new Date(Number(el)).toLocaleDateString('ru-RU', dateConfig)
+      }))
+    },
+
+    async backupSave() {
       try {
-        const backupQueryMap = collection.map(async (el: string) => {
-          return await this.$axios.post(`/api/backup/save/${el}`)
-        })
-
-        const response = await Promise.all(backupQueryMap)
-        const responseMessages = response.map((el) => el.data)
-
-        console.log(responseMessages)
+        const response = await this.$axios.post('/api/backup/save')
+        this.fetchBackupList()
+        console.log(response.data)
       } catch (error) {
         console.error(error)
       }
     },
 
-    async backupRestore(collection: string[]) {
+    async backupRestore(timestamp: number) {
       try {
-        const backupQueryMap = collection.map(async (el: string) => {
-          return await this.$axios.post(`/api/backup/restore/${el}`)
-        })
-
-        const response = await Promise.all(backupQueryMap)
-        const responseMessages = response.map((el) => el.data)
-
-        console.log(responseMessages)
+        const response = await this.$axios.post(`/api/backup/restore/${timestamp}`)
+        console.log(response.data)
       } catch (error) {
         console.error(error)
       }
     },
 
-    async backupDownload(collection: string) {
+    async backupDelete(timestamp: number) {
       try {
-        await this.$axios.post(`/api/backup/xlsx/${collection}`)
+        const response = await this.$axios.delete(`/api/backup/${timestamp}`)
+        console.log(response.data)
+        this.fetchBackupList()
       } catch (error) {
         console.error(error)
       }
