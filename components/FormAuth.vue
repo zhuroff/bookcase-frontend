@@ -29,6 +29,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import { AuthFormFields, AuthFormPayload } from '~/types/Auth'
 
 export default Vue.extend({
   props: {
@@ -56,9 +57,11 @@ export default Vue.extend({
 
   methods: {
     formSubmit() {
-      const payload = this.formFields.map((el: any) => ({
-        [el.type]: el.value
-      }))
+      const payload = this.formFields.reduce((acc: AuthFormFields, next: AuthFormPayload) => {
+        acc[next.type] = next.value
+        
+        return acc
+      }, {})
 
       this.$emit('formSubmit', payload)
     }

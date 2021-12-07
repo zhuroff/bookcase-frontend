@@ -55,9 +55,18 @@ export default Vue.extend({
   },
 
   methods: {
-    formSubmit(payload: AuthFormFields[]) {
-      console.log(payload)
-    }
+    async formSubmit(payload: AuthFormFields[]) {
+        try {
+          const response = await this.$store.dispatch('auth/create', payload)
+          
+          if (response.status === 201) {
+            this.$router.push({ path: '/auth/login' })
+          }
+          // this.$message.success('User successfully created')
+        } catch (error) {
+          console.log(error)
+        }
+      }
   }
 })
 

@@ -1,4 +1,5 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
+import { AxiosResponse, AxiosError } from 'axios'
 import Cookie from 'cookie'
 import Cookies from 'js-cookie'
 import { Token } from '~/types/Token'
@@ -24,6 +25,15 @@ export const mutations = {
 }
 
 export const actions = {
+  async create({ commit, dispatch }: ActionContext<Commit, Dispatch>, payload: AuthFormFields) {
+    try {
+      const response = await (this as any).$axios.post('/api/users/create', payload)
+      return response
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   async login ({ commit, dispatch }: ActionContext<Commit, Dispatch>, payload: AuthFormFields) {
     try {
       const response = await (this as any).$axios.post('/api/auth/login', payload)

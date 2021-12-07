@@ -4,4 +4,14 @@ type AuthFormFields = {
   [P in AuthFormLabels]?: string
 }
 
-export { AuthFormFields }
+type AuthFormPayload= {
+  type: AuthFormLabels,
+  value: string,
+  label: string
+}
+
+export {
+  AuthFormFields,
+  AuthFormLabels,
+  AuthFormPayload
+}
