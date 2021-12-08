@@ -34,7 +34,7 @@ export default Vue.extend({
 
 .main-default {
   display: grid;
-  grid-template-columns: 175px 1fr;
+  grid-template-columns: $sidebarWidth 1fr;
   min-height: 100vh;
 }
 

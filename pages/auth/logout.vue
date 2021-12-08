@@ -7,7 +7,14 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  layout: 'auth'
+  layout: 'auth',
+
+  middleware: ['authorization'],
+
+  beforeCreate () {
+    this.$store.dispatch('auth/logout')
+    this.$router.push('/auth')
+  }
 })
 
 </script>
