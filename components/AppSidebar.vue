@@ -15,10 +15,7 @@
           v-for="item in navigation"
           :key="item.route"
         )
-          NuxtLink(
-            :to="{ path: item.route }"
-            class="aside__nav-link"
-          ) {{ item.title }}
+          AppSidebarLink(:link="item")
 
 </template>
 
@@ -26,37 +23,48 @@
 
 import Vue from 'vue'
 import AppSprite from '~/components/AppSprite.vue'
+import AppSidebarLink from '~/components/AppSidebarLink.vue'
 
 export default Vue.extend({
+  name: 'AppSidebar',
+
   components: {
-    AppSprite
+    AppSprite,
+    AppSidebarLink
+  },
+
+  filters: {
+    isCurrentRoute(route: string) {
+      console.log(route)
+      return false
+    }
   },
 
   data() {
     return {
       navigation: [
         {
-          route: 'books',
+          route: '/books',
           title: 'Books'
         },
         {
-          route: 'authors',
+          route: '/authors',
           title: 'Authors'
         },
         {
-          route: 'genres',
+          route: '/genres',
           title: 'Genres'
         },
         {
-          route: 'publishers',
+          route: '/publishers',
           title: 'Publishers'
         },
         {
-          route: 'series',
+          route: '/series',
           title: 'Series'
         },
         {
-          route: 'lists',
+          route: '/lists',
           title: 'Lists'
         }
       ]
@@ -100,19 +108,6 @@ export default Vue.extend({
 
   &__nav {
     padding: 20px 0;
-    
-    &-link {
-      color: $darkModeBody;
-      font-size: 14px;
-      line-height: 30px;
-      padding: 0 20px;
-      display: block;
-
-      &:hover,
-      &.nuxt-link-active {
-        background-color: $deepDark;
-      }
-    }
   }
 }
 

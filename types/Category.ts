@@ -10,9 +10,9 @@ interface CategoryBasic extends CategoryMinimum {
 }
 
 interface CategoryAuthor extends CategoryBasic {
-  firstName : string
-  lastName: string
-  patronymicName: string
+  firstName: string
+  lastName?: string
+  patronymicName?: string
 }
 
 export {

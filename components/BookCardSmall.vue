@@ -12,8 +12,8 @@
     
     .card__content
       .card__title {{ book.title }}
-      .card__authors {{ book.relatedAuthors | categoryTitle }}
-      .card__genres Genres: {{ book.relatedGenres | categoryTitle }}
+      .card__authors {{ book.authors | categoryTitle }}
+      .card__genres Genres: {{ book.genres | categoryTitle }}
       .card__inlist(v-if="book.inList.length") In lists: {{ book.inList | categoryTitle }}
 
 </template>
@@ -34,9 +34,9 @@ export default Vue.extend({
   },
 
   filters: {
-    categoryTitle(category: CategoryMinimum[]) {
-      return category.map((el: CategoryMinimum) => (
-        el.title
+    categoryTitle(category: CategoryMinimum[] | { author: CategoryMinimum }[]) {
+      return category.map((el: any) => (
+        el.title || el.author.title
       )).join('. ')
     }
   }
