@@ -5,7 +5,7 @@
       li.column(
         v-for="book in readingBooks.data"
         :key="book._id"
-        class="is-one-quarter"
+        class="is-one-third"
       )
         BookCardSmall(
           :book="book"

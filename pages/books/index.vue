@@ -1,16 +1,21 @@
 <template lang="pug">
   
   div
-    h1 Books page
+    AppActions
 
 </template>
 
 <script lang="ts">
 
 import Vue from 'vue'
+import AppActions from '~/components/AppActions.vue'
 
 export default Vue.extend({
   name: 'BooksIndex',
+
+  components: {
+    AppActions
+  },
   
   data() {
     return {
