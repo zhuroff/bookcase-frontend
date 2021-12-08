@@ -11,15 +11,17 @@
     )
     
     .card__content
-      .title.is-6 {{ book.title }}
+      .card__title {{ book.title }}
       .card__authors {{ book.relatedAuthors | categoryTitle }}
+      .card__genres Genres: {{ book.relatedGenres | categoryTitle }}
+      .card__inlist(v-if="book.inList.length") In lists: {{ book.inList | categoryTitle }}
 
 </template>
 
 <script lang="ts">
 
 import Vue from 'vue'
-import CategoryMinimum from '~/types/Category'
+import { CategoryMinimum } from '~/types/Category'
 
 export default Vue.extend({
   name: 'BookCardSmall',
@@ -69,18 +71,25 @@ export default Vue.extend({
 
   &__content {
     padding-left: 15px;
-
-    .title {
-      color: $darkModeBody;
-      font-weight: 400;
-      font-size: 0.875rem;
-      margin-bottom: 5px;
-    }
   }
 
-  &__authors {
+  &__title {
+    color: $darkModeBody;
+    font-weight: 400;
+    font-size: 0.875rem;
+    margin-bottom: 5px;
+  }
+
+  &__authors,
+  &__genres,
+  &__inlist {
     color: $darkModeBody;
     font-size: 0.75rem;
+  }
+
+  &__genres,
+  &__inlist {
+    opacity: 0.5;
   }
 }
 

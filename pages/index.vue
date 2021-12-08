@@ -9,8 +9,6 @@
       )
         BookCardSmall(
           :book="book"
-
-
         )
 
 </template>

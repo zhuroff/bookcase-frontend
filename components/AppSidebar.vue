@@ -108,7 +108,8 @@ export default Vue.extend({
       padding: 0 20px;
       display: block;
 
-      &:hover {
+      &:hover,
+      &.nuxt-link-active {
         background-color: $deepDark;
       }
     }
