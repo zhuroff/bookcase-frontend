@@ -1,15 +1,31 @@
-<template>
-  <div>
-    <h1>Index page</h1>
-  </div>
+<template lang="pug">
+
+  div
+    ul.columns.is-multiline
+      li.column(
+        v-for="book in readingBooks.data"
+        :key="book._id"
+        class="is-one-quarter"
+      )
+        BookCardSmall(
+          :book="book"
+
+
+        )
+
 </template>
 
 <script lang="ts">
 
 import Vue from 'vue'
+import BookCardSmall from '~/components/BookCardSmall.vue'
 
 export default Vue.extend({
   name: 'HomePage',
+
+  components: {
+    BookCardSmall
+  },
 
   data() {
     return {
@@ -28,7 +44,6 @@ export default Vue.extend({
     async fetchReadingBooks () {
       try {
         const response = await this.$axios.get('/api/dashboard/reading-books')
-        console.log(response.data)
       
         this.readingBooks = {
           isFetched: true,

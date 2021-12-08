@@ -1,7 +1,8 @@
-<template>
-  <main class="main-auth">
-    <Nuxt />
-  </main>
+<template lang="pug">
+
+  main.main-auth
+    Nuxt
+    
 </template>
 
 <script lang="ts">
@@ -19,7 +20,7 @@ export default Vue.extend({
 @import '~/scss/variables';
 
 .main-auth {
-  background: $dark url(https://phonoteka.org/uploads/posts/2021-04/1619749696_4-phonoteka_org-p-prozrachnii-fon-dlya-saita-4.png) center/cover no-repeat;
+  background: $deepDark url(https://phonoteka.org/uploads/posts/2021-04/1619749696_4-phonoteka_org-p-prozrachnii-fon-dlya-saita-4.png) center/cover no-repeat;
   // background: $dark url(https://phonoteka.org/uploads/posts/2021-04/1619525559_6-phonoteka_org-p-fon-s-tochkami-dlya-fotoshopa-8.png) center/cover no-repeat;
   height: 100vh;
   display: flex;

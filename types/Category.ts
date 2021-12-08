@@ -1,7 +1,10 @@
-interface CategoryBasic {
-  isDraft: boolean
+interface CategoryMinimum {
   title: string
   _id: string
+}
+
+interface CategoryBasic extends CategoryMinimum {
+  isDraft: boolean
   dateCreated: Date
   relatedBooks: string[]
 }
@@ -13,6 +16,7 @@ interface CategoryAuthor extends CategoryBasic {
 }
 
 export {
+  CategoryMinimum,
   CategoryBasic,
   CategoryAuthor
 }

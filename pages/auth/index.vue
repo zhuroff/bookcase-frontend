@@ -49,8 +49,17 @@ export default Vue.extend({
   },
 
   methods: {
-    formSubmit(payload: AuthFormFields[]) {
-      console.log(payload)
+    async formSubmit(payload: AuthFormFields[]) {
+      try {
+        const response = await this.$store.dispatch('auth/login', payload)
+        console.log(response)
+
+        if (response.status === 200) {
+          this.$router.push({ path: '/' })
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 })

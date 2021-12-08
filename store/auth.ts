@@ -36,8 +36,9 @@ export const actions = {
 
   async login ({ commit, dispatch }: ActionContext<Commit, Dispatch>, payload: AuthFormFields) {
     try {
-      const response = await (this as any).$axios.post('/api/auth/login', payload)
+      const response = await (this as any).$axios.post('/api/users/login', payload)
       dispatch('setToken', response.data.token)
+      return response
     } catch (error) {
       console.log(error)
       // commit('setError', error, { root: true })
