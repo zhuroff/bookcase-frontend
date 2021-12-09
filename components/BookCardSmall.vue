@@ -64,10 +64,10 @@ export default Vue.extend({
   },
 
   methods: {
-    proceedToBook(event) {
+    proceedToBook(event: any) {
       event.preventDefault()
 
-      if (event.target.tagName !== 'A' && event.target.tagName !== 'BUTTON') {
+      if (event.target!.tagName !== 'A' && event.target!.tagName !== 'BUTTON') {
         this.$router.push({ path: `/books/${this.book._id}` })
       }
     }

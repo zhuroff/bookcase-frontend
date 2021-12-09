@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="auth-header">BookCase</div>
     <h1 class="auth-title">Register</h1>
     <FormAuth
       :fields="formFields"

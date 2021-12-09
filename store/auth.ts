@@ -1,25 +1,24 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
-import { AxiosResponse, AxiosError } from 'axios'
 import Cookie from 'cookie'
 import Cookies from 'js-cookie'
 import { Token } from '~/types/Token'
 import { AuthFormFields } from '~/types/Auth'
 import isJwtValid from '~/helpers/jwt-validation'
 
-interface IAuthState {
+interface AuthState {
   token: Token
 }
 
-export const state = (): IAuthState => ({
+export const state = (): AuthState => ({
   token: null
 })
 
 export const mutations = {
-  commitToken: (state: IAuthState, token: string) => {
+  commitToken: (state: AuthState, token: string) => {
     state.token = token
   },
 
-  clearToken: (state: IAuthState) => {
+  clearToken: (state: AuthState) => {
     state.token = null
   }
 }
@@ -70,6 +69,6 @@ export const actions = {
 }
 
 export const getters = {
-  isAuthenticated: (state: IAuthState): Token => state.token,
-  sessionToken: (state: IAuthState): string | null => state.token
+  isAuthenticated: (state: AuthState): Token => state.token,
+  sessionToken: (state: AuthState): string | null => state.token
 }
