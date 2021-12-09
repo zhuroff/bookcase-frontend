@@ -6,6 +6,11 @@ interface StringSignature {
   [index: string]: string
 }
 
+interface FieldPayloadEmit {
+  key: string
+  value: string | number | boolean
+}
+
 interface MinimumRow {
   _id: string
   title: string
@@ -52,6 +57,7 @@ interface IModalPayload {
 export {
   TSort,
   StringSignature,
+  FieldPayloadEmit,
   MinimumRow,
   ISearchPayload,
   IPagination,

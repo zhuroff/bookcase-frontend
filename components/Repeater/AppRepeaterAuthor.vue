@@ -1,6 +1,14 @@
 <template lang="pug">
   
-  .card(:class="[{ '--disabled' : isDisabled }, 'repeater__card']")
+  .card(
+    :class="[{ '--disabled' : isDisabled }, 'repeater__card']"
+    @click="clickCardHandler"
+  )
+    AppRepeaterDelete(
+      v-if="isDeletable"
+      @deleteCard="deleteCard"
+    )
+
     .repeater__card-image
       img(
         v-if="card.author.picture"
@@ -14,7 +22,11 @@
       )
 
     .repeater__card-content
-      .repeater__card-title {{ card.author.title }}
+      NuxtLink(
+        :to="{ path: `/authors/${card.author._id}` }"
+        class="repeater__card-title"
+      ) {{ card.author.title }}
+
       select(
         :disabled="isDisabled"
         v-model="role"
@@ -30,29 +42,12 @@
 
 <script lang="ts">
 
-import Vue from 'vue'
 import { authorRoles } from '~/configs/localize'
 import { StringSignature } from '~/types/Global'
-import AppSprite from '~/components/AppSprite.vue'
+import RepeaterBasic from './mixins'
 
-export default Vue.extend({
+export default RepeaterBasic.extend({
   name: 'AppRepeaterAuthor',
-
-  components: {
-    AppSprite
-  },
-
-  props: {
-    card: {
-      type: Object,
-      required: true
-    },
-
-    isDisabled: {
-      type: Boolean,
-      required: true
-    }
-  },
 
   computed: {
     authorRoles() {
@@ -66,7 +61,8 @@ export default Vue.extend({
   data() {
     return {
       roles: authorRoles,
-      role: this.card.role
+      role: this.card.role,
+      id: this.card.author._id
     }
   }
 })

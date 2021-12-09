@@ -11,6 +11,10 @@
         :is="cardComponent"
         :card="item"
         :isDisabled="isDisabled"
+        :isDeletable="items.length > 1"
+        :componentKey="componentKey"
+        @repeaterCardClick="repeaterCardClick"
+        @deleteCard="deleteCard"
       )
 
     li.repeater__item.--add(v-if="!isDisabled")
@@ -25,9 +29,12 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import { FieldPayloadEmit } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 import AppRepeaterAuthor from './AppRepeaterAuthor.vue'
 import AppRepeaterPublisher from './AppRepeaterPublisher.vue'
+import AppRepeaterGenre from './AppRepeaterGenre.vue'
+import AppRepeaterSeries from './AppRepeaterSeries.vue'
 
 export default Vue.extend({
   name: 'AppRepeater',
@@ -35,7 +42,9 @@ export default Vue.extend({
   components: {
     AppSprite,
     AppRepeaterAuthor,
-    AppRepeaterPublisher
+    AppRepeaterPublisher,
+    AppRepeaterGenre,
+    AppRepeaterSeries
   },
 
   props: {
@@ -70,8 +79,20 @@ export default Vue.extend({
     return {
       components: {
         authors: AppRepeaterAuthor,
-        publishers: AppRepeaterPublisher
+        publishers: AppRepeaterPublisher,
+        genres: AppRepeaterGenre,
+        series: AppRepeaterSeries
       }
+    }
+  },
+
+  methods: {
+    repeaterCardClick(payload: FieldPayloadEmit) {
+      this.$emit('repeaterCardClick', payload)
+    },
+
+    deleteCard(payload: FieldPayloadEmit) {
+      this.$emit('deleteCard', payload)
     }
   }
 })
@@ -81,10 +102,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .repeater {
   margin-bottom: 2rem;
-  padding: 0 0.5rem;
 
   &__title {
     color: $lightGray;
@@ -92,24 +113,38 @@ export default Vue.extend({
   }
 
   &__list {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -0.5rem;
+    display: grid;
+    grid-column-gap: 1rem;
+    margin-top: 0.5rem;
+
+    @include media("<tablet") {
+      grid-template-columns: repeat(2, calc(33.3333% - (50px / 3 + 1rem)));
+    }
+
+    @include media(">=tablet", "<laptop") {
+      grid-template-columns: repeat(3, calc(33.3333% - (50px / 3 + 1rem)));
+    }
+
+    @include media(">=laptop", "<desktop") {
+      grid-template-columns: repeat(4, calc(33.3333% - (50px / 3 + 1rem)));
+    }
+
+    @include media(">=desktop") {
+      grid-template-columns: repeat(5, calc(33.3333% - (50px / 3 + 1rem)));
+    }
   }
 
   &__item {
-    flex: 1 1 0;
-    padding: 0.5rem;
 
     &.--add {
-      width: 99px;
+      width: 50px;
     }
   }
 
   &__card {
 
     &_add {
-      height: 99px;
+      height: 50px;
       width: inherit;
       display: flex;
       justify-content: center;
@@ -121,8 +156,8 @@ export default Vue.extend({
       transition: box-shadow 0.2s ease;
 
       .icon-plus {
-        width: 50px;
-        height: 50px;
+        width: 30px;
+        height: 30px;
         stroke: $deepDark;
       }
 

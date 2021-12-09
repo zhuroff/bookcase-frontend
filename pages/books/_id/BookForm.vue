@@ -27,7 +27,7 @@
       )
 
       AppTextarea(
-        v-if="book.subtitle"
+        v-if="book.subtitle || !isDisabled"
         placeholder="Book subtitle"
         classname="book__subtitle"
         propKey="subtitle"
@@ -37,19 +37,40 @@
         @typeText="updateBookInstance"
       )
 
-      .repeaters
-        AppRepeater(
-          title="Authors"
-          componentKey="authors"
-          :items="book.authors"
-          :isDisabled="isDisabled"
-        )
+      AppRepeater(
+        title="Authors"
+        componentKey="authors"
+        :items="book.authors"
+        :isDisabled="isDisabled"
+        @repeaterCardClick="repeaterCardClick"
+        @deleteCard="deleteCard"
+      )
 
-        AppRepeater(
-          title="Publishers"
-          componentKey="publishers"
-          :items="book.publishers"
-          :isDisabled="isDisabled"
+      AppRepeater(
+        title="Publishers"
+        componentKey="publishers"
+        :items="book.publishers"
+        :isDisabled="isDisabled"
+        @repeaterCardClick="repeaterCardClick"
+        @deleteCard="deleteCard"
+      )
+
+      AppRepeater(
+        title="Genres"
+        componentKey="genres"
+        :items="book.genres"
+        :isDisabled="isDisabled"
+        @repeaterCardClick="repeaterCardClick"
+        @deleteCard="deleteCard"
+      )
+
+      AppRepeater(
+        title="Series"
+        componentKey="series"
+        :items="book.series ? [book.series] : []"
+        :isDisabled="isDisabled"
+        @repeaterCardClick="repeaterCardClick"
+        @deleteCard="deleteCard"
       )
 
 </template>
@@ -57,15 +78,11 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import { FieldPayloadEmit } from '~/types/Global'
 import AppTextarea from '~/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
 import AppRepeater from '~/components/Repeater/AppRepeater.vue'
-
-interface FieldPayloadEmit {
-  key: string
-  value: string | number | boolean
-}
 
 export default Vue.extend({
   name: 'BookForm',
@@ -92,6 +109,14 @@ export default Vue.extend({
   methods: {
     updateBookInstance(payload: FieldPayloadEmit) {
       this.$emit('updateBookInstance', payload)
+    },
+
+    repeaterCardClick(payload: FieldPayloadEmit) {
+      console.log(payload)
+    },
+
+    deleteCard(payload: FieldPayloadEmit) {
+      console.log(payload)
     }
   }
 })
@@ -114,7 +139,7 @@ export default Vue.extend({
     outline: none;
 
     &:not([disabled]) {
-      border-bottom: 1px solid $lightGray;
+      border-bottom: 1px solid $lightDark;
     }
   }
 
@@ -144,12 +169,6 @@ export default Vue.extend({
     line-height: 1.25rem;
     margin-bottom: 1rem;
   }
-}
-
-.repeaters {
-  display: grid;
-  margin: 0 -0.5rem;
-  grid-template-columns: auto auto auto auto;
 }
 
 </style>

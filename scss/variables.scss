@@ -2,7 +2,8 @@
 
 $deepDark: #2a2735;
 $middleDark: #3c394b;
-$lightGray: #9f9f9f;
+$lightDark: #646464;
+$lightGray: #c1c1c1;
 $darkModeBody: #ffffdc;
 $lightBlue: #4da1ff;
 $transDark: rgba(42, 39, 53, 0.75);
@@ -14,3 +15,11 @@ $headerHeight: 60px;
 $sidebarWidth: 175px;
 
 $animation: cubic-bezier(.17,.67,.35,.99);
+
+$breakpoints: (
+  'phone': 240px,
+  'tablet': 768px,
+  'laptop': 1200px,
+  'desktop': 1920px,
+  'landscape': '(orientation: landscape)'
+) !default;

@@ -1,6 +1,14 @@
 <template lang="pug">
   
-  .card(:class="[{ '--disabled' : isDisabled }, 'repeater__card']")
+  .card(
+    :class="[{ '--disabled' : isDisabled }, 'repeater__card']"
+    @click="clickCardHandler"
+  )
+    AppRepeaterDelete(
+      v-if="isDeletable"
+      @deleteCard="deleteCard"
+    )
+
     .repeater__card-image
       img(
         v-if="card.publisher.picture"
@@ -14,16 +22,22 @@
       )
 
     .repeater__card-content
-      .repeater__card-title {{ card.publisher.title }}
+      NuxtLink(
+        :to="{ path: `/publishers/${card.publisher._id}` }"
+        class="repeater__card-title"
+      ) {{ card.publisher.title }}
+
       input(
         :disabled="isDisabled"
         v-model="code"
+        placeholder="Book code"
         class="repeater__card-description"
       )
 
       input(
         :disabled="isDisabled"
         v-model="city"
+        placeholder="City"
         class="repeater__card-description"
       )
 
@@ -31,32 +45,16 @@
 
 <script lang="ts">
 
-import Vue from 'vue'
-import AppSprite from '~/components/AppSprite.vue'
+import RepeaterBasic from './mixins'
 
-export default Vue.extend({
+export default RepeaterBasic.extend({
   name: 'AppRepeaterAuthor',
-
-  components: {
-    AppSprite
-  },
-
-  props: {
-    card: {
-      type: Object,
-      required: true
-    },
-
-    isDisabled: {
-      type: Boolean,
-      required: true
-    }
-  },
 
   data() {
     return {
       code: this.card.code,
-      city: this.card.city
+      city: this.card.city,
+      id: this.card.publisher._id
     }
   }
 })

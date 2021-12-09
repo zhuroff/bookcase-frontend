@@ -106,7 +106,7 @@ export default Vue.extend({
     padding: 0 3rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     left: $sidebarWidth;
     width: calc(100vw - #{$sidebarWidth});
 

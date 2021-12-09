@@ -1,13 +1,12 @@
 @import '~/scss/variables';
 
 .repeater__card {
-  height: 99px;
   width: 100%;
   background-color: $middleDark;
   transition: box-shadow 0.2s ease;
   padding: 1rem;
   display: grid;
-  grid-template-columns: 38px 1fr;
+  grid-template-columns: 30px 1fr;
 
   &:not(.--disabled) {
     cursor: pointer;
@@ -17,28 +16,30 @@
       transition: box-shadow 0.2s ease;
     }
 
+    .repeater__card-title {
+      pointer-events: none;
+    }
+
     .repeater__card-description {
-      border-bottom-color: $lightGray;
+      border-bottom-color: $lightDark;
       color: $darkModeBody;
     }
   }
 
   &-image {
 
-    .icon-person {
-      width: 38px;
-      height: 38px;
+    .icon-person,
+    .icon-building,
+    .icon-hashtag,
+    .icon-series {
+      width: 30px;
+      height: 30px;
       fill: $lightBlue;
-      stroke: $lightBlue;
       margin-top: 1px;
     }
 
-    .icon-building {
-      width: 38px;
-      height: 38px;
-      fill: $lightBlue;
-      // stroke: $lightBlue;
-      margin-top: 1px;
+    .icon-person {
+      stroke: $lightBlue;
     }
   }
 
@@ -49,6 +50,7 @@
   &-title {
     font-size: 0.875rem;
     color: $darkModeBody;
+    display: block;
     margin-bottom: 0.25rem;
   }
 
@@ -65,6 +67,7 @@
     width: 100%;
     padding-bottom: 0.1rem;
     appearance: none;
+    letter-spacing: 1px;
 
     option {
       background-color: $deepDark;
