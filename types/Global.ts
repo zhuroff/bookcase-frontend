@@ -2,6 +2,10 @@ import { CategoryBasic } from '~/types/Category'
 
 type TSort = { title: number } | { dateCreated: number }
 
+interface StringSignature {
+  [index: string]: string
+}
+
 interface MinimumRow {
   _id: string
   title: string
@@ -45,4 +49,13 @@ interface IModalPayload {
   isBooks?: boolean
 }
 
-export { TSort, MinimumRow, ISearchPayload, IPagination, ISortPayload, IModal, IModalPayload }
+export {
+  TSort,
+  StringSignature,
+  MinimumRow,
+  ISearchPayload,
+  IPagination,
+  ISortPayload,
+  IModal,
+  IModalPayload
+}

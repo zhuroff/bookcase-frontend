@@ -1,22 +1,34 @@
 <template lang="pug">
   
   div.book
-    form.book__form
-      AppTextarea(
-        placeholder="Book title"
-        classname="book__title"
-        propKey="title"
-        :initHeight="52"
-        :content="book.title"
-        :isDisabled="true"
-      )
+    BookForm(
+      :book="book"
+      :isDisabled="true"
+    )
 
-      p Something below...
-      
-    BButton(
-      tag="router-link"
-      :to="{ path: `/books/${$route.params.id}/edit`}"
-    ) Edit
+    .book__footer
+      BButton(
+        size="is-small"
+        type="is-info"
+        @click="$router.go(-1)"
+      ) Back
+
+      BButton(
+        tag="router-link"
+        size="is-small"
+        type="is-info"
+        :to="{ path: `/books/${$route.params.id}/edit`}"
+      ) Edit
+
+      BButton(
+        size="is-small"
+        type="is-info"
+      ) Delete
+
+      BButton(
+        size="is-small"
+        type="is-info"
+      ) To draft
 
 </template>
 
@@ -24,18 +36,13 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import AppTextarea from '~/components/AppTextarea.vue'
-
-interface FieldPayloadEmit {
-  key: string
-  value: string | number | boolean
-}
+import BookForm from './BookForm.vue'
 
 export default Vue.extend({
   name: 'SingleBookPage',
 
   components: {
-    AppTextarea
+    BookForm
   },
 
   computed: {
@@ -52,12 +59,6 @@ export default Vue.extend({
     await this.fetchBook()
   },
 
-  data() {
-    return {
-      editedBook: {}
-    }
-  },
-
   methods: {
     async fetchBook() {
       try {
@@ -65,10 +66,6 @@ export default Vue.extend({
       } catch (error) {
         console.error(error)
       }
-    },
-
-    updateBookInstance(payload: FieldPayloadEmit) {
-      this.editedBook[payload.key] = payload.value
     }
   }
 })
@@ -81,28 +78,21 @@ export default Vue.extend({
 
 .book {
 
-  input,
-  textarea {
-    color: $darkModeBody;
-  }
+  &__footer {
+    background-color: $middleDark;
+    position: fixed;
+    bottom: 0;
+    z-index: 2000;
+    height: $headerHeight;
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: $sidebarWidth;
+    width: calc(100vw - #{$sidebarWidth});
 
-  textarea {
-    resize: none;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    color: $darkModeBody;
-    outline: none;
-    line-height: 2.5rem;
-    padding-bottom: 0.75rem;
-    background-color: transparent;
-    display: block;
-    width: 100%;
-    border: 0;
-
-    &:not([disabled]) {
-      border-bottom: 1px solid $lightGray;
+    .button {
+      margin: 0 5px;
     }
   }
 }

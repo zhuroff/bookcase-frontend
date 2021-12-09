@@ -1,0 +1,96 @@
+@import '~/scss/variables';
+
+.book__form-aside {
+
+  .datepicker {
+
+    .dropdown {
+
+      &:not(.is-disabled) {
+
+        .dropdown-trigger {
+
+          .control {
+          
+            .input {
+              border-bottom-color: $darkModeBody;
+            }
+          }
+        }
+      }
+
+      &.is-disabled {
+        cursor: default;
+      }
+    }
+
+    &.--disabled {
+      cursor: default;
+
+      .dropdown-trigger {
+        cursor: default;
+
+        .control {
+          cursor: default;
+        
+          .input {
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+
+  .dropdown-trigger {
+
+    .control {
+
+      .input {
+        background-color: transparent;
+        border-radius: 0;
+        border: 0;
+        border-bottom: 1px solid transparent;
+        font-family: $sans;
+        color: $darkModeBody;
+        font-size: 0.875rem;
+        padding-left: 2rem;
+
+        &::-webkit-input-placeholder {
+          color: $lightGray;
+        }
+
+        &::-moz-placeholder {
+          color: $lightGray;
+        }
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+
+          & + .icon {
+            color: $lightBlue;
+          }
+        }
+      }
+
+      .icon {
+        width: 35px;
+        height: 35px;
+        justify-content: flex-start;
+        color: $lightBlue;
+      }
+    }
+  }
+
+  .dropdown-menu {
+    right: 0;
+    left: auto;
+    background-color: $middleDark;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  }
+
+  .dropdown-content {
+    background-color: $middleDark;
+  }
+}

@@ -33,3 +33,7 @@ const readingStatuses = {
     'read': 'Прочитано'
   }
 }
+
+export {
+  authorRoles
+}

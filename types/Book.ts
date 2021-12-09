@@ -49,6 +49,7 @@ interface BookState {
 }
 
 export {
+  BookStatus,
   EntireBook,
   BookState
 }

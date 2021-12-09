@@ -4,14 +4,16 @@
     AppSidebar
     .main__workspace
       AppHeader
-      section.section
-        Nuxt
+      simplebar(data-simplebar-auto-hide="false")
+        section.section
+          Nuxt
     
 </template>
 
 <script lang="ts">
 
 import Vue from 'vue'
+import simplebar from 'simplebar-vue'
 import AppSidebar from '~/components/AppSidebar.vue'
 import AppHeader from '~/components/AppHeader.vue'
 
@@ -19,6 +21,7 @@ export default Vue.extend({
   name: 'DefaultLayout',
 
   components: {
+    simplebar,
     AppSidebar,
     AppHeader
   },
@@ -36,6 +39,10 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: $sidebarWidth 1fr;
   min-height: 100vh;
+}
+
+[data-simplebar] {
+  height: calc(100vh - #{$headerHeight});
 }
 
 section {

@@ -15,9 +15,15 @@
 
 <script lang="ts">
 
-import Vue from 'vue'
+import Vue, { VueConstructor } from 'vue'
 
-export default Vue.extend({
+export default (Vue as VueConstructor<
+  Vue & {
+    $refs: {
+      textElement: InstanceType<typeof HTMLElement>
+    }
+  }
+>).extend({
   props: {
     content: {
       type: String,

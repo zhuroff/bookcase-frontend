@@ -1,0 +1,25 @@
+@import '~/scss/variables';
+
+.book__form-aside {
+
+  .card-uploader {
+
+    .upload {
+      height: 100%;
+
+      &-draggable {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: $darkModeBody;
+        border-color: $darkModeBody;
+
+        &:hover {
+          border-color: $darkModeBody;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}

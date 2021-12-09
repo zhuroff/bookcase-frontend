@@ -1,0 +1,73 @@
+@import '~/scss/variables';
+
+.repeater__card {
+  height: 99px;
+  width: 100%;
+  background-color: $middleDark;
+  transition: box-shadow 0.2s ease;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 38px 1fr;
+
+  &:not(.--disabled) {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .repeater__card-description {
+      border-bottom-color: $lightGray;
+      color: $darkModeBody;
+    }
+  }
+
+  &-image {
+
+    .icon-person {
+      width: 38px;
+      height: 38px;
+      fill: $lightBlue;
+      stroke: $lightBlue;
+      margin-top: 1px;
+    }
+
+    .icon-building {
+      width: 38px;
+      height: 38px;
+      fill: $lightBlue;
+      // stroke: $lightBlue;
+      margin-top: 1px;
+    }
+  }
+
+  &-content {
+    padding-left: 1rem;
+  }
+
+  &-title {
+    font-size: 0.875rem;
+    color: $darkModeBody;
+    margin-bottom: 0.25rem;
+  }
+
+  &-description {
+    color: $lightGray;
+    font-size: 0.75rem;
+    font-family: $sans;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    outline: none;
+    padding: 0;
+    display: block;
+    width: 100%;
+    padding-bottom: 0.1rem;
+    appearance: none;
+
+    option {
+      background-color: $deepDark;
+    }
+  }
+}

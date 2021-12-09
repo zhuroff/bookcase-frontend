@@ -82,7 +82,6 @@ export default Vue.extend({
       align-items: center;
       width: $headerHeight;
       height: $headerHeight;
-      // outline: none;
       border: 0;
       background-color: transparent;
 

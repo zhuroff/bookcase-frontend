@@ -17,7 +17,9 @@ export default {
 
   css: [
     '~/scss/global',
-    '~/scss/auth'
+    '~/scss/auth',
+    '~/scss/uploader',
+    '~/scss/datepicker'
   ],
 
   plugins: [
