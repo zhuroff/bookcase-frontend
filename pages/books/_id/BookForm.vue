@@ -4,7 +4,7 @@
     aside.book__form-aside
       CoverUploader(
         propKey="coverImage"
-        :image="book.coverImage"
+        :image="coverImage"
         :isDisabled="isDisabled"
         @updateCover="updateBookInstance"
       )
@@ -104,6 +104,14 @@ export default Vue.extend({
       type: Boolean,
       required: true
     }  
+  },
+
+  computed: {
+    coverImage() {
+      return this.book.preCoverImage
+        || this.book.coverImage
+        || '/uploads/cover/placeholder.jpg'
+    }
   },
 
   methods: {

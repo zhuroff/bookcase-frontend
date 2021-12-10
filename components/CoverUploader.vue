@@ -1,9 +1,9 @@
 <template lang="pug">
   
   .card
-    .card-image(v-if="typeof image === 'string' && image.length")
+    .card-image(v-if="image.length")
       figure.image
-        img(:src="'/uploads' + image")
+        img(:src="host + '/uploads' + image")
         
     BField(
       v-if="!isDisabled"
@@ -28,6 +28,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import nuxtConfig from '~/nuxt.config'
 
 export default Vue.extend({
   name: 'CoverUploader',
@@ -39,7 +40,8 @@ export default Vue.extend({
     },
 
     image: {
-      required: false
+      type: String,
+      required: true
     },
 
     isDisabled: {
@@ -50,7 +52,8 @@ export default Vue.extend({
 
   data() {
     return {
-      file: null
+      file: null,
+      host: nuxtConfig.env.HOST
     }
   },
 

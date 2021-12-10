@@ -15,6 +15,10 @@ export default {
     ]
   },
 
+  env: {
+    HOST: process.env.HOST || 'http://localhost:8000'
+  },
+
   css: [
     '~/scss/global',
     '~/scss/auth',

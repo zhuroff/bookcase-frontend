@@ -37,11 +37,7 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import BookForm from './BookForm.vue'
-
-interface FieldPayloadEmit {
-  key: string
-  value: string | number | boolean
-}
+import { FieldPayloadEmit } from '~/types/Global'
 
 interface BookSignatures {
   [index: string]: string | number | Blob | boolean
@@ -59,6 +55,10 @@ export default Vue.extend({
   },
 
   beforeDestroy() {
+    if (this.editedBook.preCoverImage) {      
+      this.removePreCover(this.pageID)
+    }
+
     if (this.$route.name !== 'books-id') {
       this.$store.commit('book/clearfy')
     }
@@ -70,14 +70,15 @@ export default Vue.extend({
 
   data() {
     return {
-      editedBook: {} as BookSignatures
+      editedBook: {} as BookSignatures,
+      pageID: this.$route.params.id
     }
   },
 
   methods: {
     async fetchBook() {
       try {
-        await this.$store.dispatch('book/fetchBook', this.$route.params.id)
+        await this.$store.dispatch('book/fetchBook', this.pageID)
       } catch (error) {
         console.error(error)
       }
@@ -85,6 +86,41 @@ export default Vue.extend({
 
     updateBookInstance(payload: FieldPayloadEmit) {
       this.editedBook[payload.key] = payload.value
+
+      if (payload.key === 'coverImage') {
+        this.uploadPreCover(payload.value as File)
+      }
+    },
+
+    async uploadPreCover(file: File) {
+      const query = `/api/books/${this.pageID}/precover?folder=covers`
+      const formData = new FormData()
+
+      formData.append('preCoverImage', file)
+
+      try {
+        const response = await this.$axios.post(query, formData)
+
+        const payload = {
+          key: 'preCoverImage',
+          value: response.data.preCoverImage
+        }
+
+        this.editedBook.preCoverImage = payload.value
+        this.$store.commit('book/commitBookField', payload)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async removePreCover(id: string) {
+      const query = `/api/books/${id}/precover`
+
+      try {
+        await this.$axios.delete(query)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 })

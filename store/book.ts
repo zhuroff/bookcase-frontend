@@ -10,6 +10,10 @@ export const mutations = {
     state.book = data
   },
 
+  commitBookField: (state: BookState, data: { key: string, value: any }) => {
+    (state as any).book[data.key] = data.value
+  },
+
   clearfy: (state: BookState) => {
     state.book = {} as EntireBook
   }

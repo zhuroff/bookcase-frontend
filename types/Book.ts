@@ -24,6 +24,7 @@ interface EntireBook {
   authors: BookAuthor[]
   contents: string
   coverImage: string
+  preCoverImage: string | null
   coverType: string
   dateCreated: string
   description: string

@@ -118,11 +118,11 @@ export default Vue.extend({
     margin-top: 0.5rem;
 
     @include media("<tablet") {
-      grid-template-columns: repeat(2, calc(33.3333% - (50px / 3 + 1rem)));
+      grid-template-columns: repeat(2, calc(100% - (50px / 3 + 1rem)));
     }
 
     @include media(">=tablet", "<laptop") {
-      grid-template-columns: repeat(3, calc(33.3333% - (50px / 3 + 1rem)));
+      grid-template-columns: repeat(3, calc(50% - (50px / 3 + 1rem)));
     }
 
     @include media(">=laptop", "<desktop") {
@@ -130,7 +130,7 @@ export default Vue.extend({
     }
 
     @include media(">=desktop") {
-      grid-template-columns: repeat(5, calc(33.3333% - (50px / 3 + 1rem)));
+      grid-template-columns: repeat(5, calc(25% - (50px / 3 + 1rem)));
     }
   }
 
