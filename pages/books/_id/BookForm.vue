@@ -73,6 +73,10 @@
         @deleteCard="deleteCard"
       )
 
+      BookOutputData(
+        :book="book"
+      )
+
 </template>
 
 <script lang="ts">
@@ -83,6 +87,7 @@ import AppTextarea from '~/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
 import AppRepeater from '~/components/Repeater/AppRepeater.vue'
+import BookOutputData from '~/components/BookOutputData.vue'
 
 export default Vue.extend({
   name: 'BookForm',
@@ -91,7 +96,8 @@ export default Vue.extend({
     AppTextarea,
     CoverUploader,
     BookReadingStatus,
-    AppRepeater
+    AppRepeater,
+    BookOutputData
   },
 
   props: {
@@ -108,6 +114,10 @@ export default Vue.extend({
 
   computed: {
     coverImage() {
+      if (this.$route.name === 'books-id' || !this.book.preCoverImage) {
+        return this.book.coverImage || '/uploads/cover/placeholder.jpg'
+      }
+
       return this.book.preCoverImage
         || this.book.coverImage
         || '/uploads/cover/placeholder.jpg'
@@ -158,6 +168,7 @@ export default Vue.extend({
   &__form {
     display: grid;
     grid-template-columns: 300px 1fr;
+    margin-bottom: 3rem;
 
     &-aside {
       padding-right: 3rem;

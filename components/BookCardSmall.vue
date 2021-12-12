@@ -6,7 +6,7 @@
 
     NuxtLink(:to="{ path: `/books/${book._id}` }")
       img(
-        :src="'/uploads' + book.coverImage"
+        :src="BASE_URL + book.coverImage"
         :alt="book.title"
         class="card__cover"
       )
@@ -52,6 +52,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import nuxtConfig from '~/nuxt.config'
 
 export default Vue.extend({
   name: 'BookCardSmall',
@@ -60,6 +61,12 @@ export default Vue.extend({
     book: {
       type: Object,
       required: true
+    }
+  },
+
+  data() {
+    return {
+      BASE_URL: nuxtConfig.env.BASE_URL
     }
   },
 

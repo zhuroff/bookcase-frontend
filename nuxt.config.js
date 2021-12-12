@@ -16,7 +16,9 @@ export default {
   },
 
   env: {
-    HOST: process.env.HOST || 'http://localhost:8000'
+    BASE_URL: process.env.NODE_ENV === 'development'
+      ? process.env.VUE_APP_BASE_URL_DEV
+      : process.env.VUE_APP_BASE_URL_PROD
   },
 
   css: [
@@ -33,7 +35,8 @@ export default {
   components: true,
 
   buildModules: [
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
+    '@nuxtjs/dotenv'
   ],
 
   modules: [
@@ -42,7 +45,9 @@ export default {
   ],
 
   axios: {
-    baseURL: 'http://localhost:8000'
+    baseURL: process.env.NODE_ENV === 'development'
+      ? process.env.VUE_APP_BASE_URL_DEV
+      : process.env.VUE_APP_BASE_URL_PROD
   },
 
   build: {}

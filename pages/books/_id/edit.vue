@@ -55,7 +55,7 @@ export default Vue.extend({
   },
 
   beforeDestroy() {
-    if (this.editedBook.preCoverImage) {      
+    if (this.isPrecovered()) {      
       this.removePreCover(this.pageID)
     }
 
@@ -82,6 +82,11 @@ export default Vue.extend({
       } catch (error) {
         console.error(error)
       }
+    },
+
+    isPrecovered() {
+      return this.editedBook.preCoverImage
+        || this.$store.getters['book/book'].preCoverImage
     },
 
     updateBookInstance(payload: FieldPayloadEmit) {
@@ -118,6 +123,7 @@ export default Vue.extend({
 
       try {
         await this.$axios.delete(query)
+        delete this.editedBook.preCoverImage
       } catch (error) {
         console.error(error)
       }

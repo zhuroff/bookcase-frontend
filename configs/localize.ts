@@ -35,5 +35,8 @@ const readingStatuses = {
 }
 
 export {
-  authorRoles
+  authorRoles,
+  bookFormats,
+  coverTypes,
+  readingStatuses
 }

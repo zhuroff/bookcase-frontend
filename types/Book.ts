@@ -28,6 +28,7 @@ interface EntireBook {
   coverType: string
   dateCreated: string
   description: string
+  dateModified: string,
   file: string
   format: string
   genres: CategoryMinimum[]

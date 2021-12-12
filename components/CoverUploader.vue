@@ -3,7 +3,7 @@
   .card
     .card-image(v-if="image.length")
       figure.image
-        img(:src="host + '/uploads' + image")
+        img(:src="BASE_URL + image")
         
     BField(
       v-if="!isDisabled"
@@ -53,7 +53,7 @@ export default Vue.extend({
   data() {
     return {
       file: null,
-      host: nuxtConfig.env.HOST
+      BASE_URL: nuxtConfig.env.BASE_URL
     }
   },
 

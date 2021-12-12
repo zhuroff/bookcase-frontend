@@ -44,6 +44,13 @@ export default Vue.extend({
       } catch (error) {
         console.error(error)
       }
+
+      // try {
+      //   const response = await this.$axios.post('/api/backup/ref')
+      //   console.log(response)
+      // } catch (error) {
+      //   console.error(error)
+      // }
     },
 
     setBackupList(data: string[]) {
@@ -63,7 +70,7 @@ export default Vue.extend({
       try {
         const response = await this.$axios.post('/api/backup/save')
         this.fetchBackupList()
-        console.log(response.data)
+        //console.log(response.data)
       } catch (error) {
         console.error(error)
       }
