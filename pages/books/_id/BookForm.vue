@@ -78,6 +78,13 @@
         :isDisabled="isDisabled"
       )
 
+      AppEditor(
+        heading="Annotation"
+        :content="book.description"
+        :tools="annotationTools"
+        :isDisabled="isDisabled"
+      )
+
 </template>
 
 <script lang="ts">
@@ -89,6 +96,7 @@ import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
 import AppRepeater from '~/components/Repeater/AppRepeater.vue'
 import BookOutputData from '~/components/BookOutputData.vue'
+import AppEditor from '~/components/Editor/AppEditor.vue'
 
 export default Vue.extend({
   name: 'BookForm',
@@ -98,7 +106,8 @@ export default Vue.extend({
     CoverUploader,
     BookReadingStatus,
     AppRepeater,
-    BookOutputData
+    BookOutputData,
+    AppEditor
   },
 
   props: {
@@ -116,12 +125,18 @@ export default Vue.extend({
   computed: {
     coverImage() {
       if (this.$route.name === 'books-id' || !this.book.preCoverImage) {
-        return this.book.coverImage || '/uploads/cover/placeholder.jpg'
+        return this.book.coverImage || '/uploads/covers/placeholder.jpg'
       }
 
       return this.book.preCoverImage
         || this.book.coverImage
-        || '/uploads/cover/placeholder.jpg'
+        || '/uploads/covers/placeholder.jpg'
+    }
+  },
+
+  data() {
+    return {
+      annotationTools: 'AnnotationTools'
     }
   },
 

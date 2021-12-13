@@ -113,11 +113,28 @@ export default Vue.extend({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .output {
   display: grid;
-  grid-template-columns: repeat(5, calc(25% - (16.6666666667px + 1rem)));
   grid-gap: 1rem;
+  margin-bottom: 2rem;
+
+  @include media("<tablet") {
+    grid-template-columns: repeat(2, calc(100% - (50px / 3 + 1rem)));
+  }
+
+  @include media(">=tablet", "<laptop") {
+    grid-template-columns: repeat(3, calc(50% - (50px / 3 + 1rem)));
+  }
+
+  @include media(">=laptop", "<desktop") {
+    grid-template-columns: repeat(4, calc(33.3333% - (50px / 3 + 1rem)));
+  }
+
+  @include media(">=desktop") {
+    grid-template-columns: repeat(5, calc(25% - (50px / 3 + 1rem)));
+  }
 
   &__card {
     background-color: $middleDark;

@@ -1,0 +1,58 @@
+@import '~/scss/variables';
+
+.editor {
+
+  &__nav {
+
+    &-items {
+      display: flex;
+    }
+
+    .button {
+      background-color: transparent;
+      color: $darkModeBody;
+      outline: none;
+      box-shadow: none;
+      border: 1px solid $lightDark;
+      margin-right: 0.5rem;
+
+      span {
+        line-height: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .icon-tool {
+        max-width: 20px;
+        max-height: 20px;
+      }
+    }
+  }
+
+  &__content {
+
+    .ProseMirror {
+      border: 1px solid transparent;
+      padding-bottom: 0.75rem;
+
+      &-focused {
+        outline: none !important;
+      }
+
+      &[contenteditable="true"] {
+        border-bottom-color: $lightDark;
+      }
+
+      & > *:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+  }
+}
