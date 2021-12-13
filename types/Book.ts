@@ -14,13 +14,12 @@ interface BookLink {
 }
 
 interface BookStatus {
-  process: string
   start?: string
   finish?: string
 }
 
 interface EntireBook {
-  article: string
+  summary: string
   authors: BookAuthor[]
   contents: string
   coverImage: string

@@ -1,5 +1,17 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
 import { EntireBook, BookState } from '~/types/Book'
+import nuxtConfig from '~/nuxt.config'
+
+const summaryUrlClearfy = (summary: string | null): string => {
+  if (!summary) return ''
+
+  const clearfy = summary
+    .replace(/http:\/\/localhost\//g, '')
+    .replace(/article_covers\//g, '/articles/')
+    .replace(/\/articles\//g, nuxtConfig.env.BASE_URL + '/uploads/articles/')
+
+  return clearfy
+}
 
 export const state = (): BookState => ({
   book: {} as EntireBook
@@ -7,6 +19,10 @@ export const state = (): BookState => ({
 
 export const mutations = {
   commitBook: (state: BookState, data: EntireBook) => {
+    if (data.summary) {
+      data.summary = summaryUrlClearfy(data.summary)
+    }
+
     state.book = data
   },
 

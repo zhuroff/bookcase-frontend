@@ -15,19 +15,30 @@
       box-shadow: none;
       border: 1px solid $lightDark;
       margin-right: 0.5rem;
+      transition: all 0.2s ease;
+      padding-left: calc(0.5em - 1px);
+      padding-right: calc(0.5em - 1px);
+      width: 30px;
 
       span {
         line-height: 0;
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
       }
 
       .icon-tool {
-        max-width: 20px;
-        max-height: 20px;
+        max-width: 18px;
+        max-height: 18px;
+      }
+
+      &:hover,
+      &.--active {
+        background-color: $lightDark;
+        color: $deepDark;
+        transition: all 0.2s ease;
       }
     }
   }
@@ -46,13 +57,90 @@
         border-bottom-color: $lightDark;
       }
 
+      & > *:first-child {
+        margin-top: 0;
+      }
+
       & > *:last-child {
         margin-bottom: 0;
       }
-    }
 
-    p {
-      margin-bottom: 1rem;
+      h2, h3, h4 {
+        font-family: $serif;
+        font-weight: 600;
+      }
+
+      h2 {
+        font-size: 1.75rem;
+        margin: 2rem 0 0.75rem;
+      }
+
+      & > p {
+        margin-bottom: 1rem;
+      }
+
+      ul,
+      ol {
+        padding-left: 2rem;
+      }
+
+      ul {
+        list-style-type: disc;
+      }
+  
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      img {
+        border-radius: 0.25rem;
+        max-width: 100%;
+        max-height: calc(100vh - #{$headerHeight * 2} - 5rem);
+        min-height: 350px;
+        display: inline-block;
+        margin: 2rem 0 0.5rem 0;
+
+        & + p {
+          font-style: italic;
+          font-size: 0.75rem;
+          max-width: 50%;
+          color: $lightGray;
+          margin-bottom: 2rem;
+
+          & + img {
+            margin-top: 0;
+          }
+        }
+      }
+
+      code {
+        font-family: $mono;
+        border-radius: 0.25rem;
+        background-color: $middleDark;
+        color: $darkModeBody;
+      }
+
+      pre {
+        margin: 2rem 0;
+        border-radius: 0.25rem;
+        background-color: $middleDark;
+        font-family: $mono;
+        color: $darkModeBody;
+      }
+
+      strong {
+        color: $darkModeBody;
+
+        em {
+          color: $warning;
+        }
+      }
+
+      hr {
+        background-color: $lightGray;
+        height: 1px;
+        background-image: linear-gradient(to right, #{$middleDark}, #{$lightDark}, #{$middleDark});
+      }
     }
   }
 }

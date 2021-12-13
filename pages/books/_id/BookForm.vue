@@ -79,9 +79,27 @@
       )
 
       AppEditor(
+        v-if="book.description || !isDisabled"
         heading="Annotation"
         :content="book.description"
         :tools="annotationTools"
+        :isDisabled="isDisabled"
+      )
+
+      AppEditor(
+        v-if="book.contents || !isDisabled"
+        heading="Table of contents"
+        :content="book.contents"
+        :tools="contentsTools"
+        :isDisabled="isDisabled"
+      )
+
+      AppEditor(
+        v-if="book.summary || !isDisabled"
+        heading="Summary"
+        classname="summary"
+        :content="book.summary"
+        :tools="summaryTools"
         :isDisabled="isDisabled"
       )
 
@@ -136,7 +154,11 @@ export default Vue.extend({
 
   data() {
     return {
-      annotationTools: 'AnnotationTools'
+      annotationTools: 'AnnotationTools',
+
+      contentsTools: 'ContentsTools',
+
+      summaryTools: 'SummaryTools'
     }
   },
 

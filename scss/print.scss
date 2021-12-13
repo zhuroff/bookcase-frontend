@@ -1,0 +1,55 @@
+@import '~/scss/variables';
+
+@media print {
+  html {
+    overflow: auto;
+  }
+
+  body {
+
+    .aside,
+    .header,
+    .book__footer {
+      display: none !important;
+    }
+
+    .main-default {
+      display: block !important;
+    }
+
+    [data-simplebar] {
+      height: auto !important;
+    }
+
+    .section {
+      background-color: #fff !important;
+    }
+
+    .editor__content {
+      color: #000 !important;
+
+      .ProseMirror {
+        border: 0 !important;
+      }
+    }
+
+    .book__form {
+      display: block !important;
+    }
+
+    &.print-summary {
+
+      .book__form-aside {
+        display: none;
+      }
+      
+      .book__form-main {
+
+        & > *:not(.editor.summary),
+        .editor__nav {
+          display: none;
+        }
+      }
+    }
+  }
+}

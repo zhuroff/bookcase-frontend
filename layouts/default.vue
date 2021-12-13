@@ -45,7 +45,7 @@ export default Vue.extend({
   height: calc(100vh - #{$headerHeight});
 }
 
-section {
+.section {
   background-color: $deepDark;
   min-height: calc(100vh - #{$headerHeight});
 }
