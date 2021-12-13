@@ -5,7 +5,7 @@
     @click="clickCardHandler"
   )
     AppRepeaterDelete(
-      v-if="isDeletable"
+      v-if="isDeletable && !isDisabled"
       @deleteCard="deleteCard"
     )
 

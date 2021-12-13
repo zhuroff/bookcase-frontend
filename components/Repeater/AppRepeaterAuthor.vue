@@ -5,7 +5,7 @@
     @click="clickCardHandler"
   )
     AppRepeaterDelete(
-      v-if="isDeletable"
+      v-if="isDeletable && !isDisabled"
       @deleteCard="deleteCard"
     )
 
@@ -27,40 +27,47 @@
         class="repeater__card-title"
       ) {{ card.author.title }}
 
-      select(
+      BDropdown(
+        position="is-top-right"
         :disabled="isDisabled"
-        v-model="role"
-        class="repeater__card-description"
       )
-        option(
-          v-for="item in authorRoles"
-          :key="item.key"
-          :value="item.key"
-        ) {{ item.value }}
+        template(#trigger="{ active }")
+          BButton(
+            :label="authorRoles[card.role]"
+            :icon-right="active ? 'menu-up' : 'menu-down'"
+            size="is-small"
+          )
+        BDropdownItem(
+          v-for="option in authorRolesArr"
+          :key="option.key"
+        ) {{ option.value }}
 
 </template>
 
 <script lang="ts">
 
 import { authorRoles } from '~/configs/localize'
-import { StringSignature } from '~/types/Global'
+import { FieldPayloadEmit, StringSignature } from '~/types/Global'
 import RepeaterBasic from './mixins'
 
 export default RepeaterBasic.extend({
   name: 'AppRepeaterAuthor',
 
   computed: {
-    authorRoles() {
-      return Object.keys(authorRoles.ru).map((key: any) => ({
-        value: (authorRoles.ru as StringSignature)[key],
-        key: key
-      }))
+    authorRolesArr(): FieldPayloadEmit[] {
+      const result = Object.keys(this.authorRoles)
+        .map((key: string) => ({
+          key: key,
+          value: this.authorRoles[key]
+        }))
+
+      return result
     }
   },
 
   data() {
     return {
-      roles: authorRoles,
+      authorRoles: authorRoles.ru as StringSignature,
       role: this.card.role,
       id: this.card.author._id
     }

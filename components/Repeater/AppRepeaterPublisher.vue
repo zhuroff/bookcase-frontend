@@ -5,7 +5,7 @@
     @click="clickCardHandler"
   )
     AppRepeaterDelete(
-      v-if="isDeletable"
+      v-if="isDeletable && !isDisabled"
       @deleteCard="deleteCard"
     )
 
@@ -27,18 +27,20 @@
         class="repeater__card-title"
       ) {{ card.publisher.title }}
 
-      input(
-        :disabled="isDisabled"
-        v-model="code"
-        placeholder="Book code"
-        class="repeater__card-description"
-      )
-
-      input(
-        :disabled="isDisabled"
+      BInput(
+        type="text"
+        size="is-small"
         v-model="city"
         placeholder="City"
-        class="repeater__card-description"
+        :disabled="isDisabled"
+      )
+
+      BInput(
+        type="text"
+        size="is-small"
+        v-model="code"
+        placeholder="Book code"
+        :disabled="isDisabled"
       )
 
 </template>

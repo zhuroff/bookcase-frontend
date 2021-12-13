@@ -32,16 +32,22 @@ const RepeaterBasic = Vue.extend({
 
   data() {
     return {
-      handlerExcludes: ['SELECT', 'INPUT', 'BUTTON']
+      handlerExcludes: ['dropdown', 'control', 'repeater__card-delete']
     }
   },
 
   methods: {
     clickCardHandler(event: any) {
-      if (
-        (this as any).isDisabled
-        || this.handlerExcludes.includes(event.target.tagName)
-      ) return false
+      const pathClasses = new Set(event.composedPath()
+        .flatMap((el: Element) => el.className?.split(' ')))
+
+      const isExclude = [...pathClasses]
+        .filter((el: any) => this.handlerExcludes.includes(el))
+        .length > 0
+
+      if (this.isDisabled || isExclude) {
+        return false
+      }
 
       const payload = {
         key: (this as any).componentKey,

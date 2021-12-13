@@ -23,3 +23,67 @@ $breakpoints: (
   'desktop': 1920px,
   'landscape': '(orientation: landscape)'
 ) !default;
+
+@mixin select {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  height: 30px;
+  justify-content: space-between;
+  background-color: transparent;
+  color: $darkModeBody;
+  outline: none;
+  border-radius: 0;
+  border: 1px solid transparent;
+  font-family: $sans;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+
+  &:focus,
+  &:active {
+    box-shadow: none;
+  }
+}
+
+@mixin dropdown {
+  background-color: $middleDark;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+  .dropdown-item {
+    color: $darkModeBody;
+
+    &:hover {
+      background-color: $deepDark;
+    }
+  }
+}
+
+@mixin input {
+  border-radius: 0;
+  outline: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0;
+  height: 30px;
+  color: $darkModeBody;
+  cursor: default;
+  font-family: $sans;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+
+  &:focus,
+  &:active {
+    box-shadow: none;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  &:not([disabled]) {
+    border-bottom-color: $lightDark;
+    cursor: text;
+  }
+}

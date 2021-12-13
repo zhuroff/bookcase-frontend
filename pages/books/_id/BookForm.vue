@@ -75,6 +75,7 @@
 
       BookOutputData(
         :book="book"
+        :isDisabled="isDisabled"
       )
 
 </template>

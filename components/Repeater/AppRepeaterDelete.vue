@@ -42,6 +42,7 @@ export default Vue.extend({
     height: 12px;
     fill: $darkModeBody;
     stroke: $darkModeBody;
+    pointer-events: none;
   }
 }
 

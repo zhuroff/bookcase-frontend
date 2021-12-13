@@ -1,0 +1,54 @@
+@import '~/scss/variables';
+
+.repeater{
+
+  &__card {
+
+    &-content {
+
+      .dropdown {
+        display: block;
+
+        .dropdown-trigger {
+
+          .button {
+            @include select;
+          }
+        }
+
+        &.is-disabled {
+          opacity: 1;
+          cursor: default;
+  
+          .dropdown-trigger {
+  
+            .button {
+  
+              .icon {
+                display: none;
+              }
+            }
+          }
+        }
+
+        &:not(.is-disabled) {
+
+          .dropdown-trigger {
+  
+            .button {
+              border-bottom-color: $lightDark;
+            }
+          }
+        }
+
+        .dropdown-content {
+          @include dropdown;
+        }
+      }
+
+      .input {
+        @include input;
+      }
+    }
+  }
+}

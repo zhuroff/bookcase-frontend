@@ -36,6 +36,7 @@
       height: 30px;
       fill: $lightBlue;
       margin-top: 1px;
+      pointer-events: none;
     }
 
     .icon-person {
@@ -51,26 +52,12 @@
     font-size: 0.875rem;
     color: $darkModeBody;
     display: block;
-    margin-bottom: 0.25rem;
-  }
+    line-height: 30px;
+    transition: color 0.2s ease;
 
-  &-description {
-    color: $lightGray;
-    font-size: 0.75rem;
-    font-family: $sans;
-    background-color: transparent;
-    border: 0;
-    border-bottom: 1px solid transparent;
-    outline: none;
-    padding: 0;
-    display: block;
-    width: 100%;
-    padding-bottom: 0.1rem;
-    appearance: none;
-    letter-spacing: 1px;
-
-    option {
-      background-color: $deepDark;
+    &:hover {
+      color: $lightBlue;
+      transition: color 0.2s ease;
     }
   }
 }

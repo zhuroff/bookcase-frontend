@@ -25,7 +25,9 @@ export default {
     '~/scss/global',
     '~/scss/auth',
     '~/scss/uploader',
-    '~/scss/datepicker'
+    '~/scss/datepicker',
+    '~/scss/repeater',
+    '~/scss/output'
   ],
 
   plugins: [
