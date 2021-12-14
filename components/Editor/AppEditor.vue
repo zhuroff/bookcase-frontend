@@ -14,17 +14,17 @@
           @setRedo="setRedo"
           @setTitle="setTitle"
           @setParagraph="setParagraph"
-          @setBold="setBold"
-          @setItalic="setItalic"
-          @setUnderline="setUnderline"
-          @setStrike="setStrike"
+          @toggleBold="toggleBold"
+          @toggleItalic="toggleItalic"
+          @toggleUnderline="toggleUnderline"
+          @toggleStrike="toggleStrike"
           @setBulletList="setBulletList"
           @setOrderedList="setOrderedList"
-          @setBlockquote="setBlockquote"
+          @toggleBlockquote="toggleBlockquote"
           @setLink="setLink"
           @setImage="setImage"
-          @setCode="setCode"
-          @setCodeBlock="setCodeBlock"
+          @toggleCode="toggleCode"
+          @toggleCodeBlock="toggleCodeBlock"
           @setHorizontalRule="setHorizontalRule"
           @sendToPrint="sendToPrint"
         )
@@ -162,20 +162,20 @@ export default Vue.extend({
       this.editor.chain().focus().setParagraph().run()
     },
 
-    setBold() {
-      this.editor.chain().focus().setBold().run()
+    toggleBold() {
+      this.editor.chain().focus().toggleBold().run()
     },
 
-    setItalic() {
-      this.editor.chain().focus().setItalic().run()
+    toggleItalic() {
+      this.editor.chain().focus().toggleItalic().run()
     },
 
-    setUnderline() {
-      this.editor.chain().focus().setUnderline().run()
+    toggleUnderline() {
+      this.editor.chain().focus().toggleUnderline().run()
     },
 
-    setStrike() {
-      this.editor.chain().focus().setStrike().run()
+    toggleStrike() {
+      this.editor.chain().focus().toggleStrike().run()
     },
 
     setBulletList() {
@@ -186,8 +186,8 @@ export default Vue.extend({
       this.editor.chain().focus().toggleOrderedList().run()
     },
 
-    setBlockquote() {
-      this.editor.chain().focus().setBlockquote().run()
+    toggleBlockquote() {
+      this.editor.chain().focus().toggleBlockquote().run()
     },
 
     setLink() {
@@ -198,12 +198,12 @@ export default Vue.extend({
       // this.editor.chain().focus().setImage().run()
     },
 
-    setCode() {
-      this.editor.chain().focus().setCode().run()
+    toggleCode() {
+      this.editor.chain().focus().toggleCode().run()
     },
 
-    setCodeBlock() {
-      this.editor.chain().focus().setCodeBlock().run()
+    toggleCodeBlock() {
+      this.editor.chain().focus().toggleCodeBlock().run()
     },
 
     setHorizontalRule() {

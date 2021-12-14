@@ -1,6 +1,11 @@
 <template lang="pug">
   
   div.book
+    BLoading(
+      :is-full-page="true"
+      v-model="isPreloading"
+    )
+
     BookForm(
       :book="book"
       :isDisabled="true"
@@ -59,10 +64,17 @@ export default Vue.extend({
     await this.fetchBook()
   },
 
+  data() {
+    return {
+      isPreloading: true
+    }
+  },
+
   methods: {
     async fetchBook() {
       try {
         await this.$store.dispatch('book/fetchBook', this.$route.params.id)
+        this.isPreloading = false
       } catch (error) {
         console.error(error)
       }

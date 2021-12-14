@@ -21,6 +21,7 @@
       type="is-default"
       size="is-small"
       title="Heading 2"
+      :class="{ '--active': editor.isActive('heading', { level: 2 } )}"
       @click="$emit('setTitle', 2)"
     )
       AppEditorSprite(name="title-2")
@@ -29,6 +30,7 @@
       type="is-default"
       size="is-small"
       title="Heading 3"
+      :class="{ '--active': editor.isActive('heading', { level: 3 } )}"
       @click="$emit('setTitle', 3)"
     )
       AppEditorSprite(name="title-3")
@@ -37,6 +39,7 @@
       type="is-default"
       size="is-small"
       title="Heading 4"
+      :class="{ '--active': editor.isActive('heading', { level: 4 } )}"
       @click="$emit('setTitle', 4)"
     )
       AppEditorSprite(name="title-4")
@@ -55,7 +58,7 @@
       size="is-small"
       title="Bold"
       :class="{ '--active': editor.isActive('bold') }"
-      @click="$emit('setBold')"
+      @click="$emit('toggleBold')"
     )
       AppEditorSprite(name="bold")
 
@@ -64,7 +67,7 @@
       size="is-small"
       title="Italic"
       :class="{ '--active': editor.isActive('italic') }"
-      @click="$emit('setItalic')"
+      @click="$emit('toggleItalic')"
     )
       AppEditorSprite(name="italic")
 
@@ -72,7 +75,8 @@
       type="is-default"
       size="is-small"
       title="Underline"
-      @click="$emit('setUnderline')"
+      :class="{ '--active': editor.isActive('underline') }"
+      @click="$emit('toggleUnderline')"
     )
       AppEditorSprite(name="underline")
 
@@ -80,7 +84,8 @@
       type="is-default"
       size="is-small"
       title="Strike through"
-      @click="$emit('setStrike')"
+      :class="{ '--active': editor.isActive('strike') }"
+      @click="$emit('toggleStrike')"
     )
       AppEditorSprite(name="strike")
 
@@ -88,6 +93,7 @@
       type="is-default"
       size="is-small"
       title="Bullet list"
+      :class="{ '--active': editor.isActive('bulletList') }"
       @click="$emit('setBulletList')"
     )
       AppEditorSprite(name="bullet")
@@ -96,6 +102,7 @@
       type="is-default"
       size="is-small"
       title="Ordered list"
+      :class="{ '--active': editor.isActive('orderedList') }"
       @click="$emit('setOrderedList')"
     )
       AppEditorSprite(name="ordered")
@@ -104,7 +111,8 @@
       type="is-default"
       size="is-small"
       title="Blockquote"
-      @click="$emit('setBlockquote')"
+      :class="{ '--active': editor.isActive('blockquote') }"
+      @click="$emit('toggleBlockquote')"
     )
       AppEditorSprite(name="blockquote")
 
@@ -128,7 +136,8 @@
       type="is-default"
       size="is-small"
       title="Code"
-      @click="$emit('setCode')"
+      :class="{ '--active': editor.isActive('code') }"
+      @click="$emit('toggleCode')"
     )
       AppEditorSprite(name="code")
 
@@ -136,7 +145,8 @@
       type="is-default"
       size="is-small"
       title="Code block"
-      @click="$emit('setCodeBlock')"
+      :class="{ '--active': editor.isActive('codeBlock') }"
+      @click="$emit('toggleCodeBlock')"
     )
       AppEditorSprite(name="code-block")
 

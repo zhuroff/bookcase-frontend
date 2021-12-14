@@ -92,6 +92,18 @@
         margin-bottom: 0.5rem;
       }
 
+      blockquote {
+        margin: 2rem auto;
+        max-width: 60%;
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        background-color: $middleDark;
+        padding: 1.25rem;
+        border-left: 5px solid $lightDark;
+        font-size: 1.25rem;
+        font-family: $serif;
+      }
+
       img {
         border-radius: 0.25rem;
         max-width: 100%;

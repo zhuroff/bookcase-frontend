@@ -19,3 +19,12 @@ input[type="button"] {
 .simplebar-content {
   min-height: 100%;
 }
+
+.loading-overlay {
+  background-color: $deepDark;
+  z-index: 1000;
+
+  .loading-background {
+    background-color: transparent;
+  }
+}
