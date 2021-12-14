@@ -8,7 +8,7 @@ interface StringSignature {
 
 interface FieldPayloadEmit {
   key: string
-  value: string | number | boolean | File
+  value: string | number | boolean | File | object
 }
 
 interface MinimumRow {

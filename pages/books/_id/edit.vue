@@ -57,7 +57,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters({ book: 'book/book' })
+    ...mapGetters({ book: 'book/editedBook' })
   },
 
   beforeDestroy() {
@@ -76,8 +76,6 @@ export default Vue.extend({
 
   data() {
     return {
-      editedBook: {} as BookSignatures,
-
       pageID: this.$route.params.id,
 
       isPreloading: true
@@ -95,12 +93,11 @@ export default Vue.extend({
     },
 
     isPrecovered() {
-      return this.editedBook.preCoverImage
-        || this.$store.getters['book/book'].preCoverImage
+      return this.$store.getters['book/editedBook'].preCoverImage
     },
 
     updateBookInstance(payload: FieldPayloadEmit) {
-      this.editedBook[payload.key] = payload.value
+      this.$store.commit('book/storeNewBookContent', payload)
 
       if (payload.key === 'coverImage') {
         this.uploadPreCover(payload.value as File)
@@ -121,8 +118,7 @@ export default Vue.extend({
           value: response.data.preCoverImage
         }
 
-        this.editedBook.preCoverImage = payload.value
-        this.$store.commit('book/commitBookField', payload)
+        this.$store.commit('book/storeNewBookContent', payload)
       } catch (error) {
         console.error(error)
       }
@@ -133,7 +129,12 @@ export default Vue.extend({
 
       try {
         await this.$axios.delete(query)
-        delete this.editedBook.preCoverImage
+
+        const payload: FieldPayloadEmit = {
+          key: 'preCoverImage',
+          value: ''
+        }
+        this.$store.commit('book/storeNewBookContent', payload)
       } catch (error) {
         console.error(error)
       }

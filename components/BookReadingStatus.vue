@@ -6,9 +6,9 @@
         placeholder="Reading start"
         icon="calendar-today"
         position="is-top-right"
+        editable
         v-model="startReading"
         :disabled="isDisabled"
-        :editable="false"
         :max-date="startMaxDate"
         :date-formatter="(date) => dateFormatter(date)"
         @input="readingDateHandler"
@@ -21,12 +21,17 @@
         editable
         v-model="finishReading"
         :disabled="isDisabled"
-        :editable="false"
         :min-date="new Date(status.start)"
         :max-date="finishMaxDate"
         :date-formatter="(date) => dateFormatter(date)"
         @input="readingDateHandler"
       )
+
+    .card__status
+      BTag(
+        type="is-success"
+        size="is-medium"
+      ) {{ readingProcess }}
 
 </template>
 
@@ -34,6 +39,7 @@
 
 import Vue from 'vue'
 import { BookStatus } from '~/types/Book'
+import { readingStatuses } from '~/configs/localize'
 
 export default Vue.extend({
   props: {
@@ -48,37 +54,57 @@ export default Vue.extend({
     }
   },
 
+  mounted() {
+    this.updateStatus(this.status)
+  },
+
+  watch: {
+    status(newStatus: BookStatus) {
+      this.updateStatus(newStatus)
+    }
+  },
+
   data() {
     return {
-      statusData: { ...this.status } as BookStatus,
+      startReading: this.status.start ? new Date(this.status.start) : null,
 
-      startReading: this.status.start ? new Date(this.status.start) : '',
-
-      finishReading: this.status.finish ? new Date(this.status.finish) : '',
+      finishReading: this.status.finish ? new Date(this.status.finish) : null,
 
       startMaxDate: new Date(),
 
-      finishMaxDate: new Date()
+      finishMaxDate: new Date(),
+
+      readingProcess: readingStatuses.ru['to read']
     }
   },
 
   methods: {
     readingDateHandler() {
-      const start = this.statusData.start
-      const end = this.statusData.finish
+      const payload = {
+        start: this.startReading,
+        finish: this.finishReading
+      }
 
-      console.log(start, end)
+      this.$emit('setBookStatus', payload)
+    },
 
-      // if (start && end) {
-      //   this.statusData.readingProcess = 'Прочитано'
-      // } else if (start && !end) {
-      //   this.statusData.readingProcess = 'Читаю сейчас'
-      // } else {
-      //   this.statusData.readingProcess = 'Прочитать'
-      //   this.resetEndAndRate()
-      // }
-
-      // this.$root.$emit('set-book-status', this.statusData)
+    updateStatus(status: BookStatus) {
+      console.log(status)
+      switch(status) {
+        case (status.start && status.finish):
+          this.readingProcess = readingStatuses.ru['read']
+          break
+        case (status.start && !status.finish):
+          console.log('Here')
+          this.readingProcess = readingStatuses.ru['reading']
+          break
+        case (!status.start && !status.finish):
+          this.readingProcess = readingStatuses.ru['to read']
+          break
+        default:
+          console.log('DEFAULT')
+          this.$emit('setBookStatus', { start: null, finish: null })
+      }
     },
 
     dateFormatter(date: Date) {
@@ -98,6 +124,12 @@ export default Vue.extend({
 
   &__datepickers {
     display: flex;
+    margin-bottom: 1rem;
+  }
+
+  &__status {
+    display: flex;
+    flex-direction: column;
   }
 }
 

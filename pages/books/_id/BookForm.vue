@@ -13,6 +13,7 @@
         v-if="book.status"
         :status="book.status"
         :isDisabled="isDisabled"
+        @setBookStatus="setBookStatus"
       )
 
     .book__form-main
@@ -40,7 +41,7 @@
       AppRepeater(
         title="Authors"
         componentKey="authors"
-        :items="book.authors"
+        :items="book.authors || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
         @deleteCard="deleteCard"
@@ -49,7 +50,7 @@
       AppRepeater(
         title="Publishers"
         componentKey="publishers"
-        :items="book.publishers"
+        :items="book.publishers || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
         @deleteCard="deleteCard"
@@ -58,7 +59,7 @@
       AppRepeater(
         title="Genres"
         componentKey="genres"
-        :items="book.genres"
+        :items="book.genres || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
         @deleteCard="deleteCard"
@@ -115,6 +116,7 @@
 
 import Vue from 'vue'
 import { FieldPayloadEmit } from '~/types/Global'
+import { BookStatus } from '~/types/Book'
 import AppTextarea from '~/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
@@ -183,6 +185,15 @@ export default Vue.extend({
 
     updateEditorContent(payload: FieldPayloadEmit) {
       this.$store.commit('book/storeNewBookContent', payload)
+    },
+
+    setBookStatus(status: BookStatus) {
+      const payload: FieldPayloadEmit = {
+        key: 'status',
+        value: status
+      }
+
+      this.$emit('updateBookInstance', payload)
     }
   }
 })

@@ -27,14 +27,11 @@ export const mutations = {
     }
 
     state.book = data
+    state.editedBook = JSON.parse(JSON.stringify(data))
   },
 
   storeNewBookContent: (state: BookState, data: FieldPayloadEmit) => {
     (state.editedBook as any)[data.key] = data.value
-  },
-
-  commitBookField: (state: BookState, data: { key: string, value: any }) => {
-    (state as any).book[data.key] = data.value
   },
 
   clearfy: (state: BookState) => {
