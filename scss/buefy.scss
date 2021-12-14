@@ -1,0 +1,26 @@
+@import '~/scss/variables';
+
+.main__workspace {
+
+  .section {
+
+    .tag {
+      background-color: transparent;
+
+      &.is-warning {
+        border: 1px solid $warning;
+        color: $warning;
+      }
+
+      &.is-default {
+        border: 1px solid $lightGray;
+        color: $lightGray;
+      }
+
+      &.is-success {
+        border: 1px solid $success;
+        color: $success;
+      }
+    }
+  }
+}

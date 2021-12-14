@@ -6,19 +6,6 @@
 
     .dropdown {
 
-      &:not(.is-disabled) {
-
-        .dropdown-trigger {
-
-          .control {
-          
-            .input {
-              border-bottom-color: $lightDark;
-            }
-          }
-        }
-      }
-
       &.is-disabled {
         cursor: default;
       }
@@ -49,7 +36,6 @@
         background-color: transparent;
         border-radius: 0;
         border: 0;
-        border-bottom: 1px solid transparent;
         font-family: $sans;
         color: $darkModeBody;
         font-size: 0.875rem;

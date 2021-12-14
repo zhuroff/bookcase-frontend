@@ -12,8 +12,10 @@
       BookReadingStatus(
         v-if="book.status"
         :status="book.status"
+        :rating="book.rating"
         :isDisabled="isDisabled"
         @setBookStatus="setBookStatus"
+        @setBookRating="setBookRating"
       )
 
     .book__form-main
@@ -191,6 +193,15 @@ export default Vue.extend({
       const payload: FieldPayloadEmit = {
         key: 'status',
         value: status
+      }
+
+      this.$emit('updateBookInstance', payload)
+    },
+
+    setBookRating(rating: number) {
+      const payload: FieldPayloadEmit = {
+        key: 'rating',
+        value: rating
       }
 
       this.$emit('updateBookInstance', payload)

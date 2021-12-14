@@ -23,6 +23,7 @@ export default {
 
   css: [
     '~/scss/global',
+    '~/scss/buefy',
     '~/scss/auth',
     '~/scss/uploader',
     '~/scss/datepicker',
