@@ -46,7 +46,8 @@ interface EntireBook {
 }
 
 interface BookState {
-  book: EntireBook
+  book: EntireBook,
+  editedBook: EntireBook
 }
 
 export {

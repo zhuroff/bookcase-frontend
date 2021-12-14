@@ -81,26 +81,32 @@
       AppEditor(
         v-if="book.description || !isDisabled"
         heading="Annotation"
+        fieldKey="description"
         :content="book.description"
         :tools="annotationTools"
         :isDisabled="isDisabled"
+        @updateEditorContent="updateEditorContent"
       )
 
       AppEditor(
         v-if="book.contents || !isDisabled"
         heading="Table of contents"
+        fieldKey="contents"
         :content="book.contents"
         :tools="contentsTools"
         :isDisabled="isDisabled"
+        @updateEditorContent="updateEditorContent"
       )
 
       AppEditor(
         v-if="book.summary || !isDisabled"
         heading="Summary"
+        fieldKey="summary"
         classname="summary"
         :content="book.summary"
         :tools="summaryTools"
         :isDisabled="isDisabled"
+        @updateEditorContent="updateEditorContent"
       )
 
 </template>
@@ -173,6 +179,10 @@ export default Vue.extend({
 
     deleteCard(payload: FieldPayloadEmit) {
       console.log(payload)
+    },
+
+    updateEditorContent(payload: FieldPayloadEmit) {
+      this.$store.commit('book/storeNewBookContent', payload)
     }
   }
 })

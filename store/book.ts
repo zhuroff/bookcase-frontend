@@ -1,5 +1,6 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
 import { EntireBook, BookState } from '~/types/Book'
+import { FieldPayloadEmit } from '~/types/Global'
 import nuxtConfig from '~/nuxt.config'
 
 const summaryUrlClearfy = (summary: string | null): string => {
@@ -14,7 +15,9 @@ const summaryUrlClearfy = (summary: string | null): string => {
 }
 
 export const state = (): BookState => ({
-  book: {} as EntireBook
+  book: {} as EntireBook,
+
+  editedBook: {} as EntireBook
 })
 
 export const mutations = {
@@ -24,6 +27,10 @@ export const mutations = {
     }
 
     state.book = data
+  },
+
+  storeNewBookContent: (state: BookState, data: FieldPayloadEmit) => {
+    (state.editedBook as any)[data.key] = data.value
   },
 
   commitBookField: (state: BookState, data: { key: string, value: any }) => {
@@ -47,5 +54,7 @@ export const actions = {
 }
 
 export const getters = {
-  book: (state: BookState) => state.book
+  book: (state: BookState) => state.book,
+
+  editedBook: (state: BookState) => state.editedBook
 }

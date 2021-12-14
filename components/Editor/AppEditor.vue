@@ -32,7 +32,6 @@
       EditorContent(
         :editor="editor"
         :disabled="isDisabled"
-        v-model="textContent"
         class="editor__content"
       )
 
@@ -83,6 +82,11 @@ export default Vue.extend({
       required: false
     },
 
+    fieldKey: {
+      type: String,
+      required: true
+    },
+
     classname: {
       type: String,
       required: false
@@ -109,6 +113,7 @@ export default Vue.extend({
     this.editor = new Editor({
       content: this.content,
       editable: !this.isDisabled,
+      onUpdate: this.updateContent,
       extensions: [
         Document,
         Text,
@@ -139,13 +144,20 @@ export default Vue.extend({
 
   data() {
     return {
-      editor: {} as Editor,
-
-      textContent: this.content
+      editor: {} as Editor
     }
   },
 
   methods: {
+    updateContent() {
+      const payload = {
+        key: this.fieldKey,
+        value: this.editor.getHTML()
+      }
+
+      this.$emit('updateEditorContent', payload)
+    },
+
     setUndo() {
       this.editor.chain().focus().undo().run()
     },

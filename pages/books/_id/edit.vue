@@ -1,6 +1,11 @@
 <template lang="pug">
   
   div.book
+    BLoading(
+      :is-full-page="true"
+      v-model="isPreloading"
+    )
+
     BookForm(
       :book="book"
       :isDisabled="false"
@@ -18,6 +23,7 @@
       BButton(
         size="is-small"
         type="is-info"
+        @click="saveBookChanges"
       ) Save
 
       BButton(
@@ -36,8 +42,8 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import BookForm from './BookForm.vue'
 import { FieldPayloadEmit } from '~/types/Global'
+import BookForm from './BookForm.vue'
 
 interface BookSignatures {
   [index: string]: string | number | Blob | boolean
@@ -71,7 +77,10 @@ export default Vue.extend({
   data() {
     return {
       editedBook: {} as BookSignatures,
-      pageID: this.$route.params.id
+
+      pageID: this.$route.params.id,
+
+      isPreloading: true
     }
   },
 
@@ -79,6 +88,7 @@ export default Vue.extend({
     async fetchBook() {
       try {
         await this.$store.dispatch('book/fetchBook', this.pageID)
+        this.isPreloading = false
       } catch (error) {
         console.error(error)
       }
@@ -124,6 +134,29 @@ export default Vue.extend({
       try {
         await this.$axios.delete(query)
         delete this.editedBook.preCoverImage
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async saveBookChanges() {
+      const storedMutatedBook = this.$store.getters['book/editedBook']
+      const formData = new FormData()
+
+      formData.append('summary', storedMutatedBook.summary)
+
+      try {
+        const response = await this.$axios.patch(`/api/books/${this.pageID}`, formData)
+
+        if (response.status === 200) {
+          this.$buefy.snackbar.open({
+            message: 'Book data was successfully updated',
+            type: 'is-success',
+            position: 'is-bottom',
+            actionText: 'OK',
+            queue: false
+          })
+        }
       } catch (error) {
         console.error(error)
       }
