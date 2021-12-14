@@ -76,6 +76,15 @@
         @deleteCard="deleteCard"
       )
 
+      AppRepeater(
+        title="In lists"
+        componentKey="inList"
+        :items="book.inList || []"
+        :isDisabled="isDisabled"
+        @repeaterCardClick="repeaterCardClick"
+        @deleteCard="deleteCard"
+      )
+
       BookOutputData(
         :book="book"
         :isDisabled="isDisabled"

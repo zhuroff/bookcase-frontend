@@ -35,6 +35,7 @@ import AppRepeaterAuthor from './AppRepeaterAuthor.vue'
 import AppRepeaterPublisher from './AppRepeaterPublisher.vue'
 import AppRepeaterGenre from './AppRepeaterGenre.vue'
 import AppRepeaterSeries from './AppRepeaterSeries.vue'
+import AppRepeaterInList from './AppRepeaterInList.vue'
 
 export default Vue.extend({
   name: 'AppRepeater',
@@ -44,7 +45,8 @@ export default Vue.extend({
     AppRepeaterAuthor,
     AppRepeaterPublisher,
     AppRepeaterGenre,
-    AppRepeaterSeries
+    AppRepeaterSeries,
+    AppRepeaterInList
   },
 
   props: {
@@ -81,7 +83,8 @@ export default Vue.extend({
         authors: AppRepeaterAuthor,
         publishers: AppRepeaterPublisher,
         genres: AppRepeaterGenre,
-        series: AppRepeaterSeries
+        series: AppRepeaterSeries,
+        inList: AppRepeaterInList
       }
     }
   },

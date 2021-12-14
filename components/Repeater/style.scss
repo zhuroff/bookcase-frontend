@@ -27,11 +27,13 @@
   }
 
   &-image {
+    display: flex;
 
     .icon-person,
     .icon-building,
     .icon-hashtag,
-    .icon-series {
+    .icon-series,
+    .icon-list {
       width: 30px;
       height: 30px;
       fill: $lightBlue;
@@ -41,6 +43,10 @@
 
     .icon-person {
       stroke: $lightBlue;
+    }
+
+    .icon-list {
+      color: $lightBlue;
     }
   }
 
