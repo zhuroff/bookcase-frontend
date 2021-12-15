@@ -2,12 +2,19 @@
 
   .repeater__modal
     .repeater__modal-header
-      BInput(
-        type="text"
-        v-model="searchQuery"
-        placeholder="Search"
+      .repeater__modal-search
+        BInput(
+          type="text"
+          v-model="searchQuery"
+          size="is-small"
+        )
+        AppSprite(name="search")
+
+      BButton(
+        type="is-info"
         size="is-small"
-      )
+        @click="createNewCategory"
+      ) Create
 
     simplebar(data-simplebar-auto-hide="false")
       .repeater__modal-body
@@ -20,17 +27,34 @@
             field="title"
             label="Title"
             v-slot="props"
-          ) {{ props.row.title }}
+          )
+            NuxtLink(
+              :to="`/${propKey}/${props.row._id}`"
+              class="repeater__modal-link"
+              target="_blank"
+            ) {{ props.row.title }}
 
           BTableColumn(
             label="Action"
             numeric
+            v-slot="props"
           )
             BButton(
               type="is-default"
               size="is-small"
-
+              @click="selectCategoryItem(props.row)"
             ) Select
+
+        BPagination(
+          v-if="(pagination.totalPages * perPage) > perPage"
+          size="is-small"
+          v-model="pagination.currentPage"
+          :total="pagination.totalPages * perPage"
+          :per-page="perPage"
+          :range-before="2"
+          :range-after="2"
+          @change="switchPagination"
+        )
 
 </template>
 
@@ -38,12 +62,14 @@
 
 import Vue from 'vue'
 import simplebar from 'simplebar-vue'
+import AppSprite from '~/components/AppSprite.vue'
 
 export default Vue.extend({
   name: 'AppRepeaterModal',
 
   components: {
-    simplebar
+    simplebar,
+    AppSprite
   },
 
   props: {
@@ -65,7 +91,33 @@ export default Vue.extend({
 
   data() {
     return {
-      searchQuery: ''
+      searchQuery: '',
+
+      perPage: 20
+    }
+  },
+
+  methods: {
+    selectCategoryItem(item: any) {
+      const payload = {
+        key: this.propKey,
+        value: item
+      }
+
+      this.$emit('selectCategoryItem', payload)
+    },
+
+    createNewCategory() {
+      console.log(this.propKey)
+    },
+
+    switchPagination(value: number) {
+      const payload = {
+        key: this.propKey,
+        value: value
+      }
+
+      this.$emit('switchPagination', payload)
     }
   }
 })
@@ -90,13 +142,32 @@ export default Vue.extend({
       box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
       background-color: $middleDark;
       padding: 1rem;
-      position: sticky;
-      z-index: 1000;
-      top: 0;
+      display: flex;
+      justify-content: space-between;
+
+      .button {
+        font-family: $sans;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    &-search {
+      width: 35%;
+      min-width: 200px;
+      position: relative;
 
       .control {
-        width: 50%;
-        min-width: 150px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .icon-search {
+        position: absolute;
+        top: 4px;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        color: $lightGray;
       }
     }
 
@@ -106,6 +177,14 @@ export default Vue.extend({
 
     &-body {
       padding: 1rem;
+    }
+
+    &-link {
+      color: $darkModeBody;
+    }
+
+    .pagination {
+      padding: 1rem 0.75rem;
     }
   }
 }

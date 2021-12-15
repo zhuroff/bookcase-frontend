@@ -45,13 +45,29 @@ export default Vue.extend({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .dashboard {
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     grid-gap: 1rem;
+
+    @include media("<tablet") {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    @include media(">=tablet", "<laptop") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include media(">=laptop", "<desktop") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include media(">=desktop") {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 }
 

@@ -30,9 +30,24 @@
 
         .modal-content {
           overflow: hidden;
+          height: 100%;
 
           .modal-close {
             top: 80px;
+          }
+
+          .input {
+            border: 0;
+            border-bottom: 1px solid $lightDark;
+            outline: none;
+            box-shadow: none;
+            background-color: transparent;
+            color: $darkModeBody;
+            padding-left: 0;
+            padding-right: 2rem;
+            letter-spacing: 0.5px;
+            font-family: $sans;
+            font-size: 0.875rem;
           }
         }
       }
@@ -48,6 +63,7 @@
           color: $darkModeBody;
           font-size: 0.875rem;
           border-color: $lightDark;
+          vertical-align: middle;
 
           .button {
             background-color: transparent;
@@ -81,6 +97,24 @@
               }
             }
           }
+        }
+      }
+    }
+
+    .pagination {
+
+      &-link {
+        margin-left: 0;
+        color: $darkModeBody;
+        border-color: transparent;
+
+        &.is-current {
+          border-color: $deepDark;
+          background-color: $deepDark;
+        }
+
+        &[disabled] {
+          background-color: transparent;
         }
       }
     }

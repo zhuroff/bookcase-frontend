@@ -1,6 +1,6 @@
 const authorRoles = {
   ru: {
-    'not chosen': 'Не выбрано',
+    '': 'Не выбрано',
     'author': 'Автор',
     'editor': 'Редактор',
     'compiler': 'Составитель',

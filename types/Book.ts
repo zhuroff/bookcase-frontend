@@ -8,6 +8,12 @@ interface BookAuthor {
   role: string
 }
 
+interface BookPublisher {
+  city: string
+  code: string
+  publisher: CategoryMinimum
+}
+
 interface BookLink {
   url: string
   title: string
@@ -41,24 +47,11 @@ interface EntireBook extends BasicBook {
   links: BookLink[]
   pages: number
   publicationYear: number
-  publishers: CategoryMinimum[]
+  publishers: BookPublisher[]
   rating: number
   series: string | null
   status: BookStatus
   subtitle: string
-}
-
-type EntireBookTypes = null
-  | string
-  | number
-  | boolean
-  | BookAuthor[]
-  | CategoryMinimum[]
-  | BookLink[]
-  | BookStatus
-
-interface EntireBookKeys {
-  [index: string]: EntireBookTypes
 }
 
 interface BookState {
@@ -69,6 +62,5 @@ export {
   BookStatus,
   BasicBook,
   EntireBook,
-  EntireBookKeys,
   BookState
 }

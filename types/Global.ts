@@ -4,7 +4,7 @@ interface StringSignature {
 
 interface FieldPayloadEmit {
   key: string
-  value: string | number | boolean | File | object
+  value: any
 }
 
 export {

@@ -31,6 +31,29 @@ export const mutations = {
     (state.book as any)[data.key] = data.value
   },
 
+  updateCategories: (state: BookState, payload: FieldPayloadEmit) => {
+    switch(payload.key) {
+      case 'authors':
+        state.book.authors.push({
+          author: payload.value,
+          role: ''
+        })
+        break
+      case 'publishers':
+        state.book.publishers.push({
+          city: '',
+          code: '',
+          publisher: payload.value
+        })
+        break
+      case 'series':
+        state.book.series = payload.value
+        break
+      default:
+        (state.book as any)[payload.key].push(payload.value)
+    }
+  },
+
   clearfy: (state: BookState) => {
     state.book = {} as EntireBook
   }

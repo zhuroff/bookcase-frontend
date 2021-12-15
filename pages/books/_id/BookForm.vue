@@ -134,6 +134,8 @@
         :propKey="repeaterModalKey"
         :data="repeaterData.data"
         :pagination="repeaterData.pagination || {}"
+        @selectCategoryItem="selectCategoryItem"
+        @switchPagination="switchPagination"
       )
 
 </template>
@@ -247,11 +249,33 @@ export default Vue.extend({
     },
 
     closeRepeaterModal() {
+      this.isModalActive = false
       this.repeaterData.data = []
       this.repeaterData.pagination = null
       this.repeaterConfig.page = 1
-      this.repeaterConfig.sort = { title: 1 },
-      this.repeaterConfig.limit = 20
+    },
+
+    selectCategoryItem(payload: FieldPayloadEmit) {
+      if (payload.key === 'lists') {
+        return this.fetchSubLists(payload.value._id)
+      }
+
+      this.$store.commit('book/updateCategories', payload)
+      this.closeRepeaterModal()
+    },
+
+    switchPagination(payload: FieldPayloadEmit) {
+      this.repeaterConfig.page = payload.value
+      this.fetchModalList(payload.key)
+    },
+
+    async fetchSubLists(id: string) {
+      try {
+        const response = await this.$axios.get(`/api/lists/${id}/sub`)
+        console.log(response.data.lists)
+      } catch (error) {
+        console.error(error)
+      }
     },
 
     async fetchModalList(key: string) {
@@ -341,6 +365,7 @@ export default Vue.extend({
     & > .modal {
       top: $headerHeight;
       bottom: $headerHeight;
+      left: $sidebarWidth;
       padding: 2rem;
     }
   }
