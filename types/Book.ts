@@ -18,11 +18,18 @@ interface BookStatus {
   finish?: string
 }
 
-interface EntireBook {
-  summary: string
-  authors: BookAuthor[]
-  contents: string
+interface BasicBook {
+  _id: string
+  title: string
   coverImage: string
+  authors: BookAuthor[]
+  genres: CategoryMinimum[]
+  lists: CategoryMinimum[]
+}
+
+interface EntireBook extends BasicBook {
+  summary: string
+  contents: string
   preCoverImage: string | null
   coverType: string
   dateCreated: string
@@ -30,8 +37,6 @@ interface EntireBook {
   dateModified: string,
   file: string
   format: string
-  genres: CategoryMinimum[]
-  inList: CategoryMinimum[]
   isDraft: boolean
   links: BookLink[]
   pages: number
@@ -41,17 +46,29 @@ interface EntireBook {
   series: string | null
   status: BookStatus
   subtitle: string
-  title: string
-  _id: string
+}
+
+type EntireBookTypes = null
+  | string
+  | number
+  | boolean
+  | BookAuthor[]
+  | CategoryMinimum[]
+  | BookLink[]
+  | BookStatus
+
+interface EntireBookKeys {
+  [index: string]: EntireBookTypes
 }
 
 interface BookState {
-  book: EntireBook,
-  editedBook: EntireBook
+  book: EntireBook
 }
 
 export {
   BookStatus,
+  BasicBook,
   EntireBook,
+  EntireBookKeys,
   BookState
 }

@@ -1,11 +1,10 @@
 <template lang="pug">
 
-  div
-    ul.columns.is-multiline
-      li.column(
-        v-for="book in readingBooks.data"
+  div.dashboard
+    ul.dashboard__list
+      li.dashboard__item(
+        v-for="book in readingBooks"
         :key="book._id"
-        class="is-one-third"
       )
         BookCardSmall(
           :book="book"
@@ -16,6 +15,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import BookCardSmall from '~/components/BookCardSmall.vue'
 
 export default Vue.extend({
@@ -25,13 +25,8 @@ export default Vue.extend({
     BookCardSmall
   },
 
-  data() {
-    return {
-      readingBooks: {
-        isFetched: false,
-        data: []
-      }
-    }
+  computed: {
+    ...mapGetters({ readingBooks: 'dashboard/readingBooksState' })
   },
 
   async fetch() {
@@ -40,18 +35,24 @@ export default Vue.extend({
 
   methods: {
     async fetchReadingBooks () {
-      try {
-        const response = await this.$axios.get('/api/dashboard/reading-books')
-      
-        this.readingBooks = {
-          isFetched: true,
-          data: response.data
-        }
-      } catch (error) {
-        console.error(error)
-      }
+      await this.$store.dispatch('dashboard/fetchReadingBook')
     }
   }
 })
 
 </script>
+
+<style lang="scss" scoped>
+
+@import '~/scss/variables';
+
+.dashboard {
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 1rem;
+  }
+}
+
+</style>

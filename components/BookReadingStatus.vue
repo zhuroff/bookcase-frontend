@@ -44,7 +44,7 @@
         v-model="ratingValue"
         inactive-color="#646464"
         active-color="#f7d064"
-        @rating-selected="setRatingValue"
+        @rating-selected="setRatingValue(ratingValue)"
       )
 
 </template>
@@ -155,7 +155,7 @@ export default Vue.extend({
       return new Intl.DateTimeFormat('ru-RU', { timeZone: 'UTC' }).format(date)
     },
 
-    setRatingValue(rating: number = this.ratingValue) {
+    setRatingValue(rating: number) {
       this.ratingValue = rating
       this.$emit('setBookRating', rating)
     },

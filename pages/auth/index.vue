@@ -53,7 +53,6 @@ export default Vue.extend({
     async formSubmit(payload: AuthFormFields[]) {
       try {
         const response = await this.$store.dispatch('auth/login', payload)
-        console.log(response)
 
         if (response.status === 200) {
           this.$router.push({ path: '/' })

@@ -46,6 +46,7 @@
         :items="book.authors || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
+        @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
       )
 
@@ -55,6 +56,7 @@
         :items="book.publishers || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
+        @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
       )
 
@@ -64,6 +66,7 @@
         :items="book.genres || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
+        @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
       )
 
@@ -73,15 +76,17 @@
         :items="book.series ? [book.series] : []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
+        @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
       )
 
       AppRepeater(
         title="In lists"
-        componentKey="inList"
-        :items="book.inList || []"
+        componentKey="lists"
+        :items="book.lists || []"
         :isDisabled="isDisabled"
         @repeaterCardClick="repeaterCardClick"
+        @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
       )
 
@@ -121,6 +126,16 @@
         @updateEditorContent="updateEditorContent"
       )
 
+    BModal(
+      v-model="isModalActive"
+      @close="closeRepeaterModal"
+    )
+      AppRepeaterModal(
+        :propKey="repeaterModalKey"
+        :data="repeaterData.data"
+        :pagination="repeaterData.pagination || {}"
+      )
+
 </template>
 
 <script lang="ts">
@@ -134,6 +149,24 @@ import BookReadingStatus from '~/components/BookReadingStatus.vue'
 import AppRepeater from '~/components/Repeater/AppRepeater.vue'
 import BookOutputData from '~/components/BookOutputData.vue'
 import AppEditor from '~/components/Editor/AppEditor.vue'
+import AppRepeaterModal from '~/components/Repeater/AppRepeaterModal.vue'
+
+interface RepeaterFetchedData {
+  dateCreated: string
+  isDraft: boolean
+  title: string
+  _id: string
+}
+
+interface RepeaterFetchedPagination {
+  totalPages: number
+  currentPage: number
+}
+
+interface RepeaterFetchedConfig {
+  data: RepeaterFetchedData[]
+  pagination: RepeaterFetchedPagination | null
+}
 
 export default Vue.extend({
   name: 'BookForm',
@@ -144,7 +177,8 @@ export default Vue.extend({
     BookReadingStatus,
     AppRepeater,
     BookOutputData,
-    AppEditor
+    AppEditor,
+    AppRepeaterModal
   },
 
   props: {
@@ -177,7 +211,23 @@ export default Vue.extend({
 
       contentsTools: 'ContentsTools',
 
-      summaryTools: 'SummaryTools'
+      summaryTools: 'SummaryTools',
+
+      isModalActive: false,
+
+      repeaterModalKey: '',
+
+      repeaterConfig: {
+        page: 1,
+        sort: { title: 1 },
+        limit: 20,
+        isDraft: false
+      },
+
+      repeaterData: {
+        data: [],
+        pagination: null
+      } as RepeaterFetchedConfig
     }
   },
 
@@ -188,6 +238,41 @@ export default Vue.extend({
 
     repeaterCardClick(payload: FieldPayloadEmit) {
       console.log(payload)
+    },
+
+    callRepeaterModal(key: string) {
+      this.isModalActive = true
+      this.repeaterModalKey = key
+      this.fetchModalList(key)
+    },
+
+    closeRepeaterModal() {
+      this.repeaterData.data = []
+      this.repeaterData.pagination = null
+      this.repeaterConfig.page = 1
+      this.repeaterConfig.sort = { title: 1 },
+      this.repeaterConfig.limit = 20
+    },
+
+    async fetchModalList(key: string) {
+      try {
+        const response = await this.$axios.post(`/api/${key}`, this.repeaterConfig)
+        this.setModalData(response.data.docs)
+        this.setModalPagination(response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    setModalData(data: RepeaterFetchedData[]) {
+      this.repeaterData.data = data
+    },
+
+    setModalPagination(data: RepeaterFetchedPagination) {
+      this.repeaterData.pagination = {
+        totalPages: data.totalPages,
+        currentPage: this.repeaterConfig.page
+      }
     },
 
     deleteCard(payload: FieldPayloadEmit) {
@@ -251,6 +336,12 @@ export default Vue.extend({
 
     &-aside {
       padding-right: 3rem;
+    }
+
+    & > .modal {
+      top: $headerHeight;
+      bottom: $headerHeight;
+      padding: 2rem;
     }
   }
 

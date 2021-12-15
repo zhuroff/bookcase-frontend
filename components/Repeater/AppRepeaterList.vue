@@ -25,7 +25,7 @@
 import RepeaterBasic from './mixins'
 
 export default RepeaterBasic.extend({
-  name: 'AppRepeaterInList',
+  name: 'AppRepeaterList',
 
   data() {
     return {

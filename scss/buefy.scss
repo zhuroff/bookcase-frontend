@@ -22,5 +22,67 @@
         color: $success;
       }
     }
+
+    .book__form {
+
+      .modal {
+        z-index: 9000;
+
+        .modal-content {
+          overflow: hidden;
+
+          .modal-close {
+            top: 80px;
+          }
+        }
+      }
+    }
+
+    .table {
+
+      thead,
+      tbody {
+
+        th,
+        td {
+          color: $darkModeBody;
+          font-size: 0.875rem;
+          border-color: $lightDark;
+
+          .button {
+            background-color: transparent;
+            border-color: $darkModeBody;
+            color: $darkModeBody;
+            outline: none;
+            box-shadow: none;
+            font-family: $sans;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background-color: $darkModeBody;
+              color: $deepDark;
+              transition: all 0.2s ease;
+            }
+          }
+        }
+      }
+
+      &.is-hoverable {
+
+        tbody {
+
+          tr {
+
+            &:not(.is-selected) {
+
+              &:hover {
+                background-color: $deepDark;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

@@ -17,7 +17,7 @@ declare module '@nuxt/types' {
 }
 
 // declare module 'vuex/types/index' {
-//   interface Store {
+//   interface Store<S> {
 //     $axios: NuxtAxiosInstance
 //   }
 // }

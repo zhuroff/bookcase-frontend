@@ -34,7 +34,7 @@ export default {
   ],
 
   plugins: [
-    { src: '@/plugins/axios' }
+    { src: '~/plugins/axios' }
   ],
 
   components: true,

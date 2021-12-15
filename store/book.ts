@@ -15,9 +15,7 @@ const summaryUrlClearfy = (summary: string | null): string => {
 }
 
 export const state = (): BookState => ({
-  book: {} as EntireBook,
-
-  editedBook: {} as EntireBook
+  book: {} as EntireBook
 })
 
 export const mutations = {
@@ -27,11 +25,10 @@ export const mutations = {
     }
 
     state.book = data
-    state.editedBook = JSON.parse(JSON.stringify(data))
   },
 
   storeNewBookContent: (state: BookState, data: FieldPayloadEmit) => {
-    (state.editedBook as any)[data.key] = data.value
+    (state.book as any)[data.key] = data.value
   },
 
   clearfy: (state: BookState) => {
@@ -51,7 +48,5 @@ export const actions = {
 }
 
 export const getters = {
-  book: (state: BookState) => state.book,
-
-  editedBook: (state: BookState) => state.editedBook
+  bookState: (state: BookState) => state.book
 }

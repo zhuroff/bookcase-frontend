@@ -51,7 +51,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters({ book: 'book/book' })
+    ...mapGetters({ book: 'book/bookState' })
   },
 
   beforeDestroy() {

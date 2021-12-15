@@ -21,6 +21,7 @@
       button(
         type="button"
         class="card repeater__card_add"
+        @click="callRepeaterModal"
       )
         AppSprite(name="plus")
 
@@ -35,7 +36,7 @@ import AppRepeaterAuthor from './AppRepeaterAuthor.vue'
 import AppRepeaterPublisher from './AppRepeaterPublisher.vue'
 import AppRepeaterGenre from './AppRepeaterGenre.vue'
 import AppRepeaterSeries from './AppRepeaterSeries.vue'
-import AppRepeaterInList from './AppRepeaterInList.vue'
+import AppRepeaterList from './AppRepeaterList.vue'
 
 export default Vue.extend({
   name: 'AppRepeater',
@@ -46,7 +47,7 @@ export default Vue.extend({
     AppRepeaterPublisher,
     AppRepeaterGenre,
     AppRepeaterSeries,
-    AppRepeaterInList
+    AppRepeaterList
   },
 
   props: {
@@ -84,7 +85,7 @@ export default Vue.extend({
         publishers: AppRepeaterPublisher,
         genres: AppRepeaterGenre,
         series: AppRepeaterSeries,
-        inList: AppRepeaterInList
+        lists: AppRepeaterList
       }
     }
   },
@@ -96,6 +97,10 @@ export default Vue.extend({
 
     deleteCard(payload: FieldPayloadEmit) {
       this.$emit('deleteCard', payload)
+    },
+
+    callRepeaterModal() {
+      this.$emit('callRepeaterModal', this.componentKey)
     }
   }
 })

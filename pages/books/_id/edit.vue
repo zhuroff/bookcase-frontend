@@ -57,7 +57,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters({ book: 'book/editedBook' })
+    ...mapGetters({ book: 'book/bookState' })
   },
 
   beforeDestroy() {
@@ -93,7 +93,7 @@ export default Vue.extend({
     },
 
     isPrecovered() {
-      return this.$store.getters['book/editedBook'].preCoverImage
+      return this.$store.getters['book/bookState'].preCoverImage
     },
 
     updateBookInstance(payload: FieldPayloadEmit) {
@@ -141,7 +141,7 @@ export default Vue.extend({
     },
 
     async saveBookChanges() {
-      const storedMutatedBook = this.$store.getters['book/editedBook']
+      const storedMutatedBook = this.$store.getters['book/bookState']
       const formData = new FormData()
 
       formData.append('summary', storedMutatedBook.summary)
