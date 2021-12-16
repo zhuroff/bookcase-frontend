@@ -170,6 +170,8 @@ export default Vue.extend({
       const formData = new FormData()
 
       formData.append('summary', storedMutatedBook.summary)
+      formData.append('rating', storedMutatedBook.rating)
+      formData.append('status', JSON.stringify(storedMutatedBook.status))
 
       try {
         const response = await this.$axios.patch(`/api/books/${this.pageID}`, formData)

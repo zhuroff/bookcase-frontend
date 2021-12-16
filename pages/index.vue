@@ -1,9 +1,22 @@
 <template lang="pug">
 
   div.dashboard
+    .dashboard__title
+      span Reading now
     ul.dashboard__list
       li.dashboard__item(
         v-for="book in readingBooks"
+        :key="book._id"
+      )
+        BookCardSmall(
+          :book="book"
+        )
+
+    .dashboard__title
+      span Read completely ({{ readBooksPages }} pages)
+    ul.dashboard__list
+      li.dashboard__item(
+        v-for="book in readBooks"
         :key="book._id"
       )
         BookCardSmall(
@@ -16,6 +29,7 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
+import { BasicBook } from '~/types/Book'
 import BookCardSmall from '~/components/BookCardSmall.vue'
 
 export default Vue.extend({
@@ -26,17 +40,21 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters({ readingBooks: 'dashboard/readingBooksState' })
+    ...mapGetters({
+      readingBooks: 'dashboard/readingBooksState',
+      readBooks: 'dashboard/readBooksState'
+    }),
+
+    readBooksPages() {
+       return this.$store.getters['dashboard/readBooksState']
+         .reduce((acc: number, next: BasicBook) => acc + next.pages, 0)
+         .toLocaleString('ru-RU')
+    }
   },
 
   async fetch() {
-    await this.fetchReadingBooks()
-  },
-
-  methods: {
-    async fetchReadingBooks () {
-      await this.$store.dispatch('dashboard/fetchReadingBook')
-    }
+    await this.$store.dispatch('dashboard/fetchReadingBooks')
+    await this.$store.dispatch('dashboard/fetchReadBooks', this.$store.getters['dashboard/readYearState'])
   }
 })
 

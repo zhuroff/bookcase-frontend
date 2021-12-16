@@ -28,6 +28,7 @@ interface BasicBook {
   _id: string
   title: string
   coverImage: string
+  pages: number
   authors: BookAuthor[]
   genres: CategoryMinimum[]
   lists: CategoryMinimum[]
@@ -45,7 +46,6 @@ interface EntireBook extends BasicBook {
   format: string
   isDraft: boolean
   links: BookLink[]
-  pages: number
   publicationYear: number
   publishers: BookPublisher[]
   rating: number
