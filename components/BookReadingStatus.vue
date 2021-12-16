@@ -75,6 +75,7 @@ export default Vue.extend({
   },
 
   mounted() {
+    this.updateReadingProcess(this.status)
     this.updateStatus(this.status)
   },
 
@@ -101,15 +102,16 @@ export default Vue.extend({
 
   watch: {
     status(newStatus: BookStatus) {
+      this.updateReadingProcess(newStatus)
       this.updateStatus(newStatus)
     }
   },
 
   data() {
     return {
-      startReading: this.status.start ? new Date(this.status.start) : null,
+      startReading: null,
 
-      finishReading: this.status.finish ? new Date(this.status.finish) : null,
+      finishReading: null,
 
       startMaxDate: new Date(),
 
@@ -142,6 +144,11 @@ export default Vue.extend({
     },
 
     updateStatus(status: BookStatus) {
+      this.startReading = status.start ? new Date(status.start) : null
+      this.finishReading = status.finish ? new Date(status.finish) : null
+    },
+
+    updateReadingProcess(status: BookStatus) {
       if (status.start && status.finish) {
         this.readingProcess = readingStatuses.ru['read']
       } else if (status.start && !status.finish) {

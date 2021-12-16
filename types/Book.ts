@@ -20,8 +20,8 @@ interface BookLink {
 }
 
 interface BookStatus {
-  start?: string
-  finish?: string
+  start?: string | null
+  finish?: string | null
 }
 
 interface BasicBook {
@@ -41,7 +41,7 @@ interface EntireBook extends BasicBook {
   coverType: string
   dateCreated: string
   description: string
-  dateModified: string,
+  dateModified: string
   file: string
   format: string
   isDraft: boolean

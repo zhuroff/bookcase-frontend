@@ -1,11 +1,36 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
-import { EntireBook, BookState } from '~/types/Book'
+import { EntireBook, BookState, BookStatus } from '~/types/Book'
 import { FieldPayloadEmit } from '~/types/Global'
 import nuxtConfig from '~/nuxt.config'
 
-const summaryUrlClearfy = (summary: string | null): string => {
-  if (!summary) return ''
-  
+// const BookInstance: EntireBook = {
+//   _id: '',
+//   title: '',
+//   coverImage: '',
+//   pages: 0,
+//   authors: [],
+//   genres: [],
+//   lists: [],
+//   summary: '',
+//   contents: '',
+//   preCoverImage: null,
+//   coverType: '',
+//   dateCreated: '',
+//   description: '',
+//   dateModified: '',
+//   file: '',
+//   format: '',
+//   isDraft: false,
+//   links: [],
+//   publicationYear: 0,
+//   publishers: [],
+//   rating: 0,
+//   series: null,
+//   status: { start: null, finish: null },
+//   subtitle: ''
+// }
+
+const summaryUrlClearfy = (summary: string): string => {
   if (!summary.includes('article_covers')) {
     return summary
   }
@@ -19,7 +44,9 @@ const summaryUrlClearfy = (summary: string | null): string => {
 }
 
 export const state = (): BookState => ({
-  book: {} as EntireBook
+  book: {
+    status: { start: null, finish: null }
+  } as EntireBook
 })
 
 export const mutations = {
