@@ -7,6 +7,7 @@
     )
 
     BookForm(
+      v-if="book.title"
       :book="book"
       :isDisabled="true"
     )

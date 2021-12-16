@@ -1,8 +1,9 @@
 <template lang="pug">
 
   div.dashboard
-    .dashboard__title
-      span Reading now
+    .dashboard__heading
+      h2.dashboard__title Reading now
+
     ul.dashboard__list
       li.dashboard__item(
         v-for="book in readingBooks"
@@ -12,8 +13,22 @@
           :book="book"
         )
 
-    .dashboard__title
-      span Read completely ({{ readBooksPages }} pages)
+    .dashboard__heading
+      h2.dashboard__title Read completely in {{ readYearState }} ({{ readBooksPages }} pages)
+      BDropdown(@change="setReadingYear")
+        template(#trigger="{ active }")
+          BButton(
+            type="is-default"
+            size="is-small"
+            :icon-right="active ? 'menu-up' : 'menu-down'"
+            :label="readYearState"
+          )
+        BDropdownItem(
+          v-for="item in readingYears"
+          :key="item"
+          :value="item"
+        ) {{ item }}
+
     ul.dashboard__list
       li.dashboard__item(
         v-for="book in readBooks"
@@ -42,19 +57,37 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       readingBooks: 'dashboard/readingBooksState',
-      readBooks: 'dashboard/readBooksState'
+      readBooks: 'dashboard/readBooksState',
+      readYearState: 'dashboard/readYearState'
     }),
 
     readBooksPages() {
        return this.$store.getters['dashboard/readBooksState']
          .reduce((acc: number, next: BasicBook) => acc + next.pages, 0)
          .toLocaleString('ru-RU')
+    },
+
+    readingYears() {
+      const readingStart = 2010
+      const readingNow = new Date().getFullYear() + 1
+
+      return Array.from(
+        { length: readingNow - readingStart },
+        (a, b) => b += readingStart
+      ).reverse()
     }
   },
 
   async fetch() {
     await this.$store.dispatch('dashboard/fetchReadingBooks')
     await this.$store.dispatch('dashboard/fetchReadBooks', this.$store.getters['dashboard/readYearState'])
+  },
+
+  methods: {
+    setReadingYear(year: number) {
+      this.$store.commit('dashboard/updateReadingYear', year)
+      this.$store.dispatch('dashboard/fetchReadBooks', year)
+    }
   }
 })
 
@@ -67,9 +100,20 @@ export default Vue.extend({
 
 .dashboard {
 
+  &__heading {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    color: $darkModeBody;
+    font-size: 1.25rem;
+  }
+
   &__list {
     display: grid;
     grid-gap: 1rem;
+    margin-bottom: 3rem;
 
     @include media("<tablet") {
       grid-template-columns: repeat(1, 1fr);

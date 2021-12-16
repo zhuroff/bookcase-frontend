@@ -20,6 +20,10 @@ export const mutations = {
 
   commitReadBooks: (state: DashboardState, data: BasicBook[]) => {
     state.readBooks = data
+  },
+
+  updateReadingYear: (state: DashboardState, year: number) => {
+    state.readYear = year
   }
 }
 
