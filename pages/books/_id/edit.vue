@@ -10,6 +10,7 @@
       :book="book"
       :isDisabled="false"
       @updateBookInstance="updateBookInstance"
+      @pushNewImage="pushNewImage"
     )
 
     .book__footer
@@ -65,6 +66,10 @@ export default Vue.extend({
       this.removePreCover(this.pageID)
     }
 
+    if (this.uploadedArticleImages.length) {
+      this.removeUnsavedArticleImages()
+    }
+
     if (this.$route.name !== 'books-id') {
       this.$store.commit('book/clearfy')
     }
@@ -78,7 +83,9 @@ export default Vue.extend({
     return {
       pageID: this.$route.params.id,
 
-      isPreloading: true
+      isPreloading: true,
+
+      uploadedArticleImages: [] as string[]
     }
   },
 
@@ -102,6 +109,10 @@ export default Vue.extend({
       if (payload.key === 'coverImage') {
         this.uploadPreCover(payload.value as File)
       }
+    },
+
+    pushNewImage(url: string) {
+      this.uploadedArticleImages.push(url)
     },
 
     async uploadPreCover(file: File) {
@@ -140,6 +151,20 @@ export default Vue.extend({
       }
     },
 
+    async removeUnsavedArticleImages() {
+      const query = `/api/books/summary/images/delete`
+      const formData = new FormData()
+
+      formData.append('urls', JSON.stringify(this.uploadedArticleImages))
+
+      try {
+        const response = await this.$axios.post(query, formData)
+        console.log(response)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
     async saveBookChanges() {
       const storedMutatedBook = this.$store.getters['book/bookState']
       const formData = new FormData()
@@ -157,6 +182,8 @@ export default Vue.extend({
             actionText: 'OK',
             queue: false
           })
+
+          this.uploadedArticleImages = []
         }
       } catch (error) {
         console.error(error)

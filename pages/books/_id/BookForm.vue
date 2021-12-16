@@ -124,6 +124,7 @@
         :tools="summaryTools"
         :isDisabled="isDisabled"
         @updateEditorContent="updateEditorContent"
+        @pushNewImage="pushNewImage"
       )
 
     BModal(
@@ -305,6 +306,10 @@ export default Vue.extend({
 
     updateEditorContent(payload: FieldPayloadEmit) {
       this.$store.commit('book/storeNewBookContent', payload)
+    },
+
+    pushNewImage(url: string) {
+      this.$emit('pushNewImage', url)
     },
 
     setBookStatus(status: BookStatus) {

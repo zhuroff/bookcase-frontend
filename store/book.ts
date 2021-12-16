@@ -5,6 +5,10 @@ import nuxtConfig from '~/nuxt.config'
 
 const summaryUrlClearfy = (summary: string | null): string => {
   if (!summary) return ''
+  
+  if (!summary.includes('article_covers')) {
+    return summary
+  }
 
   const clearfy = summary
     .replace(/http:\/\/localhost\//g, '')

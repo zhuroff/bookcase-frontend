@@ -116,21 +116,52 @@
     )
       AppEditorSprite(name="blockquote")
 
-    BButton(
-      type="is-default"
-      size="is-small"
-      title="Link"
-      @click="$emit('setLink')"
-    )
-      AppEditorSprite(name="link")
+    BDropdown
+      template(#trigger="{ active }")
+        BButton(
+          type="is-default"
+          size="is-small"
+          title="Link"
+          :class="{ '--active': editor.isActive('link') }"
+        )
+          AppEditorSprite(name="link")
+      template
+        BInput(
+          type="text"
+          size="is-small"
+          v-model="linkURL"
+          placeholder="Link URL"
+        )
 
-    BButton(
-      type="is-default"
-      size="is-small"
-      title="Image"
-      @click="$emit('setImage')"
-    )
-      AppEditorSprite(name="image")
+        BButton(
+          type="is-success"
+          size="is-small"
+          @click="setLink"
+        )
+          AppSprite(name="check")
+
+    BDropdown
+      template(#trigger="{ active }")
+        BButton(
+          type="is-default"
+          size="is-small"
+          title="Image"
+          :class="{ '--active': editor.isActive('image') }"
+        )
+          AppEditorSprite(name="image")
+      template
+        BUpload(
+          v-model="image"
+          @input="uploadImage"
+        )
+          section.section
+            .content.has-text-centered
+              p
+                BIcon(
+                  icon="upload"
+                  size="is-large"
+                )
+              p Drop file here or click to upload
 
     BButton(
       type="is-default"
@@ -172,6 +203,7 @@
 
 import Vue from 'vue'
 import AppEditorSprite from './AppEditorSprite.vue'
+import AppSprite from '~/components/AppSprite.vue'
 
 export default Vue.extend({
   name: 'ContentsTools',
@@ -183,7 +215,33 @@ export default Vue.extend({
   },
 
   components: {
-    AppEditorSprite
+    AppEditorSprite,
+    AppSprite
+  },
+
+  data() {
+    return {
+      linkURL: '',
+
+      image: null
+    }
+  },
+
+  methods: {
+    setLink() {
+      this.$emit('setLink', this.linkURL)
+      this.linkURL = ''
+    },
+
+    uploadImage() {
+      const payload = {
+        key: 'articles',
+        value: this.image
+      }
+
+      this.$emit('uploadImage', payload)
+      this.image = null
+    }
   }
 })
 

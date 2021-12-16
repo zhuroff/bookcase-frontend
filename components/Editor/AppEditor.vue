@@ -27,6 +27,7 @@
           @toggleCodeBlock="toggleCodeBlock"
           @setHorizontalRule="setHorizontalRule"
           @sendToPrint="sendToPrint"
+          @uploadImage="uploadImage"
         )
 
       EditorContent(
@@ -40,6 +41,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import { FieldPayloadEmit } from '~/types/Global'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
@@ -63,6 +65,8 @@ import HorizontalRule from '@tiptap/extension-horizontal-rule'
 import AnnotationTools from './AnnotationTools.vue'
 import ContentsTools from './ContentsTools.vue'
 import SummaryTools from './SummaryTools.vue'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import nuxtConfig from '~/nuxt.config'
 
 type Level = 2 | 3 | 4
 
@@ -133,7 +137,8 @@ export default Vue.extend({
         Image,
         Underline,
         HardBreak,
-        HorizontalRule
+        HorizontalRule,
+        Dropcursor
       ]
     })
   },
@@ -202,12 +207,34 @@ export default Vue.extend({
       this.editor.chain().focus().toggleBlockquote().run()
     },
 
-    setLink() {
-      // this.editor.chain().focus().setLink().run()
+    setLink(url: string) {
+      if (url) {
+        this.editor.chain().focus().setLink({
+          href: url,
+          target: '_blank'
+        }).run()
+      } else {
+        this.editor.chain().focus().unsetLink().run()
+      }
     },
 
-    setImage() {
-      // this.editor.chain().focus().setImage().run()
+    async uploadImage(payload: FieldPayloadEmit) {
+      const query = `/api/books/${this.$route.params.id}/summary?folder=${payload.key}`
+      const formData = new FormData()
+
+      formData.append('articleImage', payload.value)
+
+      try {
+        const response = await this.$axios.post(query, formData)
+        this.setImage(response.data.articleImage)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    setImage(url: string) {
+      this.editor.chain().focus().setImage({ src: nuxtConfig.env.BASE_URL + url }).run()
+      this.$emit('pushNewImage', url)
     },
 
     toggleCode() {
@@ -238,6 +265,7 @@ export default Vue.extend({
 
 .editor {
   margin-bottom: 2rem;
+  max-width: 1046px;
 
   &__title {
     color: $lightGray;
