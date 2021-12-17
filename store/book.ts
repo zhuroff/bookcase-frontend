@@ -85,6 +85,29 @@ export const mutations = {
     }
   },
 
+  deleteCategoryItem: (state: BookState, payload: FieldPayloadEmit) => {
+    const targetCategory = (state.book as any)[payload.key]
+    let targetItemIndex
+
+    switch(payload.key) {
+      case 'authors':
+        targetItemIndex = targetCategory.findIndex((el: any) => el.author._id === payload.value)
+        break
+      case 'publishers':
+        targetItemIndex = targetCategory.findIndex((el: any) => el.publisher._id === payload.value)
+        break
+      case 'series':
+        (state.book as any)[payload.key] = null
+        return false
+      default:
+        targetItemIndex = targetCategory.findIndex((el: any) => el._id === payload.value)
+    }
+
+    if (targetItemIndex > -1) {
+      targetCategory.splice(targetItemIndex, 1)
+    }
+  },
+
   clearfy: (state: BookState) => {
     state.book = {} as EntireBook
   }

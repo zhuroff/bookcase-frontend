@@ -109,9 +109,9 @@ export default Vue.extend({
 
   data() {
     return {
-      startReading: null,
+      startReading: null as unknown,
 
-      finishReading: null,
+      finishReading: null as unknown,
 
       startMaxDate: new Date(),
 
