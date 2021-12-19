@@ -240,7 +240,7 @@ export default Vue.extend({
     },
 
     repeaterCardClick(payload: FieldPayloadEmit) {
-      console.log(payload)
+      this.callRepeaterModal(payload.key)
     },
 
     callRepeaterModal(key: string) {
@@ -301,7 +301,7 @@ export default Vue.extend({
     },
 
     deleteCard(payload: FieldPayloadEmit) {
-      console.log(payload)
+      this.$store.commit('book/deleteCategoryItem', payload)
     },
 
     updateEditorContent(payload: FieldPayloadEmit) {
