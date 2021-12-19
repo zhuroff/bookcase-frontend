@@ -21,7 +21,7 @@ interface BookLink {
 
 interface BookStatus {
   start?: string | null
-  finish?: string | null
+  finish: string | null
 }
 
 interface BasicBook {
