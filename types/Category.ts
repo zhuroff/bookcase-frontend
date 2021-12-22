@@ -6,7 +6,7 @@ interface CategoryMinimum {
 interface CategoryBasic extends CategoryMinimum {
   isDraft: boolean
   dateCreated: Date
-  relatedBooks: string[]
+  books: string[]
   picture?: string
 }
 

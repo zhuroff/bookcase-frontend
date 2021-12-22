@@ -26,16 +26,6 @@
         :to="{ path: `/books/${$route.params.id}/edit`}"
       ) Edit
 
-      BButton(
-        size="is-small"
-        type="is-info"
-      ) Delete
-
-      BButton(
-        size="is-small"
-        type="is-info"
-      ) To draft
-
 </template>
 
 <script lang="ts">

@@ -31,6 +31,7 @@
       BButton(
         size="is-small"
         type="is-info"
+        @click="deleteBookConfirmation"
       ) Delete
 
       BButton(
@@ -188,6 +189,34 @@ export default Vue.extend({
 
           this.uploadedArticleImages = []
         }
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    deleteBookConfirmation() {
+      this.$buefy.dialog.confirm({
+        message: 'Are you serious?',
+        onConfirm: () => this.deleteBook()
+      })
+    },
+
+    async deleteBook() {
+      try {
+        const response = await this.$axios.delete(`/api/books/${this.$route.params.id}`)
+        console.log(response.data)
+
+        // if (response.status === 200) {
+        //   this.$buefy.snackbar.open({
+        //     message: response.data.message,
+        //     type: 'is-success',
+        //     position: 'is-bottom',
+        //     actionText: 'OK',
+        //     queue: false
+        //   })
+
+        //   this.$router.push({ path: '/books' })
+        // }
       } catch (error) {
         console.error(error)
       }
