@@ -89,4 +89,16 @@ $breakpoints: (
     border-bottom-color: $lightDark;
     cursor: text;
   }
+
+  &::-webkit-input-placeholder {
+    color: $lightDark;
+  }
+
+  &::-moz-placeholder {
+    color: $lightDark;
+  }
+
+  &:-moz-placeholder {
+    color: $lightDark;
+  }
 }

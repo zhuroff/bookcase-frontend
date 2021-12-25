@@ -12,6 +12,7 @@
       :isDisabled="false"
       @updateBookInstance="updateBookInstance"
       @updateAuthorRole="updateAuthorRole"
+      @updateEditionInfo="updateEditionInfo"
       @pushNewImage="pushNewImage"
     )
 
@@ -47,7 +48,7 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { FieldPayloadEmit } from '../../../types/Global'
-import { BookAuthorRole } from '../../../types/Book'
+import { BookAuthorRole, EditionInfo } from '../../../types/Book'
 import BookForm from './BookForm.vue'
 
 // interface BookSignatures {
@@ -117,6 +118,10 @@ export default Vue.extend({
 
     updateAuthorRole(payload: BookAuthorRole) {
       this.$store.commit('book/updateAuthorRole', payload)
+    },
+
+    updateEditionInfo(payload: EditionInfo) {
+      this.$store.commit('book/updateEditionInfo', payload)
     },
 
     pushNewImage(url: string) {

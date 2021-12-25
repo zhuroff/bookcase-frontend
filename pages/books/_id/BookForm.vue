@@ -59,6 +59,7 @@
         @repeaterCardClick="repeaterCardClick"
         @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
+        @updateEditionInfo="updateEditionInfo"
       )
 
       AppRepeater(
@@ -147,7 +148,7 @@
 
 import Vue from 'vue'
 import { FieldPayloadEmit } from '../../../types/Global'
-import { BookAuthorRole, BookStatus } from '../../../types/Book'
+import { BookAuthorRole, BookStatus, EditionInfo } from '../../../types/Book'
 import { CategoryForm } from '../../../types/Category'
 import AppTextarea from '/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
@@ -351,6 +352,10 @@ export default Vue.extend({
 
     setAuthorRole(payload: BookAuthorRole) {
       this.$emit('updateAuthorRole', payload)
+    },
+
+    updateEditionInfo(payload: EditionInfo) {
+      this.$emit('updateEditionInfo', payload)
     }
   }
 })

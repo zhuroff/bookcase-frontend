@@ -33,6 +33,7 @@
         v-model="city"
         placeholder="City"
         :disabled="isDisabled"
+        @input="updateEditionInfo('city')"
       )
 
       BInput(
@@ -41,6 +42,7 @@
         v-model="code"
         placeholder="Book code"
         :disabled="isDisabled"
+        @input="updateEditionInfo('code')"
       )
 
 </template>
@@ -48,6 +50,7 @@
 <script lang="ts">
 
 import RepeaterBasic from './mixins'
+import { EditionInfo } from '../../types/Book'
 
 export default RepeaterBasic.extend({
   name: 'AppRepeaterAuthor',
@@ -57,6 +60,16 @@ export default RepeaterBasic.extend({
       code: this.card.code,
       city: this.card.city,
       id: this.card.publisher._id
+    }
+  },
+
+  methods: {
+    updateEditionInfo(key: string) {
+      const payload: EditionInfo = { id: this.id }
+
+      payload[key] = this[key]
+
+      this.$emit('updateEditionInfo', payload)
     }
   }
 })

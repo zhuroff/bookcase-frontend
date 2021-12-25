@@ -13,6 +13,11 @@ interface BookAuthor {
   role: string
 }
 
+interface EditionInfo {
+  id: string
+  [index: string]: string
+}
+
 interface BookPublisher {
   city: string
   code: string
@@ -66,6 +71,8 @@ interface BookState {
 export {
   BookAuthorRole,
   BookAuthor,
+  EditionInfo,
+  BookPublisher,
   BookStatus,
   BasicBook,
   EntireBook,

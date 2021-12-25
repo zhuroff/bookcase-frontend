@@ -1,5 +1,5 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
-import { EntireBook, BookState, BookAuthor, BookAuthorRole } from '~/types/Book'
+import { EntireBook, BookState, BookAuthor, BookAuthorRole, EditionInfo, BookPublisher } from '~/types/Book'
 import { FieldPayloadEmit } from '~/types/Global'
 import nuxtConfig from '~/nuxt.config'
 
@@ -90,6 +90,18 @@ export const mutations = {
 
     if (targetAuthor) {
       targetAuthor.role = payload.role
+    }
+  },
+
+  updateEditionInfo: (state: BookState, payload: EditionInfo) => {
+    const targetPublisher = state.book.publishers.find((el: BookPublisher) => el.publisher._id === payload.id)
+
+    if (targetPublisher) {
+      if (payload.code) {
+        targetPublisher.code = payload.code
+      } else {
+        targetPublisher.city = payload.city
+      }
     }
   },
 
