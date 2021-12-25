@@ -4,6 +4,7 @@
     BButton(
       type="is-primary is-light"
       size="is-small"
+      @click="createNewEntry"
     ) Add new
 
     BButton(
@@ -30,3 +31,19 @@
     // Сортиорвка имя, дата
 
 </template>
+
+<script lang="ts">
+
+import Vue from 'vue'
+
+export default Vue.extend({
+  name: 'AppActions',
+
+  methods: {
+    createNewEntry() {
+      this.$emit('createNewEntry')
+    }
+  }
+})
+
+</script>

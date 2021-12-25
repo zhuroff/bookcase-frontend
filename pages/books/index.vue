@@ -1,7 +1,9 @@
 <template lang="pug">
   
   div
-    AppActions
+    AppActions(
+      @createNewEntry="createNewBook"
+    )
 
 </template>
 
@@ -37,6 +39,18 @@ export default Vue.extend({
       try {
         const response = await this.$axios.post('/api/books', this.listViewConfig)
         console.log(response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async createNewBook() {
+      try {
+        const response = await this.$axios.post('/api/books/create')
+
+        if (response.status === 201) {
+          this.$router.push({ path: `/books/${response.data._id}/edit` })
+        }
       } catch (error) {
         console.error(error)
       }

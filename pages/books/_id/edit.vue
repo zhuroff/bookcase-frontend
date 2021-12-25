@@ -7,7 +7,7 @@
     )
 
     BookForm(
-      v-if="book.title"
+      v-if="book._id"
       :book="book"
       :isDisabled="false"
       @updateBookInstance="updateBookInstance"
@@ -48,9 +48,9 @@ import { mapGetters } from 'vuex'
 import { FieldPayloadEmit } from '~/types/Global'
 import BookForm from './BookForm.vue'
 
-interface BookSignatures {
-  [index: string]: string | number | Blob | boolean
-}
+// interface BookSignatures {
+//   [index: string]: string | number | Blob | boolean
+// }
 
 export default Vue.extend({
   name: 'SingleBookEdit',
@@ -204,19 +204,18 @@ export default Vue.extend({
     async deleteBook() {
       try {
         const response = await this.$axios.delete(`/api/books/${this.$route.params.id}`)
-        console.log(response.data)
 
-        // if (response.status === 200) {
-        //   this.$buefy.snackbar.open({
-        //     message: response.data.message,
-        //     type: 'is-success',
-        //     position: 'is-bottom',
-        //     actionText: 'OK',
-        //     queue: false
-        //   })
+        if (response.status === 200) {
+          this.$buefy.snackbar.open({
+            message: response.data.message,
+            type: 'is-success',
+            position: 'is-bottom',
+            actionText: 'OK',
+            queue: false
+          })
 
-        //   this.$router.push({ path: '/books' })
-        // }
+          this.$router.push({ path: '/books' })
+        }
       } catch (error) {
         console.error(error)
       }

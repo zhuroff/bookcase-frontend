@@ -17,7 +17,7 @@
       ) Create
 
     simplebar(data-simplebar-auto-hide="false")
-      .repeater__modal-body
+      .repeater__modal-body(v-if="!isCreateMode")
         BTable(
           :data="data"
           :hoverable="true"
@@ -56,6 +56,15 @@
           @change="switchPagination"
         )
 
+      .repeater__modal-body(v-else)
+        form
+          BInput(
+            v-for="item in categoryForm"
+            :key="item.key"
+            :type="item.type"
+            :placeholder="item.label"
+          )
+
 </template>
 
 <script lang="ts">
@@ -63,6 +72,15 @@
 import Vue from 'vue'
 import simplebar from 'simplebar-vue'
 import AppSprite from '~/components/AppSprite.vue'
+
+interface CategoryField {
+  key: string
+  label: string
+}
+
+interface CategoryFields {
+  [index: string]: CategoryField[]
+}
 
 export default Vue.extend({
   name: 'AppRepeaterModal',
@@ -93,7 +111,81 @@ export default Vue.extend({
     return {
       searchQuery: '',
 
-      perPage: 20
+      perPage: 20,
+
+      isCreateMode: false,
+
+      categoryForm: [] as unknown as CategoryField[],
+
+      categoryFields: {
+        authors: [
+          {
+            key: 'firstName',
+            label: 'Name',
+            type: 'text'
+          },
+
+          {
+            key: 'lastName',
+            label: 'Last name',
+            type: 'text'
+          },
+
+          {
+            key: 'patronymicName',
+            label: 'Patronymic name',
+            type: 'text'
+          },
+
+          {
+            key: 'picture',
+            label: 'Picture',
+            type: 'file'
+          }
+        ],
+
+        genres: [
+          {
+            key: 'title',
+            label: 'Title',
+            type: 'text'
+          },
+
+          {
+            key: 'picture',
+            label: 'Picture',
+            type: 'file'
+          }
+        ],
+
+        publishers: [
+          {
+            key: 'title',
+            label: 'Title',
+            type: 'text'
+          },
+
+          {
+            key: 'picture',
+            label: 'Picture',
+            type: 'file'
+          }
+        ],
+
+        series: [
+          {
+            key: 'title',
+            label: 'Title',
+            type: 'text'
+          },
+
+          {
+            key: 'picture',
+            label: 'Picture',
+            type: 'file'
+          }
+        ]
+      }
     }
   },
 
@@ -108,7 +200,8 @@ export default Vue.extend({
     },
 
     createNewCategory() {
-      console.log(this.propKey)
+      this.isCreateMode = true
+      this.categoryForm = (this.categoryFields as CategoryFields)[this.propKey]
     },
 
     switchPagination(value: number) {
