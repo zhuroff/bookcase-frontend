@@ -2,7 +2,7 @@
 
   .repeater__modal
     .repeater__modal-header
-      .repeater__modal-search
+      .repeater__modal-search(v-if="!isCreateMode")
         BInput(
           type="text"
           v-model="searchQuery"
@@ -11,10 +11,18 @@
         AppSprite(name="search")
 
       BButton(
+        v-if="!isCreateMode"
         type="is-info"
         size="is-small"
         @click="createNewCategory"
       ) Create
+
+      BButton(
+        v-else
+        type="is-info"
+        size="is-small"
+        @click="saveNewCategory"
+      ) Save
 
     simplebar(data-simplebar-auto-hide="false")
       .repeater__modal-body(v-if="!isCreateMode")
@@ -57,30 +65,31 @@
         )
 
       .repeater__modal-body(v-else)
-        form
-          BInput(
+        form.repeater__modal-form
+          .repeater__modal-field(
             v-for="item in categoryForm"
             :key="item.key"
-            :type="item.type"
-            :placeholder="item.label"
           )
+            BInput(
+              v-if="item.type !== 'file'"
+              :type="item.type"
+              :placeholder="item.label"
+              v-model="item.value"
+            )
+
+            BUpload(
+              v-else
+              v-model="item.value"
+            ) Фото
 
 </template>
 
 <script lang="ts">
 
 import Vue from 'vue'
+import { CategoryField, CategoryForm } from '../../types/Category'
 import simplebar from 'simplebar-vue'
 import AppSprite from '~/components/AppSprite.vue'
-
-interface CategoryField {
-  key: string
-  label: string
-}
-
-interface CategoryFields {
-  [index: string]: CategoryField[]
-}
 
 export default Vue.extend({
   name: 'AppRepeaterModal',
@@ -120,70 +129,80 @@ export default Vue.extend({
       categoryFields: {
         authors: [
           {
-            key: 'firstName',
-            label: 'Name',
-            type: 'text'
+            key: 'lastName',
+            label: 'Last name',
+            type: 'text',
+            value: ''
           },
 
           {
-            key: 'lastName',
-            label: 'Last name',
-            type: 'text'
+            key: 'firstName',
+            label: 'First name',
+            type: 'text',
+            value: ''
           },
 
           {
             key: 'patronymicName',
             label: 'Patronymic name',
-            type: 'text'
+            type: 'text',
+            value: ''
           },
 
-          {
-            key: 'picture',
-            label: 'Picture',
-            type: 'file'
-          }
+          // {
+          //   key: 'picture',
+          //   label: 'Picture',
+          //   type: 'file',
+          //   value: ''
+          // }
         ],
 
         genres: [
           {
             key: 'title',
             label: 'Title',
-            type: 'text'
+            type: 'text',
+            value: ''
           },
 
-          {
-            key: 'picture',
-            label: 'Picture',
-            type: 'file'
-          }
+          // {
+          //   key: 'picture',
+          //   label: 'Picture',
+          //   type: 'file',
+          //   value: ''
+          // }
         ],
 
         publishers: [
           {
             key: 'title',
             label: 'Title',
-            type: 'text'
+            type: 'text',
+            value: ''
           },
 
-          {
-            key: 'picture',
-            label: 'Picture',
-            type: 'file'
-          }
+          // {
+          //   key: 'picture',
+          //   label: 'Picture',
+          //   type: 'file',
+          //   value: ''
+          // }
         ],
 
         series: [
           {
             key: 'title',
             label: 'Title',
-            type: 'text'
+            type: 'text',
+            value: ''
           },
 
-          {
-            key: 'picture',
-            label: 'Picture',
-            type: 'file'
-          }
+          // {
+          //   key: 'picture',
+          //   label: 'Picture',
+          //   type: 'file',
+          //   value: ''
+          // }
         ]
       }
     }
@@ -201,7 +220,11 @@ export default Vue.extend({
 
     createNewCategory() {
       this.isCreateMode = true
-      this.categoryForm = (this.categoryFields as CategoryFields)[this.propKey]
+      this.categoryForm = (this.categoryFields as CategoryForm)[this.propKey]
+    },
+
+    saveNewCategory() {
+      this.$emit('saveNewCategory', this.categoryForm)
     },
 
     switchPagination(value: number) {

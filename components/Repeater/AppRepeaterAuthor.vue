@@ -30,16 +30,19 @@
       BDropdown(
         position="is-top-right"
         :disabled="isDisabled"
+        v-model="selectedRole"
+        @input="selectRole"
       )
         template(#trigger="{ active }")
           BButton(
-            :label="authorRoles[card.role]"
+            :label="currentRole"
             :icon-right="active ? 'menu-up' : 'menu-down'"
             size="is-small"
           )
         BDropdownItem(
           v-for="option in authorRolesArr"
           :key="option.key"
+          :value="option.key"
         ) {{ option.value }}
 
 </template>
@@ -47,7 +50,8 @@
 <script lang="ts">
 
 import { authorRoles } from '~/configs/localize'
-import { FieldPayloadEmit, StringSignature } from '~/types/Global'
+import { FieldPayloadEmit, StringSignature } from '../../types/Global'
+import { BookAuthorRole } from '../../types/Book'
 import RepeaterBasic from './mixins'
 
 export default RepeaterBasic.extend({
@@ -62,14 +66,33 @@ export default RepeaterBasic.extend({
         }))
 
       return result
+    },
+
+    currentRole(): string {
+      return this.authorRoles[this.selectedRole]
     }
   },
 
   data() {
     return {
       authorRoles: authorRoles.ru as StringSignature,
+
       role: this.card.role,
-      id: this.card.author._id
+
+      id: this.card.author._id,
+
+      selectedRole: this.card.role || ''
+    }
+  },
+
+  methods: {
+    selectRole() {
+      const payload: BookAuthorRole = {
+        id: (this as any).id,
+        role: this.selectedRole
+      }
+
+      this.$emit('setAuthorRole', payload)
     }
   }
 })

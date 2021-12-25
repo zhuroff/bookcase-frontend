@@ -11,6 +11,7 @@
       :book="book"
       :isDisabled="false"
       @updateBookInstance="updateBookInstance"
+      @updateAuthorRole="updateAuthorRole"
       @pushNewImage="pushNewImage"
     )
 
@@ -45,7 +46,8 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { FieldPayloadEmit } from '~/types/Global'
+import { FieldPayloadEmit } from '../../../types/Global'
+import { BookAuthorRole } from '../../../types/Book'
 import BookForm from './BookForm.vue'
 
 // interface BookSignatures {
@@ -111,6 +113,10 @@ export default Vue.extend({
       if (payload.key === 'coverImage') {
         this.uploadPreCover(payload.value as File)
       }
+    },
+
+    updateAuthorRole(payload: BookAuthorRole) {
+      this.$store.commit('book/updateAuthorRole', payload)
     },
 
     pushNewImage(url: string) {

@@ -16,8 +16,21 @@ interface CategoryAuthor extends CategoryBasic {
   patronymicName?: string
 }
 
+interface CategoryField {
+  key: string
+  label: string,
+  type: string,
+  value: string | File
+}
+
+interface CategoryForm {
+  [index: string]: CategoryField[]
+}
+
 export {
   CategoryMinimum,
   CategoryBasic,
-  CategoryAuthor
+  CategoryAuthor,
+  CategoryField,
+  CategoryForm
 }

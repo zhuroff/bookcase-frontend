@@ -1,5 +1,10 @@
 import { CategoryMinimum } from './Category'
 
+interface BookAuthorRole {
+  id: string
+  role: string
+}
+
 interface BookAuthor {
   author: {
     _id: string
@@ -59,6 +64,8 @@ interface BookState {
 }
 
 export {
+  BookAuthorRole,
+  BookAuthor,
   BookStatus,
   BasicBook,
   EntireBook,

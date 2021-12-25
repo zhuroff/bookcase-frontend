@@ -48,6 +48,7 @@
         @repeaterCardClick="repeaterCardClick"
         @callRepeaterModal="callRepeaterModal"
         @deleteCard="deleteCard"
+        @setAuthorRole="setAuthorRole"
       )
 
       AppRepeater(
@@ -136,6 +137,7 @@
         :data="repeaterData.data"
         :pagination="repeaterData.pagination || {}"
         @selectCategoryItem="selectCategoryItem"
+        @saveNewCategory="saveNewCategory"
         @switchPagination="switchPagination"
       )
 
@@ -144,9 +146,10 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { FieldPayloadEmit } from '~/types/Global'
-import { BookStatus } from '~/types/Book'
-import AppTextarea from '~/components/AppTextarea.vue'
+import { FieldPayloadEmit } from '../../../types/Global'
+import { BookAuthorRole, BookStatus } from '../../../types/Book'
+import { CategoryForm } from '../../../types/Category'
+import AppTextarea from '/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
 import AppRepeater from '~/components/Repeater/AppRepeater.vue'
@@ -289,6 +292,22 @@ export default Vue.extend({
       }
     },
 
+    async saveNewCategory(data: CategoryForm[]) {
+      const payload = data.reduce((acc: any, next: any) => {
+        acc[next.key] = next.value
+        acc.isDraft = false
+        acc.books = []
+        return acc
+      }, {})
+
+      try {
+        const response = await this.$axios.post(`/api/${this.repeaterModalKey}/create`, payload)
+        this.repeaterData.data.unshift(response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
     setModalData(data: RepeaterFetchedData[]) {
       this.repeaterData.data = data
     },
@@ -328,6 +347,10 @@ export default Vue.extend({
       }
 
       this.$emit('updateBookInstance', payload)
+    },
+
+    setAuthorRole(payload: BookAuthorRole) {
+      this.$emit('updateAuthorRole', payload)
     }
   }
 })

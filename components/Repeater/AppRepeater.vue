@@ -15,6 +15,7 @@
         :componentKey="componentKey"
         @repeaterCardClick="repeaterCardClick"
         @deleteCard="deleteCard"
+        @setAuthorRole="setAuthorRole"
       )
 
     li.repeater__item.--add(v-if="!isDisabled")
@@ -30,7 +31,8 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { FieldPayloadEmit } from '~/types/Global'
+import { FieldPayloadEmit } from '../../types/Global'
+import { BookAuthorRole } from '../../types/Book'
 import AppSprite from '~/components/AppSprite.vue'
 import AppRepeaterAuthor from './AppRepeaterAuthor.vue'
 import AppRepeaterPublisher from './AppRepeaterPublisher.vue'
@@ -101,6 +103,10 @@ export default Vue.extend({
 
     callRepeaterModal() {
       this.$emit('callRepeaterModal', this.componentKey)
+    },
+
+    setAuthorRole(payload: BookAuthorRole) {
+      this.$emit('setAuthorRole', payload)
     }
   }
 })
