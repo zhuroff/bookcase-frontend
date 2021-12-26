@@ -37,9 +37,18 @@
       ) Delete
 
       BButton(
+        v-if="!book.isDraft"
         size="is-small"
         type="is-info"
+        @click="setBookPublishStatus(true)"
       ) To draft
+
+      BButton(
+        v-else
+        size="is-small"
+        type="is-info"
+        @click="setBookPublishStatus(false)"
+      ) Publish
 
 </template>
 
@@ -178,13 +187,59 @@ export default Vue.extend({
       }
     },
 
+    setBookPublishStatus(isDraft: boolean) {
+      this.$store.commit('book/changePublishStatus', isDraft)
+      this.saveBookChanges()
+    },
+
     async saveBookChanges() {
       const storedMutatedBook = this.$store.getters['book/bookState']
+      console.log(storedMutatedBook)
+      // storedMutatedBook.dateModified = new Date().toISOString()
       const formData = new FormData()
 
-      formData.append('summary', storedMutatedBook.summary)
-      formData.append('rating', storedMutatedBook.rating)
+      const authors = storedMutatedBook.authors.map((el: any) => ({
+        author: el.author._id,
+        role: el.role
+      }))
+
+      const publishers = storedMutatedBook.publishers.map((el: any) => ({
+        publisher: el.publisher._id,
+        city: el.city,
+        code: el.code
+      }))
+
+      const genres = storedMutatedBook.genres.map((el: any) => el._id)
+
+      const series = storedMutatedBook.series?._id || ''
+
+      formData.append('isDraft', storedMutatedBook.isDraft)
+      formData.append('summary', storedMutatedBook.summary || '')
+      formData.append('contents', storedMutatedBook.contents || '')
+      formData.append('description', storedMutatedBook.description || '')
+      formData.append('rating', storedMutatedBook.rating || 0)
+      formData.append('title', storedMutatedBook.title)
+      formData.append('subtitle', storedMutatedBook.subtitle || '')
+      formData.append('coverType', storedMutatedBook.coverType || 'unknown')
+      formData.append('format', storedMutatedBook.format || 'unavailable')
+      formData.append('coverImage', storedMutatedBook.preCoverImage || storedMutatedBook.coverImage || '')
+      formData.append('preCoverImage', '')
       formData.append('status', JSON.stringify(storedMutatedBook.status))
+      formData.append('authors', JSON.stringify(authors))
+      formData.append('publishers', JSON.stringify(publishers))
+      formData.append('genres', JSON.stringify(genres))
+
+      if (series.length) {
+        formData.append('series', series)
+      }
+
+      if (storedMutatedBook.publicationYear) {
+        formData.append('publicationYear', storedMutatedBook.publicationYear)
+      }
+
+      if (storedMutatedBook.pages) {
+        formData.append('pages', storedMutatedBook.pages)
+      }
 
       try {
         const response = await this.$axios.patch(`/api/books/${this.pageID}`, formData)

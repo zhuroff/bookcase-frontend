@@ -49,7 +49,7 @@
 
 <script lang="ts">
 
-import { authorRoles } from '~/configs/localize'
+import { authorRoles } from '../../configs/localize'
 import { FieldPayloadEmit, StringSignature } from '../../types/Global'
 import { BookAuthorRole } from '../../types/Book'
 import RepeaterBasic from './mixins'

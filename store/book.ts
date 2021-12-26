@@ -55,6 +55,10 @@ export const mutations = {
       data.summary = summaryUrlClearfy(data.summary)
     }
 
+    if (!data.status) {
+      data.status = state.book.status
+    }
+
     state.book = data
   },
 
@@ -105,6 +109,26 @@ export const mutations = {
     }
   },
 
+  updateBookFormat: (state: BookState, value: string) => {
+    state.book.format = value
+  },
+
+  updateCoverType: (state: BookState, value: string) => {
+    state.book.coverType = value
+  },
+
+  updateBookPages: (state: BookState, value: number) => {
+    state.book.pages = value
+  },
+
+  updateBookYear: (state: BookState, value: number) => {
+    state.book.publicationYear = value
+  },
+
+  changePublishStatus: (state: BookState, value: boolean) => {
+    state.book.isDraft = value
+  },
+
   deleteCategoryItem: (state: BookState, payload: FieldPayloadEmit) => {
     const targetCategory = (state.book as any)[payload.key]
     let targetItemIndex
@@ -129,12 +153,12 @@ export const mutations = {
   },
 
   clearfy: (state: BookState) => {
-    state.book = {} as EntireBook
+    state.book = { status: { start: null, finish: null } } as EntireBook
   }
 }
 
 export const actions = {
-  async fetchBook({ commit, dispatch }: ActionContext<Commit, Dispatch>, id: string) {
+  async fetchBook({ commit }: ActionContext<Commit, Dispatch>, id: string) {
     try {
       const response = await (this as any).$axios.get(`/api/books/${id}`)
       commit('commitBook', response.data)

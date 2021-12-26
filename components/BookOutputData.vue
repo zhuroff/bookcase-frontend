@@ -6,16 +6,19 @@
         BDropdown(
           position="is-top-right"
           :disabled="isDisabled"
+          v-model="selectedCoverType"
+          @input="selectCoverType"
         )
           template(#trigger="{ active }")
             BButton(
-              :label="coverTypes[book.coverType]"
+              :label="currentCoverType"
               :icon-right="active ? 'menu-up' : 'menu-down'"
               size="is-small"
             )
           BDropdownItem(
             v-for="option in coverTypesArr"
             :key="option.key"
+            :value="option.key"
           ) {{ option.value }}
 
     .output__card.card
@@ -24,16 +27,19 @@
         BDropdown(
           position="is-top-right"
           :disabled="isDisabled"
+          v-model="selectedBookFormat"
+          @input="selectBookFormat"
         )
           template(#trigger="{ active }")
             BButton(
-              :label="bookFormats[book.format]"
+              :label="currentBookFormat"
               :icon-right="active ? 'menu-up' : 'menu-down'"
               size="is-small"
             )
           BDropdownItem(
             v-for="option in bookFormatsArr"
             :key="option.key"
+            :value="option.key"
           ) {{ option.value }}
 
     .output__card.card
@@ -44,6 +50,7 @@
           :value="book.pages"
           :disabled="isDisabled"
           size="is-small"
+          @input="setBookPages"
         )
 
     .output__card.card
@@ -54,6 +61,7 @@
           :value="book.publicationYear"
           :disabled="isDisabled"
           size="is-small"
+          @input="setBookYear"
         )
           
 </template>
@@ -61,8 +69,8 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { coverTypes, bookFormats } from '~/configs/localize'
-import { FieldPayloadEmit, StringSignature } from '~/types/Global'
+import { coverTypes, bookFormats } from '../configs/localize'
+import { FieldPayloadEmit, StringSignature } from '../types/Global'
 
 export default Vue.extend({
   props: {
@@ -96,6 +104,14 @@ export default Vue.extend({
         }))
 
       return result
+    },
+
+    currentCoverType() {
+      return this.coverTypes[this.selectedCoverType]
+    },
+
+    currentBookFormat() {
+      return this.bookFormats[this.selectedBookFormat]
     }
   },
 
@@ -103,7 +119,29 @@ export default Vue.extend({
     return {
       coverTypes: coverTypes.ru as StringSignature,
 
-      bookFormats: bookFormats.ru as StringSignature
+      bookFormats: bookFormats.ru as StringSignature,
+
+      selectedCoverType: this.book.coverType || 'unknown',
+
+      selectedBookFormat: this.book.format || 'unavailable',
+    }
+  },
+
+  methods: {
+    selectCoverType() {
+      this.$store.commit('book/updateCoverType', this.selectedCoverType)
+    },
+
+    selectBookFormat() {
+      this.$store.commit('book/updateBookFormat', this.selectedBookFormat)
+    },
+
+    setBookPages(value: string) {
+      this.$store.commit('book/updateBookPages', Number(value))
+    },
+
+    setBookYear(value: string) {
+      this.$store.commit('book/updateBookYear', Number(value))
     }
   }
 })
