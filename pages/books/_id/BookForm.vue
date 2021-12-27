@@ -18,6 +18,8 @@
         @setBookRating="setBookRating"
       )
 
+      BookFileLink(:file="book.file")
+
     .book__form-main
       AppTextarea(
         placeholder="Book title"
@@ -154,6 +156,7 @@ import { CategoryForm } from '../../../types/Category'
 import AppTextarea from '/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
+import BookFileLink from '~/components/BookFileLink.vue'
 import AppRepeater from '~/components/Repeater/AppRepeater.vue'
 import BookOutputData from '~/components/BookOutputData.vue'
 import AppEditor from '~/components/Editor/AppEditor.vue'
@@ -183,6 +186,7 @@ export default Vue.extend({
     AppTextarea,
     CoverUploader,
     BookReadingStatus,
+    BookFileLink,
     AppRepeater,
     BookOutputData,
     AppEditor,

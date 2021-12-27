@@ -241,6 +241,10 @@ export default Vue.extend({
         formData.append('pages', storedMutatedBook.pages)
       }
 
+      if (storedMutatedBook.file) {
+        formData.append('file', storedMutatedBook.file)
+      }
+
       try {
         const response = await this.$axios.patch(`/api/books/${this.pageID}`, formData)
 

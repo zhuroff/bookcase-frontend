@@ -100,6 +100,10 @@ export const mutations = {
     state.book.isDraft = value
   },
 
+  updateFileLink: (state: BookState, value: string) => {
+    state.book.file = value
+  },
+
   deleteCategoryItem: (state: BookState, payload: FieldPayloadEmit) => {
     const targetCategory = (state.book as any)[payload.key]
     let targetItemIndex
