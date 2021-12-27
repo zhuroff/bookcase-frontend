@@ -7,6 +7,7 @@
           type="text"
           v-model="searchQuery"
           size="is-small"
+          @input="searchByCategory"
         )
         AppSprite(name="search")
 
@@ -23,6 +24,13 @@
         size="is-small"
         @click="saveNewCategory"
       ) Save
+
+      BButton(
+        v-if="isCreateMode"
+        type="is-info"
+        size="is-small"
+        @click="isCreateMode = false"
+      ) Cancel
 
     simplebar(data-simplebar-auto-hide="false")
       .repeater__modal-body(v-if="!isCreateMode")
@@ -123,6 +131,8 @@ export default Vue.extend({
       perPage: 20,
 
       isCreateMode: false,
+
+      searchTimer: 0,
 
       categoryForm: [] as unknown as CategoryField[],
 
@@ -225,6 +235,7 @@ export default Vue.extend({
 
     saveNewCategory() {
       this.$emit('saveNewCategory', this.categoryForm)
+      this.isCreateMode = false
     },
 
     switchPagination(value: number) {
@@ -234,6 +245,25 @@ export default Vue.extend({
       }
 
       this.$emit('switchPagination', payload)
+    },
+
+    searchByCategory() {
+      clearTimeout(this.searchTimer)
+
+      this.searchTimer = window.setTimeout(async () => {
+        const config = {
+          query: this.searchQuery,
+          collection: this.propKey
+        }
+
+        const response = await this.$axios.post('/api/search', config)
+
+        const payload = {
+          key: this.propKey,
+          data: response.data
+        }
+        this.$emit('setSearchResults', payload)
+      }, 1000)
     }
   }
 })
@@ -259,11 +289,15 @@ export default Vue.extend({
       background-color: $middleDark;
       padding: 1rem;
       display: flex;
-      justify-content: space-between;
 
       .button {
         font-family: $sans;
         letter-spacing: 0.5px;
+        margin-right: 0.5rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
 
@@ -271,6 +305,7 @@ export default Vue.extend({
       width: 35%;
       min-width: 200px;
       position: relative;
+      margin-right: auto;
 
       .control {
         position: relative;

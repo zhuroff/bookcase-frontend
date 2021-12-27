@@ -140,6 +140,7 @@
         @selectCategoryItem="selectCategoryItem"
         @saveNewCategory="saveNewCategory"
         @switchPagination="switchPagination"
+        @setSearchResults="setSearchResults"
       )
 
 </template>
@@ -272,6 +273,15 @@ export default Vue.extend({
     switchPagination(payload: FieldPayloadEmit) {
       this.repeaterConfig.page = payload.value
       this.fetchModalList(payload.key)
+    },
+
+    setSearchResults(payload: any) {
+      if (payload.data.length) {
+        this.setModalData(payload.data)
+        this.repeaterData.pagination  = null
+      } else {
+        this.fetchModalList(payload.key)
+      }
     },
 
     async fetchSubLists(id: string) {

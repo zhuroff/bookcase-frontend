@@ -15,6 +15,7 @@
     "noEmit": true,
     "removeComments": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "strictNullChecks": true,
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",

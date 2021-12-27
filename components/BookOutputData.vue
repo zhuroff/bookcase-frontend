@@ -107,11 +107,11 @@ export default Vue.extend({
     },
 
     currentCoverType() {
-      return this.coverTypes[this.selectedCoverType]
+      return (this as any).coverTypes[(this as any).selectedCoverType]
     },
 
     currentBookFormat() {
-      return this.bookFormats[this.selectedBookFormat]
+      return (this as any).bookFormats[(this as any).selectedBookFormat]
     }
   },
 

@@ -67,7 +67,7 @@ export default RepeaterBasic.extend({
     updateEditionInfo(key: string) {
       const payload: EditionInfo = { id: this.id }
 
-      payload[key] = this[key]
+      payload[key] = (this as any)[key]
 
       this.$emit('updateEditionInfo', payload)
     }
