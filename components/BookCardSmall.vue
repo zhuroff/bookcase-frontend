@@ -5,7 +5,7 @@
       :to="{ path: `/books/${book._id}` }"
     )
       img(
-        :src="BASE_URL + (book.coverImage || '/uploads/covers/placeholder.jpg')"
+        :src="baseUrl + (book.coverImage || '/uploads/covers/placeholder.jpg')"
         :alt="book.title"
         class="card__cover"
       )
@@ -68,7 +68,7 @@ export default Vue.extend({
 
   data() {
     return {
-      BASE_URL: nuxtConfig.env.BASE_URL
+      baseUrl: nuxtConfig.env?.baseUrl
     }
   },
 

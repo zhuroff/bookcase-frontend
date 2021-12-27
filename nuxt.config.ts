@@ -1,4 +1,6 @@
-export default {
+import type { NuxtConfig } from '@nuxt/types'
+
+const config: NuxtConfig = {
   head: {
     title: 'bookcase-frontend',
     htmlAttrs: {
@@ -16,9 +18,9 @@ export default {
   },
 
   env: {
-    BASE_URL: process.env.NODE_ENV === 'development'
-      ? process.env.VUE_APP_BASE_URL_DEV
-      : process.env.VUE_APP_BASE_URL_PROD
+    baseUrl: process.env.NODE_ENV === 'development'
+      ? process.env.VUE_APP_BASE_URL_DEV || ''
+      : process.env.VUE_APP_BASE_URL_PROD || ''
   },
 
   css: [
@@ -57,3 +59,5 @@ export default {
 
   build: {}
 }
+
+export default config

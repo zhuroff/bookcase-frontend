@@ -20,8 +20,7 @@
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./*"]
+      "~/*": ["./*"]
     },
     "types": [
       "@nuxt/types",
@@ -30,6 +29,9 @@
       "buefy/types"
     ]
   },
+  "include": [
+    "./**/*"
+  ],
   "exclude": [
     "node_modules",
     ".nuxt",

@@ -3,44 +3,15 @@ import { EntireBook, BookState, BookAuthor, BookAuthorRole, EditionInfo, BookPub
 import { FieldPayloadEmit } from '~/types/Global'
 import nuxtConfig from '~/nuxt.config'
 
-// const BookInstance: EntireBook = {
-//   _id: '',
-//   title: '',
-//   coverImage: '',
-//   pages: 0,
-//   authors: [],
-//   genres: [],
-//   lists: [],
-//   summary: '',
-//   contents: '',
-//   preCoverImage: null,
-//   coverType: '',
-//   dateCreated: '',
-//   description: '',
-//   dateModified: '',
-//   file: '',
-//   format: '',
-//   isDraft: false,
-//   links: [],
-//   publicationYear: 0,
-//   publishers: [],
-//   rating: 0,
-//   series: null,
-//   status: { start: null, finish: null },
-//   subtitle: ''
-// }
-
-const summaryUrlClearfy = (summary: string): string => {
-  if (!summary.includes('article_covers')) {
+const summaryImagesUrlify = (summary: string): string => {
+  if (!summary.includes('<img')) {
     return summary
   }
+  
+  const urlified = summary
+    .replace(/\/uploads\//g, `${nuxtConfig.env?.baseUrl}/uploads/`)
 
-  const clearfy = summary
-    .replace(/http:\/\/localhost\//g, '')
-    .replace(/article_covers\//g, '/articles/')
-    .replace(/\/articles\//g, nuxtConfig.env.BASE_URL + '/uploads/articles/')
-
-  return clearfy
+  return urlified
 }
 
 export const state = (): BookState => ({
@@ -52,7 +23,7 @@ export const state = (): BookState => ({
 export const mutations = {
   commitBook: (state: BookState, data: EntireBook) => {
     if (data.summary) {
-      data.summary = summaryUrlClearfy(data.summary)
+      data.summary = summaryImagesUrlify(data.summary)
     }
 
     if (!data.status) {

@@ -233,7 +233,7 @@ export default Vue.extend({
     },
 
     setImage(url: string) {
-      this.editor.chain().focus().setImage({ src: nuxtConfig.env.BASE_URL + url }).run()
+      this.editor.chain().focus().setImage({ src: nuxtConfig.env?.baseUrl + url }).run()
       this.$emit('pushNewImage', url)
     },
 
