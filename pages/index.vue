@@ -21,7 +21,7 @@
             type="is-default"
             size="is-small"
             :icon-right="active ? 'menu-up' : 'menu-down'"
-            :label="readYearState"
+            :label="String(readYearState)"
           )
         BDropdownItem(
           v-for="item in readingYears"

@@ -5,7 +5,7 @@
       :to="{ path: `/books/${book._id}` }"
     )
       img(
-        :src="BASE_URL + book.coverImage"
+        :src="BASE_URL + (book.coverImage || '/uploads/covers/placeholder.jpg')"
         :alt="book.title"
         class="card__cover"
       )

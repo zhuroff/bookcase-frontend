@@ -154,6 +154,7 @@ export default Vue.extend({
   }
 
   &__item {
+    height: 100%;
 
     &.--add {
       width: 50px;

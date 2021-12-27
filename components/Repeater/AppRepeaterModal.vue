@@ -301,6 +301,9 @@ export default Vue.extend({
 
     .pagination {
       padding: 1rem 0.75rem;
+      position: sticky;
+      bottom: calc(1rem - 1px);
+      background-color: $middleDark;
     }
   }
 }

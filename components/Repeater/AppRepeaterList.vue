@@ -40,6 +40,10 @@ export default RepeaterBasic.extend({
 
 @import './style';
 
+.repeater__card {
+  height: 100%;
+}
+
 .repeater__card-content {
   align-self: center;
 }

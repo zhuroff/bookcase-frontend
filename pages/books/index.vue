@@ -1,9 +1,18 @@
 <template lang="pug">
   
-  div
+  div.books
     AppActions(
       @createNewEntry="createNewBook"
     )
+
+    ul.books__list(v-if="books.length")
+      li.books__item(
+        v-for="book in books"
+        :key="book._id"
+      )
+        BookCardSmall(
+          :book="book"
+        )
 
 </template>
 
@@ -11,12 +20,14 @@
 
 import Vue from 'vue'
 import AppActions from '~/components/AppActions.vue'
+import BookCardSmall from '~/components/BookCardSmall.vue'
 
 export default Vue.extend({
   name: 'BooksIndex',
 
   components: {
-    AppActions
+    AppActions,
+    BookCardSmall
   },
   
   data() {
@@ -26,7 +37,9 @@ export default Vue.extend({
         sort: { dateCreated: -1 },
         limit: 30,
         isDraft: false
-      }
+      },
+
+      books: []
     }
   },
 
@@ -38,7 +51,7 @@ export default Vue.extend({
     async fetchBooksList() {
       try {
         const response = await this.$axios.post('/api/books', this.listViewConfig)
-        console.log(response.data)
+        this.books = response.data.docs
       } catch (error) {
         console.error(error)
       }
@@ -59,3 +72,13 @@ export default Vue.extend({
 })
 
 </script>
+
+<style lang="scss" scoped>
+
+.books__list {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+</style>
