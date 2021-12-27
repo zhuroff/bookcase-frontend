@@ -1,18 +1,18 @@
 <template lang="pug">
   
-  div.books
-    AppActions(
-      @createNewEntry="createNewBook"
-    )
+div.books
+  AppActions(
+    @createNewEntry="createNewBook"
+  )
 
-    ul.books__list(v-if="books.length")
-      li.books__item(
-        v-for="book in books"
-        :key="book._id"
+  ul.books__list(v-if="books.length")
+    li.books__item(
+      v-for="book in books"
+      :key="book._id"
+    )
+      BookCardSmall(
+        :book="book"
       )
-        BookCardSmall(
-          :book="book"
-        )
 
 </template>
 
