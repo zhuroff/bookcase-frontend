@@ -68,7 +68,7 @@ import SummaryTools from './SummaryTools.vue'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import nuxtConfig from '~/nuxt.config'
 
-type Level = 2 | 3 | 4
+type TitleLevel = 2 | 3 | 4
 
 export default Vue.extend({
   name: 'AppEditor',
@@ -171,7 +171,7 @@ export default Vue.extend({
       this.editor.chain().focus().redo().run()
     },
 
-    setTitle(level: Level) {
+    setTitle(level: TitleLevel) {
       this.editor.chain().focus().toggleHeading({ level: level }).run()
     },
 

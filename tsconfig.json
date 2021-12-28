@@ -15,7 +15,6 @@
     "noEmit": true,
     "removeComments": true,
     "noImplicitAny": true,
-    "noImplicitThis": true,
     "strictNullChecks": true,
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",
@@ -29,9 +28,6 @@
       "buefy/types"
     ]
   },
-  "include": [
-    "./**/*"
-  ],
   "exclude": [
     "node_modules",
     ".nuxt",

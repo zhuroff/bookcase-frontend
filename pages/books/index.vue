@@ -19,7 +19,8 @@ div.books
 <script lang="ts">
 
 import Vue from 'vue'
-import AppActions from '~/components/AppActions.vue'
+import { PageViewConfig } from '~/types/Global'
+import AppActions from '~/components/books/AppActions.vue'
 import BookCardSmall from '~/components/BookCardSmall.vue'
 
 export default Vue.extend({
@@ -32,12 +33,12 @@ export default Vue.extend({
   
   data() {
     return {
-      listViewConfig: {
+      pageViewConfig: {
         page: 1,
         sort: { dateCreated: -1 },
         limit: 30,
         isDraft: false
-      },
+      } as PageViewConfig,
 
       books: []
     }
@@ -50,7 +51,7 @@ export default Vue.extend({
   methods: {
     async fetchBooksList() {
       try {
-        const response = await this.$axios.post('/api/books', this.listViewConfig)
+        const response = await this.$axios.post('/api/books', this.pageViewConfig)
         this.books = response.data.docs
       } catch (error) {
         console.error(error)

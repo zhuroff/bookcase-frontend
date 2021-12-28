@@ -56,13 +56,9 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { FieldPayloadEmit } from '../../../types/Global'
-import { BookAuthorRole, EditionInfo } from '../../../types/Book'
-import BookForm from './BookForm.vue'
-
-// interface BookSignatures {
-//   [index: string]: string | number | Blob | boolean
-// }
+import { FieldPayloadEmit } from '~/types/Global'
+import { BookAuthorRole, EditionInfo } from '~/types/Book'
+import BookForm from '~/components/books/BookForm.vue'
 
 export default Vue.extend({
   name: 'SingleBookEdit',
@@ -146,7 +142,7 @@ export default Vue.extend({
       try {
         const response = await this.$axios.post(query, formData)
 
-        const payload = {
+        const payload: FieldPayloadEmit = {
           key: 'preCoverImage',
           value: response.data.preCoverImage
         }

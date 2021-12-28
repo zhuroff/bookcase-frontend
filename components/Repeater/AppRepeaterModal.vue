@@ -234,7 +234,16 @@ export default Vue.extend({
     },
 
     saveNewCategory() {
-      this.$emit('saveNewCategory', this.categoryForm)
+      const payload = this.categoryForm.reduce((acc, next) => {
+        acc[next.key] = next.value        
+        return acc
+      }, {} as any)
+
+      payload.books = []
+      payload.isDraft = false
+
+
+      this.$emit('saveNewCategory', payload)
       this.isCreateMode = false
     },
 

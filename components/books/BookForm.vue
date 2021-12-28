@@ -149,10 +149,9 @@
 
 <script lang="ts">
 
-import Vue from 'vue'
-import { FieldPayloadEmit } from '../../../types/Global'
-import { BookAuthorRole, BookStatus, EditionInfo } from '../../../types/Book'
-import { CategoryForm } from '../../../types/Category'
+import Vue, { PropOptions } from 'vue'
+import { FieldPayloadEmit, PageViewConfig } from '~/types/Global'
+import { EntireBook, BookAuthorRole, BookStatus, EditionInfo } from '~/types/Book'
 import AppTextarea from '/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
@@ -197,20 +196,16 @@ export default Vue.extend({
     book: {
       type: Object,
       required: true
-    },
+    } as PropOptions<EntireBook>,
 
     isDisabled: {
       type: Boolean,
       required: true
-    }  
+    }
   },
 
   computed: {
     coverImage() {
-      if (this.$route.name === 'books-id' || !this.book.preCoverImage) {
-        return this.book.coverImage || '/uploads/covers/placeholder.jpg'
-      }
-
       return this.book.preCoverImage
         || this.book.coverImage
         || '/uploads/covers/placeholder.jpg'
@@ -229,12 +224,12 @@ export default Vue.extend({
 
       repeaterModalKey: '',
 
-      repeaterConfig: {
+      categoryTableConfig: {
         page: 1,
         sort: { title: 1 },
         limit: 20,
         isDraft: false
-      },
+      } as PageViewConfig,
 
       repeaterData: {
         data: [],
@@ -262,7 +257,7 @@ export default Vue.extend({
       this.isModalActive = false
       this.repeaterData.data = []
       this.repeaterData.pagination = null
-      this.repeaterConfig.page = 1
+      this.categoryTableConfig.page = 1
     },
 
     selectCategoryItem(payload: FieldPayloadEmit) {
@@ -275,7 +270,7 @@ export default Vue.extend({
     },
 
     switchPagination(payload: FieldPayloadEmit) {
-      this.repeaterConfig.page = payload.value
+      this.categoryTableConfig.page = payload.value
       this.fetchModalList(payload.key)
     },
 
@@ -299,7 +294,7 @@ export default Vue.extend({
 
     async fetchModalList(key: string) {
       try {
-        const response = await this.$axios.post(`/api/${key}`, this.repeaterConfig)
+        const response = await this.$axios.post(`/api/${key}`, this.categoryTableConfig)
         this.setModalData(response.data.docs)
         this.setModalPagination(response.data)
       } catch (error) {
@@ -307,14 +302,7 @@ export default Vue.extend({
       }
     },
 
-    async saveNewCategory(data: CategoryForm[]) {
-      const payload = data.reduce((acc: any, next: any) => {
-        acc[next.key] = next.value
-        acc.isDraft = false
-        acc.books = []
-        return acc
-      }, {})
-
+    async saveNewCategory(payload: any) {
       try {
         const response = await this.$axios.post(`/api/${this.repeaterModalKey}/create`, payload)
         this.repeaterData.data.unshift(response.data)
@@ -330,7 +318,7 @@ export default Vue.extend({
     setModalPagination(data: RepeaterFetchedPagination) {
       this.repeaterData.pagination = {
         totalPages: data.totalPages,
-        currentPage: this.repeaterConfig.page
+        currentPage: this.categoryTableConfig.page
       }
     },
 

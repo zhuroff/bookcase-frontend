@@ -201,7 +201,8 @@
 
 <script lang="ts">
 
-import Vue from 'vue'
+import Vue, { PropOptions } from 'vue'
+import { Editor } from '@tiptap/vue-2'
 import AppEditorSprite from './AppEditorSprite.vue'
 import AppSprite from '~/components/AppSprite.vue'
 
@@ -210,8 +211,9 @@ export default Vue.extend({
 
   props: {
     editor: {
+      type: Object,
       required: true
-    }
+    } as PropOptions<Editor>
   },
 
   components: {
@@ -223,7 +225,7 @@ export default Vue.extend({
     return {
       linkURL: '',
 
-      image: null
+      image: null as null | File
     }
   },
 

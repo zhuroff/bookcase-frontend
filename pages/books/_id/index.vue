@@ -7,7 +7,7 @@
     )
 
     BookForm(
-      v-if="book.title"
+      v-if="book._id"
       :book="book"
       :isDisabled="true"
     )
@@ -32,7 +32,7 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import BookForm from './BookForm.vue'
+import BookForm from '~/components/books/BookForm.vue'
 
 export default Vue.extend({
   name: 'SingleBookPage',
