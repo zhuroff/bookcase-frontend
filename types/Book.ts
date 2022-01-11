@@ -1,5 +1,17 @@
 import { CategoryMinimum } from './Category'
 
+// const bookFieldPayloadEmitKeys = ['_id', 'title', 'coverImage', 'pages',
+//                                 'authors', 'genres', 'lists', 'summary',
+//                                 'contents', 'preCoverImage', 'dateCreated',
+//                                 'description', 'dateModified', 'file',
+//                                 'format', 'isDraft', 'links', 'publicationYear', 
+//                                 'publishers', 'rating', 'series', 'status', 'subtitle']
+
+interface BookFieldPayloadEmit {
+  key: string
+  value: any
+}
+
 interface BookAuthorRole {
   id: string
   role: string
@@ -69,6 +81,7 @@ interface BookState {
 }
 
 export {
+  BookFieldPayloadEmit,
   BookAuthorRole,
   BookAuthor,
   EditionInfo,

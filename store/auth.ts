@@ -1,4 +1,5 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
+import { $axios } from '~/utils/api'
 import Cookie from 'cookie'
 import Cookies from 'js-cookie'
 import { Token } from '~/types/Token'
@@ -26,7 +27,7 @@ export const mutations = {
 export const actions = {
   async create({ commit, dispatch }: ActionContext<Commit, Dispatch>, payload: AuthFormFields) {
     try {
-      const response = await (this as any).$axios.post('/api/users/create', payload)
+      const response = await $axios.post('/api/users/create', payload)
       return response
     } catch (error) {
       console.log(error)
@@ -35,7 +36,7 @@ export const actions = {
 
   async login ({ commit, dispatch }: ActionContext<Commit, Dispatch>, payload: AuthFormFields) {
     try {
-      const response = await (this as any).$axios.post('/api/users/login', payload)
+      const response = await $axios.post('/api/users/login', payload)
       dispatch('setToken', response.data.token)
       return response
     } catch (error) {
@@ -45,7 +46,7 @@ export const actions = {
   },
 
   logout ({ commit }: ActionContext<Commit, Dispatch>) {
-    (this as any).$axios.setToken(false)
+    $axios.setToken(false)
     commit('clearToken')
     Cookies.remove('jwt-token')
   },
@@ -62,7 +63,7 @@ export const actions = {
   },
 
   setToken ({ commit }: ActionContext<Commit, Dispatch>, token: string) {
-    (this as any).$axios.setToken(token, 'Bearer')
+    $axios.setToken(token, 'Bearer')
     commit('commitToken', token)
     Cookies.set('jwt-token', token)
   }

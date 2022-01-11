@@ -41,7 +41,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { FieldPayloadEmit } from '~/types/Global'
+import { BookFieldPayloadEmit } from '~/types/Book'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
@@ -218,7 +218,7 @@ export default Vue.extend({
       }
     },
 
-    async uploadImage(payload: FieldPayloadEmit) {
+    async uploadImage(payload: BookFieldPayloadEmit) {
       const query = `/api/books/${this.$route.params.id}/summary?folder=${payload.key}`
       const formData = new FormData()
 

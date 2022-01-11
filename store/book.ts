@@ -1,6 +1,14 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
-import { EntireBook, BookState, BookAuthor, BookAuthorRole, EditionInfo, BookPublisher } from '~/types/Book'
-import { FieldPayloadEmit } from '~/types/Global'
+import { $axios } from '~/utils/api'
+import {
+  BookFieldPayloadEmit,
+  EntireBook,
+  BookState,
+  BookAuthor,
+  BookAuthorRole,
+  EditionInfo,
+  BookPublisher
+} from '~/types/Book'
 import nuxtConfig from '~/nuxt.config'
 
 const summaryImagesUrlify = (summary: string): string => {
@@ -33,11 +41,11 @@ export const mutations = {
     state.book = data
   },
 
-  storeNewBookContent: (state: BookState, data: FieldPayloadEmit) => {
+  storeNewBookContent: (state: BookState, data: BookFieldPayloadEmit) => {
     (state.book as any)[data.key] = data.value
   },
 
-  updateCategories: (state: BookState, payload: FieldPayloadEmit) => {
+  updateCategories: (state: BookState, payload: BookFieldPayloadEmit) => {
     switch(payload.key) {
       case 'authors':
         state.book.authors.push({
@@ -104,7 +112,7 @@ export const mutations = {
     state.book.file = value
   },
 
-  deleteCategoryItem: (state: BookState, payload: FieldPayloadEmit) => {
+  deleteCategoryItem: (state: BookState, payload: BookFieldPayloadEmit) => {
     const targetCategory = (state.book as any)[payload.key]
     let targetItemIndex
 
@@ -135,7 +143,7 @@ export const mutations = {
 export const actions = {
   async fetchBook({ commit }: ActionContext<Commit, Dispatch>, id: string) {
     try {
-      const response = await (this as any).$axios.get(`/api/books/${id}`)
+      const response = await $axios.get(`/api/books/${id}`)
       commit('commitBook', response.data)
     } catch (error) {
       console.error(error)

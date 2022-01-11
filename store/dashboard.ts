@@ -1,4 +1,5 @@
 import { ActionContext, Commit, Dispatch } from 'vuex'
+import { $axios } from '~/utils/api'
 import { BasicBook } from '~/types/Book'
 
 interface DashboardState {
@@ -30,7 +31,7 @@ export const mutations = {
 export const actions = {
   async fetchReadingBooks({ commit, dispatch }: ActionContext<Commit, Dispatch>) {
     try {
-      const response = await (this as any).$axios.get('/api/dashboard/reading-books')
+      const response = await $axios.get('/api/dashboard/reading-books')
       commit('commitReadingBooks', response.data)
     } catch (error) {
       console.error(error)
@@ -39,7 +40,7 @@ export const actions = {
 
   async fetchReadBooks({ commit, dispatch }: ActionContext<Commit, Dispatch>, year: number) {
     try {
-      const response = await (this as any).$axios.post('/api/dashboard/read-books', { year: year })
+      const response = await $axios.post('/api/dashboard/read-books', { year: year })
       commit('commitReadBooks', response.data)
     } catch (error) {
       console.error(error)

@@ -56,8 +56,7 @@
 
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { FieldPayloadEmit } from '~/types/Global'
-import { BookAuthorRole, EditionInfo } from '~/types/Book'
+import { BookFieldPayloadEmit, BookAuthorRole, EditionInfo } from '~/types/Book'
 import BookForm from '~/components/books/BookForm.vue'
 
 export default Vue.extend({
@@ -113,7 +112,7 @@ export default Vue.extend({
       return this.$store.getters['book/bookState'].preCoverImage
     },
 
-    updateBookInstance(payload: FieldPayloadEmit) {
+    updateBookInstance(payload: BookFieldPayloadEmit) {
       this.$store.commit('book/storeNewBookContent', payload)
 
       if (payload.key === 'coverImage') {
@@ -142,7 +141,7 @@ export default Vue.extend({
       try {
         const response = await this.$axios.post(query, formData)
 
-        const payload: FieldPayloadEmit = {
+        const payload: BookFieldPayloadEmit = {
           key: 'preCoverImage',
           value: response.data.preCoverImage
         }
@@ -159,7 +158,7 @@ export default Vue.extend({
       try {
         await this.$axios.delete(query)
 
-        const payload: FieldPayloadEmit = {
+        const payload: BookFieldPayloadEmit = {
           key: 'preCoverImage',
           value: ''
         }

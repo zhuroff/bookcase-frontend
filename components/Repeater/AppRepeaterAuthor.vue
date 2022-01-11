@@ -50,15 +50,15 @@
 <script lang="ts">
 
 import { authorRoles } from '../../configs/localize'
-import { FieldPayloadEmit, StringSignature } from '../../types/Global'
-import { BookAuthorRole } from '../../types/Book'
+import { StringSignature } from '../../types/Global'
+import { BookFieldPayloadEmit, BookAuthorRole } from '../../types/Book'
 import RepeaterBasic from './mixins'
 
 export default RepeaterBasic.extend({
   name: 'AppRepeaterAuthor',
 
   computed: {
-    authorRolesArr(): FieldPayloadEmit[] {
+    authorRolesArr(): BookFieldPayloadEmit[] {
       const result = Object.keys(this.authorRoles)
         .map((key: string) => ({
           key: key,
@@ -88,7 +88,7 @@ export default RepeaterBasic.extend({
   methods: {
     selectRole() {
       const payload: BookAuthorRole = {
-        id: (this as any).id,
+        id: this.id,
         role: this.selectedRole
       }
 

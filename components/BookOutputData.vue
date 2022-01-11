@@ -69,8 +69,9 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { coverTypes, bookFormats } from '../configs/localize'
-import { FieldPayloadEmit, StringSignature } from '../types/Global'
+import { coverTypes, bookFormats } from '~/configs/localize'
+import { BookFieldPayloadEmit } from '~/types/Book'
+import { StringSignature } from '~/types/Global'
 
 export default Vue.extend({
   props: {
@@ -86,7 +87,7 @@ export default Vue.extend({
   },
 
   computed: {
-    coverTypesArr(): FieldPayloadEmit[] {
+    coverTypesArr(): BookFieldPayloadEmit[] {
       const result = Object.keys(this.coverTypes)
         .map((key: string) => ({
           key: key,
@@ -96,7 +97,7 @@ export default Vue.extend({
       return result
     },
 
-    bookFormatsArr(): FieldPayloadEmit[] {
+    bookFormatsArr(): BookFieldPayloadEmit[] {
       const result = Object.keys(this.bookFormats)
         .map((key: string) => ({
           key: key,

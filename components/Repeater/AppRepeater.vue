@@ -32,8 +32,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { FieldPayloadEmit } from '../../types/Global'
-import { BookAuthorRole, EditionInfo } from '../../types/Book'
+import { BookFieldPayloadEmit, BookAuthorRole, EditionInfo } from '~/types/Book'
 import AppSprite from '~/components/AppSprite.vue'
 import AppRepeaterAuthor from './AppRepeaterAuthor.vue'
 import AppRepeaterPublisher from './AppRepeaterPublisher.vue'
@@ -94,11 +93,11 @@ export default Vue.extend({
   },
 
   methods: {
-    repeaterCardClick(payload: FieldPayloadEmit) {
+    repeaterCardClick(payload: BookFieldPayloadEmit) {
       this.$emit('repeaterCardClick', payload)
     },
 
-    deleteCard(payload: FieldPayloadEmit) {
+    deleteCard(payload: BookFieldPayloadEmit) {
       this.$emit('deleteCard', payload)
     },
 

@@ -50,7 +50,7 @@ const RepeaterBasic = Vue.extend({
       }
 
       const payload = {
-        key: (this as any).componentKey,
+        key: this.componentKey,
         value: (this as any).id
       }
 
@@ -59,7 +59,7 @@ const RepeaterBasic = Vue.extend({
 
     deleteCard() {
       const payload = {
-        key: (this as any).componentKey,
+        key: this.componentKey,
         value: (this as any).id
       }
 

@@ -1,7 +1,10 @@
 import { Plugin, Context } from '@nuxt/types'
 import { AxiosRequestConfig, AxiosError } from 'axios'
+import { initializeAxios } from '~/utils/api'
 
 const accessor: Plugin = ({ $axios, redirect, store }: Context) => {
+  initializeAxios($axios)
+
   $axios.interceptors.request.use((request: AxiosRequestConfig): AxiosRequestConfig => {
     if (store.getters['auth/isAuthenticated'] && !request.headers.common.Authorization) {
       const token: string = store.getters['auth/sessionToken']

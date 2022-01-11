@@ -150,9 +150,9 @@
 <script lang="ts">
 
 import Vue, { PropOptions } from 'vue'
-import { FieldPayloadEmit, PageViewConfig } from '~/types/Global'
-import { EntireBook, BookAuthorRole, BookStatus, EditionInfo } from '~/types/Book'
-import AppTextarea from '/components/AppTextarea.vue'
+import { PageViewConfig } from '~/types/Global'
+import { BookFieldPayloadEmit, EntireBook, BookAuthorRole, BookStatus, EditionInfo } from '~/types/Book'
+import AppTextarea from '~/components/AppTextarea.vue'
 import CoverUploader from '~/components/CoverUploader.vue'
 import BookReadingStatus from '~/components/BookReadingStatus.vue'
 import BookFileLink from '~/components/BookFileLink.vue'
@@ -239,11 +239,11 @@ export default Vue.extend({
   },
 
   methods: {
-    updateBookInstance(payload: FieldPayloadEmit) {
+    updateBookInstance(payload: BookFieldPayloadEmit) {
       this.$emit('updateBookInstance', payload)
     },
 
-    repeaterCardClick(payload: FieldPayloadEmit) {
+    repeaterCardClick(payload: BookFieldPayloadEmit) {
       this.callRepeaterModal(payload.key)
     },
 
@@ -260,7 +260,7 @@ export default Vue.extend({
       this.categoryTableConfig.page = 1
     },
 
-    selectCategoryItem(payload: FieldPayloadEmit) {
+    selectCategoryItem(payload: BookFieldPayloadEmit) {
       if (payload.key === 'lists') {
         return this.fetchSubLists(payload.value._id)
       }
@@ -269,7 +269,7 @@ export default Vue.extend({
       this.closeRepeaterModal()
     },
 
-    switchPagination(payload: FieldPayloadEmit) {
+    switchPagination(payload: BookFieldPayloadEmit) {
       this.categoryTableConfig.page = payload.value
       this.fetchModalList(payload.key)
     },
@@ -322,11 +322,11 @@ export default Vue.extend({
       }
     },
 
-    deleteCard(payload: FieldPayloadEmit) {
+    deleteCard(payload: BookFieldPayloadEmit) {
       this.$store.commit('book/deleteCategoryItem', payload)
     },
 
-    updateEditorContent(payload: FieldPayloadEmit) {
+    updateEditorContent(payload: BookFieldPayloadEmit) {
       this.$store.commit('book/storeNewBookContent', payload)
     },
 
@@ -335,7 +335,7 @@ export default Vue.extend({
     },
 
     setBookStatus(status: BookStatus) {
-      const payload: FieldPayloadEmit = {
+      const payload: BookFieldPayloadEmit = {
         key: 'status',
         value: status
       }
@@ -344,7 +344,7 @@ export default Vue.extend({
     },
 
     setBookRating(rating: number) {
-      const payload: FieldPayloadEmit = {
+      const payload: BookFieldPayloadEmit = {
         key: 'rating',
         value: rating
       }
