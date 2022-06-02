@@ -1,5 +1,4 @@
-<template lang="pug">
-  
+<template lang="pug">  
   aside.aside
     .aside__header
       NuxtLink(
@@ -16,7 +15,6 @@
           :key="item.route"
         )
           AppSidebarLink(:link="item")
-
 </template>
 
 <script lang="ts">
@@ -66,6 +64,10 @@ export default Vue.extend({
         {
           route: '/lists',
           title: 'Lists'
+        },
+        {
+          route: '/paper',
+          title: 'PaperBooks'
         }
       ]
     }
