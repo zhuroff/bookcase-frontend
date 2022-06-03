@@ -1,6 +1,32 @@
-<template lang="pug">
-  
+<template lang="pug">  
   header.header
+    .header__search
+      BInput(
+        v-model="searchQuery"
+        size="is-small"
+        @input="searchEntities"
+      )
+
+      BModal(
+        v-model="searchResults.length > 0"
+        @close="() => { searchResults = []; searchQuery = '' }"
+      )
+        ul.search__list
+          li.search__item(
+            v-for="item in searchResults"
+            :key="Object.keys(item)[0]"
+          )
+            strong {{ Object.keys(item)[0] }}
+            ul.search__sublist
+              li.search__subitem(
+                v-for="{ title, _id } in Object.values(item).flat()"
+                :key="_id"
+              )
+                NuxtLink(
+                  :to="`/${Object.keys(item)[0]}/${_id}`"
+                  class="search__link"
+                ) {{ title }}
+
     .header__account
       button.header__account-button
         AppSprite(name="user")
@@ -11,11 +37,9 @@
             :key="item.route"
           )
             AppHeaderLink(:link="item")
-
 </template>
 
 <script lang="ts">
-
 import Vue from 'vue'
 import AppSprite from '~/components/AppSprite.vue'
 import AppHeaderLink from '~/components/AppHeaderLink.vue'
@@ -30,6 +54,9 @@ export default Vue.extend({
 
   data() {
     return {
+      searchQuery: '',
+      searchDebounce: 0 as ReturnType<typeof setTimeout> | number,
+      searchResults: [],
       navigation: [
         {
           route: '/account',
@@ -45,13 +72,28 @@ export default Vue.extend({
         }
       ]
     }
+  },
+
+  methods: {
+    async searchEntities() {
+      if (typeof this.searchDebounce === 'number' && this.searchQuery.length) {
+        clearTimeout(this.searchDebounce)
+        this.searchDebounce = setTimeout(async () => {
+          try {
+            const response = await this.$axios.post('/api/search', { query: this.searchQuery })
+            this.searchResults = response.data
+            console.log(this.searchResults)
+          } catch (error) {
+            console.dir(error)
+          }
+        }, 1000)
+      }
+    },
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 
 @mixin visibleNavState {
@@ -70,6 +112,10 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   padding: 0 1.6rem 0 3rem;
+
+  &__search {
+    position: relative;
+  }
 
   &__account {
     margin-left: auto;
@@ -124,5 +170,4 @@ export default Vue.extend({
     }
   }
 }
-
 </style>

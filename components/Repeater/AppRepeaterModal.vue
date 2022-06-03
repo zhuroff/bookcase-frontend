@@ -1,5 +1,4 @@
 <template lang="pug">
-
   .repeater__modal
     .repeater__modal-header
       .repeater__modal-search(v-if="!isCreateMode")
@@ -89,7 +88,6 @@
               v-else
               v-model="item.value"
             ) Фото
-
 </template>
 
 <script lang="ts">
