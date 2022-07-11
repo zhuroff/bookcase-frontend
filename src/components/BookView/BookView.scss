@@ -1,0 +1,174 @@
+@import '../../scss/mixins.scss';
+@import 'include-media';
+
+.section {
+
+  .book {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: $paddingMax;
+    padding-bottom: $headerHeight;
+
+    &__title {
+      font-size: 2rem;
+      padding-top: 0.3rem;
+      width: 100%;
+      font-weight: 400;
+      @include serif;
+      @include viewInput;
+    }
+
+    &__subtitle {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      font-size: 1.25rem;
+      @include serif;
+      @include viewInput;
+    }
+
+    &__rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: $paddingMax;
+
+      .pi-ban {
+        display: none;
+      }
+
+      .p-rating-icon {
+        margin: 0 0.25rem;
+      }
+    }
+
+    &__file {
+
+      &-input {
+        width: 100%;
+        margin-top: $paddingMin;
+      }
+
+      &-link {
+        width: 100%;
+        margin-top: $paddingMin;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+
+    &__repeater {
+      display: grid;
+      gap: $paddingMin;
+
+      @include media('>=laptop-l', '<desktop-s') {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @include media('>=desktop-s', '<desktop-l') {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      @include media('>=desktop-l') {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .p-card {
+        min-height: 71px;
+
+        &-content {
+          padding: 0;
+        }
+
+        .p-button:not(.--delete):not(.--undo) {
+          margin-bottom: 0.5rem;
+        }
+
+        .p-button:not(.--delete):not(.--undo),
+        .p-dropdown,
+        input.p-inputtext {
+          width: 100%;
+        }
+
+        .--delete {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          z-index: 10;
+          opacity: 0;
+          transition: $transitionSimple;
+          width: 1.75rem;
+          height: 1.75rem;
+
+          .pi {
+            font-size: 0.75rem;
+          }
+        }
+
+        .--undo {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          z-index: 10;
+          width: 1.75rem;
+          height: 1.75rem;
+
+          .pi {
+            font-size: 0.75rem;
+          }
+        }
+
+        &.--deleted {
+
+          &:before {
+            content: '';
+            background-color: var(--surface-a);
+            position: absolute;
+            z-index: 5;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+          }
+          
+          .p-card-content {
+
+            & > *:not(.--undo) {
+              opacity: 0.25;
+              pointer-events: none;
+            }
+
+            .--delete {
+              display: none;
+            }
+          }
+        }
+
+        &:hover {
+
+          .--delete {
+            opacity: 1;
+            transition: $transitionSimple;
+          }
+        }
+      }
+    }
+
+    &__footer {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      background-color: var(--surface-b);
+      z-index: 2;
+      padding: 0 $paddingMax;
+      height: $headerHeight;
+      width: calc(100vw - #{$sidebarWidth});
+
+      .actions {
+        justify-content: flex-end;
+        height: 100%;
+      }
+    }
+  }
+}

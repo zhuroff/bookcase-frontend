@@ -1,36 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "es2020",
-    "moduleResolution": "Node",
+    "target": "es2020",
     "lib": [
-      "ESNext",
-      "ESNext.AsyncIterable",
-      "DOM"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "esModuleInterop": true,
     "allowJs": true,
-    "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "noEmit": true,
-    "removeComments": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noPropertyAccessFromIndexSignature": false,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-    },
-    "types": [
-      "@nuxt/types",
-      "@nuxtjs/axios",
-      "@types/node",
-      "buefy/types"
-    ]
+    "jsx": "react-jsx"
   },
-  "exclude": [
-    "node_modules",
-    ".nuxt",
-    "dist"
+  "include": [
+    "src"
   ]
 }

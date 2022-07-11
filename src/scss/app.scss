@@ -1,0 +1,76 @@
+@import './mixins';
+@import 'include-media';
+@import 'primeicons/primeicons.css';
+@import 'primereact/resources/primereact.min.css';
+@import 'primereact/resources/themes/vela-green/theme.css';
+// @import 'primereact/resources/themes/nova/theme.css';
+@import './reset';
+@import './common';
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--surface-b);
+  color: var(--text-color);
+  font-family: $sans;
+  letter-spacing: 0.5px;
+  line-height: 1.25;
+}
+
+.auth {
+  background: transparent url('../../public/login_bgr.png') center/cover no-repeat;
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  &__heading {
+    @include serif;
+    text-align: center;
+    font-size: 8rem;
+    letter-spacing: 1px;
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--surface-b) 0%, var(--surface-d) 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__form {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: $paddingMin;
+    z-index: 1000;
+    width: calc(100% - #{$paddingMin});
+    max-width: 350px;
+  }
+}
+
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: $sidebarWidth 1fr;
+  grid-template-rows: $headerHeight 1fr;
+  grid-template-areas: 
+    "sidebar header"
+    "sidebar main"
+    "sidebar main";
+
+  .aside {
+    grid-area: sidebar;
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .main {
+    grid-area: main;
+  }  
+}

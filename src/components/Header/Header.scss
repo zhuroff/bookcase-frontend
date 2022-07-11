@@ -1,0 +1,11 @@
+@import '../../scss/mixins.scss';
+
+.header {
+  position: relative;
+  z-index: 2;
+  background-color: var(--surface-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 $paddingMax;
+}

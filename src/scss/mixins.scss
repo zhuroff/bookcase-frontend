@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Jost:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+$sans: 'Jost', sans-serif;
+$serif: 'Playfair Display', serif;
+$mono: 'JetBrains Mono', monospace;
+
+$headerHeight: 60px;
+$sidebarWidth: 175px;
+$paddingMin: 1rem;
+$paddingMax: 2rem;
+$boxShadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+$borderRadiusSmall: 3px;
+$transitionSimple: all 0.3s ease;
+
+$breakpoints: (
+  'tablet': 768px,
+  'laptop': 1024px,
+  'laptop-l': 1200px,
+  'desktop-s': 1440px,
+  'desktop-m': 1600px,
+  'desktop-l': 1920px,
+  'landscape': '(orientation: landscape)'
+) !default;
+
+@mixin serif {
+  font-family: $serif;
+  letter-spacing: 0.5px;
+}
+
+@mixin viewInput {
+  border-radius: 0;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 1px solid var(--surface-border);
+
+  &:enabled {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &[disabled] {
+    opacity: 1;
+    border-color: transparent;
+  }
+}

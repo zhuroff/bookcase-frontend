@@ -1,0 +1,19 @@
+@import '../../scss/mixins';
+
+.preloader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - #{$headerHeight});
+  background-color: var(--surface-b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+
+  .p-progress-spinner-circle {
+    stroke: var(--primary-color);
+    animation: p-progress-spinner-dash 1.5s ease-in-out infinite;
+  }
+}

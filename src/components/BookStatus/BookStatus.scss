@@ -1,0 +1,41 @@
+@import '../../scss/mixins.scss';
+@import 'include-media';
+
+.section {
+
+  .book {
+
+    &__status {
+      margin-top: $paddingMax;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+
+      &-label {
+        display: block;
+        margin-bottom: $paddingMin;
+
+        span {
+          width: 100%;
+        }
+      }
+
+      .p-inputtext {
+        @include viewInput;
+        text-align: center;
+        font-size: 1.25rem;
+      }
+
+      &-result {
+        display: flex;
+        flex-direction: column;
+
+        strong {
+          text-align: center;
+          font-size: 1.25rem;
+          margin-top: 0.875rem;
+        }
+      }
+    }
+  }
+}

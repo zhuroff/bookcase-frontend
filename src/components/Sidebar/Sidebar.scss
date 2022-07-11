@@ -1,0 +1,43 @@
+@import '../../scss/mixins.scss';
+
+.aside {
+  position: relative;
+  z-index: 3;
+  background-color: var(--surface-100);
+  box-shadow: rgb(0 0 0 / 25%) 0px 14px 28px, rgb(0 0 0 / 22%) 0px 10px 10px;
+
+  &__navbar {
+    padding: $headerHeight 0;
+  }
+
+  &__navlink {
+    display: flex;
+    align-items: center;
+    padding: 0 $paddingMin;
+    font-size: 1rem;
+    line-height: 2rem;
+    color: var(--primary-color);
+    transition: background-color 0.2s ease;
+
+    &:hover,
+    &.active {
+      background-color: var(--surface-b);
+      transition: background-color 0.2s ease;
+    }
+  }
+
+  &__lang {
+    padding: 0 $paddingMin;
+
+    &-action {
+      line-height: 1.5;
+      font-size: 0.875rem;
+      cursor: pointer;
+
+      &.--active {
+        pointer-events: none;
+        color: var(--surface-400);
+      }
+    }
+  }
+}
