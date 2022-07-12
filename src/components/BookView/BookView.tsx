@@ -12,6 +12,7 @@ import { AuthorField } from '../AuthorField/AuthorField';
 import { TCategoryAuthor, TCategoryBasic } from '../../types/Categories';
 import { PublisherField } from '../PublisherField/PublisherField';
 import './BookView.scss';
+import { GenreField } from '../GenreField/GenreField';
 
 type TBookViewProps = {
   book: TBookPage
@@ -24,8 +25,10 @@ type TBookViewProps = {
   setAuthorRole: (value: string, _id: string) => void
   deleteOrRestoreAuthor: (_id: string, isDeleted: boolean) => void
   setPublisher: (value: TCategoryBasic, _id?: string) => void
-  deleteOrRestorePublisher: (_id: string, isDeleted: boolean) => void,
+  deleteOrRestorePublisher: (_id: string, isDeleted: boolean) => void
   setPublisherMetadata: (_id: string, key: string, value: string) => void
+  deleteOrRestoreGenre: (_id: string, isDeleted: boolean) => void
+  setGenre: (value: TCategoryBasic, _id?: string) => void
 }
 
 export const BookView = observer(({
@@ -40,7 +43,9 @@ export const BookView = observer(({
   deleteOrRestoreAuthor,
   setPublisher,
   deleteOrRestorePublisher,
-  setPublisherMetadata
+  setPublisherMetadata,
+  deleteOrRestoreGenre,
+  setGenre
 }: TBookViewProps) => {
   const { text } = useLocale()
   const [bookContent, setBookContent] = useState(book)
@@ -149,6 +154,29 @@ export const BookView = observer(({
                     isAppend ? undefined : publisher._id
                   )}
                   setPublisherMetadata={setPublisherMetadata}
+                />
+              ))
+            }
+          </div>
+        </Fieldset>
+
+        <Fieldset
+          legend={text('common.genres')}
+          toggleable
+        >
+          <div className="book__repeater">
+            {
+              book.genres.map((genre, index, arr) => (
+                <GenreField
+                  key={genre._id}
+                  isLast={index === arr.length - 1}
+                  isEditable={isEditable}
+                  content={genre}
+                  deleteOrRestoreGenre={deleteOrRestoreGenre}
+                  selectGenre={(value, isAppend) => setGenre(
+                    value,
+                    isAppend ? undefined : genre._id
+                  )}
                 />
               ))
             }

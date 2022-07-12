@@ -82,6 +82,9 @@ export const messages = {
   publishers: {
     alreadyExist: 'The publisher has already been added'
   },
+  genres: {
+    alreadyExist: 'The genre has already been added'
+  },
   auth: {
     login: 'Login',
     register: 'Register',

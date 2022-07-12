@@ -106,6 +106,29 @@ export const Book = observer(() => {
     })
   }
 
+  const setGenre = (value: TCategoryBasic, _id?: string) => {
+    if (book.genres.some((el) => el._id === value._id)) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: text('error'),
+        detail: text('genres.alreadyExist'),
+        life: 5000
+      })
+      return false
+    }
+
+    setBook({
+      genres: _id ?
+        book.genres.map((el) => (
+          el._id === _id ? { ...value } : el
+        )) :
+        [
+          ...book.genres,
+          { ...value, isNew: true }
+        ]
+    })
+  }
+
   const setAuthorRole = (value: string, _id: string) => {
     setBook({
       authors: book.authors.map((el) => (
@@ -134,6 +157,14 @@ export const Book = observer(() => {
   const deleteOrRestorePublisher = (_id: string, value: boolean) => {
     setBook({
       publishers: book.publishers.map((el) => (
+        el._id === _id ? { ...el, isDeleted: value } : el
+      ))
+    })
+  }
+
+  const deleteOrRestoreGenre = (_id: string, value: boolean) => {
+    setBook({
+      genres: book.genres.map((el) => (
         el._id === _id ? { ...el, isDeleted: value } : el
       ))
     })
@@ -173,6 +204,8 @@ export const Book = observer(() => {
               setPublisher={setPublisher}
               deleteOrRestorePublisher={deleteOrRestorePublisher}
               setPublisherMetadata={setPublisherMetadata}
+              deleteOrRestoreGenre={deleteOrRestoreGenre}
+              setGenre={setGenre}
             />
 
             <footer className="book__footer">

@@ -4,6 +4,8 @@ export type TCategoryBasic = {
   _id: string
   title: string
   isDraft?: boolean
+  isNew?: true
+  isDeleted?: boolean
 }
 
 export type TCategoryAuthor = TCategoryBasic & {

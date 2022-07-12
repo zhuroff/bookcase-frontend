@@ -82,6 +82,9 @@ export const messages = {
   publishers: {
     alreadyExist: 'Издатель уже был добавлен'
   },
+  genres: {
+    alreadyExist: 'Жанр уже был добавлен'
+  },
   auth: {
     login: 'Войти',
     register: 'Зарегистрироваться',
