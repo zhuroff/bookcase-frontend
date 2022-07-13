@@ -21,6 +21,7 @@ export type TBooksListItem = TBookBasic & {
   lists: TCategoryBasic[]
   publicationYear: number
   status: TBookStatus
+  accountability: boolean
 }
 
 export type TBookPage = Omit<TBooksListItem, 'authors'> & {

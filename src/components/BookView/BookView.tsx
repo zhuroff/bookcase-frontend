@@ -13,6 +13,7 @@ import { TCategoryAuthor, TCategoryBasic } from '../../types/Categories';
 import { PublisherField } from '../PublisherField/PublisherField';
 import './BookView.scss';
 import { GenreField } from '../GenreField/GenreField';
+import { ParamUnnecessary } from '../ParamFields/ParamUnnecessary';
 
 type TBookViewProps = {
   book: TBookPage
@@ -29,6 +30,7 @@ type TBookViewProps = {
   setPublisherMetadata: (_id: string, key: string, value: string) => void
   deleteOrRestoreGenre: (_id: string, isDeleted: boolean) => void
   setGenre: (value: TCategoryBasic, _id?: string) => void
+  switchUnnecessaryState: () => void
 }
 
 export const BookView = observer(({
@@ -45,7 +47,8 @@ export const BookView = observer(({
   deleteOrRestorePublisher,
   setPublisherMetadata,
   deleteOrRestoreGenre,
-  setGenre
+  setGenre,
+  switchUnnecessaryState
 }: TBookViewProps) => {
   const { text } = useLocale()
   const [bookContent, setBookContent] = useState(book)
@@ -180,6 +183,19 @@ export const BookView = observer(({
                 />
               ))
             }
+          </div>
+        </Fieldset>
+
+        <Fieldset
+          legend={text('book.params.heading')}
+          toggleable
+        >
+          <div className="book__repeater">
+            <ParamUnnecessary
+              isEditable={isEditable}
+              isAccounted={bookContent.accountability}
+              switchUnnecessaryState={switchUnnecessaryState}
+            />
           </div>
         </Fieldset>
       </main>

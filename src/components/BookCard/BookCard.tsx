@@ -15,6 +15,7 @@ type BookCardProps = {
   authors: TCategoryAuthor[]
   genres: TCategoryBasic[]
   lists: TCategoryBasic[]
+  accountability: boolean
   onClick: () => void
 }
 
@@ -31,6 +32,7 @@ export const BookCard = observer(({
   authors,
   genres,
   lists,
+  accountability,
   onClick
 }: BookCardProps) => {
   const { text } = useLocale()
@@ -64,8 +66,9 @@ export const BookCard = observer(({
   return (
     <Card>
       <div
-        className="card__wrapper"
+        className={`card__wrapper ${!accountability && 'not-accounted'}`}
         onClick={onCardClick}
+        title={!accountability ? text('book.params.unnecessary.tooltip') : ''}
       >
         {
           (status?.start && !status?.finish) && <i className="pi pi-clock card__status"></i>

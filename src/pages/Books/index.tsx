@@ -138,6 +138,7 @@ export const Books = observer(() => {
                   authors={book.authors}
                   genres={book.genres}
                   lists={book.lists}
+                  accountability={book.accountability}
                   onClick={() => navigate(`/books/${book._id}`)}
                 />
               ))

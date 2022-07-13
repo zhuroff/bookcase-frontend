@@ -88,6 +88,7 @@ export const Dashboard = observer(() => {
                   authors={book.authors}
                   genres={book.genres}
                   lists={book.lists}
+                  accountability={book.accountability}
                   onClick={() => openBookPage(book._id)}
                 />
               ))
@@ -120,6 +121,7 @@ export const Dashboard = observer(() => {
                   authors={book.authors}
                   genres={book.genres}
                   lists={book.lists}
+                  accountability={book.accountability}
                   onClick={() => openBookPage(book._id)}
                 />
               ))

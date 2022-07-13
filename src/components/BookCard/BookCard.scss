@@ -21,6 +21,11 @@
         grid-template-columns: 160px 1fr;
         gap: $paddingMax;
       }
+
+      &.not-accounted {
+        opacity: 0.5;
+        filter: grayscale(1) blur(1px);
+      }
     }
 
     &__status {
@@ -159,9 +164,16 @@
       &-secondary {
         font-size: 0.875rem;
         color: var(--surface-400);
+        display: flex;
+        align-items: center;
+        margin-top: 0.5rem;
 
         &.--italic {
           font-style: italic;
+        }
+
+        .p-inputswitch {
+          margin-right: 0.5rem;
         }
       }
     }

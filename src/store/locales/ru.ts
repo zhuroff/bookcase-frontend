@@ -67,7 +67,15 @@ export const messages = {
       days: ['день', 'дня', 'дней']
     },
     fileButton: 'Файл книги',
-    successSaving: 'Книга успешно сохранена'
+    successSaving: 'Книга успешно сохранена',
+    params: {
+      heading: 'Параметры в коллекции',
+      unnecessary: {
+        title: 'Учитываемость',
+        values: ['Не учтена', 'Учтена'],
+        tooltip: 'Книга не учтена в коллекции'
+      }
+    }
   },
   authors: {
     roles: {

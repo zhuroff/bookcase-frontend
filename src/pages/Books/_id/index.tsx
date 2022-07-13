@@ -206,6 +206,7 @@ export const Book = observer(() => {
               setPublisherMetadata={setPublisherMetadata}
               deleteOrRestoreGenre={deleteOrRestoreGenre}
               setGenre={setGenre}
+              switchUnnecessaryState={() => setBook({ accountability: !book.accountability })}
             />
 
             <footer className="book__footer">

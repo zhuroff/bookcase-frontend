@@ -67,7 +67,15 @@ export const messages = {
       days: ['day', 'days', 'days']
     },
     fileButton: 'Book file',
-    successSaving: 'Book was saved successfully'
+    successSaving: 'Book was saved successfully',
+    params: {
+      heading: 'Parameters in collection',
+      unnecessary: {
+        title: 'Accountability',
+        values: ['Not accounted', 'Accounted'],
+        tooltip: 'The book is not included in the collection'
+      }
+    }
   },
   authors: {
     roles: {
