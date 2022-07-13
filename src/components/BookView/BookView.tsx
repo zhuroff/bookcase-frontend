@@ -14,6 +14,7 @@ import { PublisherField } from '../PublisherField/PublisherField';
 import './BookView.scss';
 import { GenreField } from '../GenreField/GenreField';
 import { ParamUnnecessary } from '../ParamFields/ParamUnnecessary';
+import { SeriesField } from '../SeriesField/SeriesField';
 
 type TBookViewProps = {
   book: TBookPage
@@ -31,6 +32,8 @@ type TBookViewProps = {
   deleteOrRestoreGenre: (_id: string, isDeleted: boolean) => void
   setGenre: (value: TCategoryBasic, _id?: string) => void
   switchUnnecessaryState: () => void
+  setSeries: (value: TCategoryBasic) => void
+  deleteOrRestoreSeries: () => void
 }
 
 export const BookView = observer(({
@@ -48,7 +51,9 @@ export const BookView = observer(({
   setPublisherMetadata,
   deleteOrRestoreGenre,
   setGenre,
-  switchUnnecessaryState
+  switchUnnecessaryState,
+  setSeries,
+  deleteOrRestoreSeries
 }: TBookViewProps) => {
   const { text } = useLocale()
   const [bookContent, setBookContent] = useState(book)
@@ -195,6 +200,13 @@ export const BookView = observer(({
               isEditable={isEditable}
               isAccounted={bookContent.accountability}
               switchUnnecessaryState={switchUnnecessaryState}
+            />
+
+            <SeriesField
+              isEditable={isEditable}
+              content={bookContent.series}
+              selectSeries={setSeries}
+              deleteOrRestoreSeries={deleteOrRestoreSeries}
             />
           </div>
         </Fieldset>

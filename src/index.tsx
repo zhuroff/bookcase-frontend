@@ -5,6 +5,7 @@ import { LocaleProvider } from './hooks/useLocale';
 import { AuthProvider } from './hooks/useAuth';
 import { AccountProvider } from './hooks/useAccount';
 import { ToastProvider } from './hooks/useToast';
+import { ConfirmProvider } from './hooks/useConfirm';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import './scss/app.scss';
@@ -19,9 +20,11 @@ root.render(
       <LocaleProvider>
         <AuthProvider>
           <AccountProvider>
-            <ToastProvider position={'bottom-right'}>
-              <Root />
-            </ToastProvider>
+            <ConfirmProvider>
+              <ToastProvider position={'bottom-right'}>
+                <Root />
+              </ToastProvider>
+            </ConfirmProvider>
           </AccountProvider>
         </AuthProvider>
       </LocaleProvider>

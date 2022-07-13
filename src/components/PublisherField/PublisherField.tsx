@@ -86,16 +86,10 @@ export const PublisherField = observer(({
           <Card>
             <span className="card__link-primary">{content.publisher.title}</span>
             {content.city &&
-              <>
-                <br />
-                <em className="card__link-secondary">{content.city}</em>
-              </>
+              <em className="card__link-secondary">{content.city}</em>
             }
             {content.code &&
-              <>
-                <br />
-                <em className="card__link-secondary --italic">{content.code}</em>
-              </>
+              <em className="card__link-secondary --italic">{content.code}</em>
             }
           </Card>
         </Link> :
@@ -127,7 +121,7 @@ export const PublisherField = observer(({
             <Input
               name={`city:${content._id}`}
               type="text"
-              value={content.city}
+              value={content.city || ''}
               size="small"
               noBorder={true}
               onInput={(e) => setPublisherMetadata(content.publisher._id, 'city', e.currentTarget.value)}
@@ -136,7 +130,7 @@ export const PublisherField = observer(({
             <Input
               name={`code:${content._id}`}
               type="text"
-              value={content.code}
+              value={content.code || ''}
               size="small"
               noBorder={true}
               onInput={(e) => setPublisherMetadata(content.publisher._id, 'code', e.currentTarget.value)}

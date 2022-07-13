@@ -5,6 +5,7 @@ import { BookView } from '../../../components/BookView/BookView';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
 import { Preloader } from '../../../components/Preloader/Preloader';
 import { useApi } from '../../../hooks/useApi';
+import { useConfirm } from '../../../hooks/useConfirm';
 import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TBookPage } from '../../../types/Books';
@@ -15,13 +16,14 @@ export const Book = observer(() => {
   const navigate = useNavigate()
   const toast = useToast()
   const location = useLocation()
-  const { get, post } = useApi()
+  const { get, post, remove } = useApi()
   const { text } = useLocale()
   const [isBookFetched, setIsBookFetched] = useState(false)
   const [book, setBook] = useReducer(
     (book: TBookPage, payload: Partial<TBookPage>) => ({ ...book, ...payload }),
     {} as TBookPage
   )
+  const { callConfirmation } = useConfirm()
 
   const fetchBook = () => {
     get<TBookPage>(`/api/books/${params.id}`)
@@ -42,7 +44,17 @@ export const Book = observer(() => {
   }
 
   const deleteBook = () => {
-    navigate('/books', { replace: true })
+    remove(`/api/books/${params.id}`)
+      .then(_ => {
+        toast.current?.show({
+          severity: 'success',
+          summary: text('success'),
+          detail: text('book.successDeleted'),
+          life: 5000
+        })
+        navigate('/books', { replace: true })
+      })
+      .catch((error) => console.dir(error))
   }
 
   const draftingOrPublishing = () => {
@@ -170,6 +182,15 @@ export const Book = observer(() => {
     })
   }
 
+  const deleteOrRestoreSeries = () => {
+    setBook({
+      series: book.series && {
+        ...book.series,
+        isDeleted: !book.series?.isDeleted
+      }
+    })
+  }
+
   const setPublisherMetadata = (_id: string, key: string, value: string) => {
     setBook({
       publishers: book.publishers.map((el) => (
@@ -181,6 +202,7 @@ export const Book = observer(() => {
   useEffect(() => {
     if (!location.pathname.includes('/edit') || !book._id) {
       setIsBookFetched(false)
+      delete book.series
       fetchBook()
     }
   }, [location])
@@ -207,17 +229,23 @@ export const Book = observer(() => {
               deleteOrRestoreGenre={deleteOrRestoreGenre}
               setGenre={setGenre}
               switchUnnecessaryState={() => setBook({ accountability: !book.accountability })}
+              setSeries={(series) => setBook({ series })}
+              deleteOrRestoreSeries={deleteOrRestoreSeries}
             />
 
             <footer className="book__footer">
               <ItemActions
                 isDraft={book.isDraft}
                 isEditMode={params.edit !== undefined}
-                editEntity={() => navigate(`/books/${params.id}/edit`, { replace: true })}
                 saveEntity={saveBook}
-                deleteEntity={deleteBook}
-                cancelEditingEntity={() => navigate(`/books/${params.id}`, { replace: true })}
                 draftingOrPublishing={draftingOrPublishing}
+                cancelEditingEntity={() => {
+                  navigate(`/books/${params.id}`, { replace: true })
+                }}
+                editEntity={() => {
+                  navigate(`/books/${params.id}/edit`, { replace: true })
+                }}
+                deleteEntity={(event) => callConfirmation(event, deleteBook)}
               />
             </footer>
           </>

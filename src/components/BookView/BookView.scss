@@ -20,7 +20,6 @@
 
     &__subtitle {
       font-size: 1rem;
-      margin-bottom: 1rem;
       width: 100%;
       font-size: 1.25rem;
       @include serif;
@@ -80,7 +79,7 @@
           padding: 0;
         }
 
-        .p-button:not(.--delete):not(.--undo) {
+        .p-button:not(.--delete):not(.--undo):not(:last-child) {
           margin-bottom: 0.5rem;
         }
 

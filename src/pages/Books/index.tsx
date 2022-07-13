@@ -118,6 +118,19 @@ export const Books = observer(() => {
                   })
                 }}
               />
+              <Button
+                className={`p-button-sm p-button-secondary ${!pageConfig.accountableOnly && 'p-button-outlined'}`}
+                icon="pi pi-check-square"
+                title={text('book.params.unnecessary.filterTitle')}
+                onClick={() => {
+                  setBookListFetchedState(false)
+                  setPageConfig({
+                    ...pageConfig,
+                    accountableOnly: !pageConfig.accountableOnly,
+                    page: 1
+                  })
+                }}
+              />
             </>
           }
         </ListActions>

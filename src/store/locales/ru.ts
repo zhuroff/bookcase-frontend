@@ -5,6 +5,7 @@ export const messages = {
     authors: 'Авторы',
     genres: 'Жанры',
     lists: 'Списки',
+    series: 'Серия',
     publishers: 'Издательства',
     emptySection: 'Нет данных',
     create: 'Создать',
@@ -23,6 +24,7 @@ export const messages = {
     unlistTitle: 'Вне списков',
     paperWithoutFile: 'Бумажные книги без файлов',
     withoutFile: 'Без файлов',
+    confirmIntention: 'Подтвердите свое намерение',
     fileUpload: {
       image: 'Перетащите сюда изображение или кликните для выбора файла'
     }
@@ -68,12 +70,16 @@ export const messages = {
     },
     fileButton: 'Файл книги',
     successSaving: 'Книга успешно сохранена',
+    successDeleted: 'Книга успешно удалена',
+    selectSeries: 'Выбрать серию',
+    withoutSeries: 'Без серии',
     params: {
-      heading: 'Параметры в коллекции',
+      heading: 'Параметры издания',
       unnecessary: {
         title: 'Учитываемость',
         values: ['Не учтена', 'Учтена'],
-        tooltip: 'Книга не учтена в коллекции'
+        tooltip: 'Книга не учтена в коллекции',
+        filterTitle: 'Только учтенные'
       }
     }
   },

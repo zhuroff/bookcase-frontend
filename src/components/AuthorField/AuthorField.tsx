@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useLocale } from '../../hooks/useLocale';
-import { TCategoriesResponse, TCategoryAuthor, TCategoryAuthorBook } from '../../types/Categories';
+import { TAuthorsResponse, TCategoryAuthor, TCategoryAuthorBook } from '../../types/Categories';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -45,8 +45,8 @@ export const AuthorField = observer(({
     }, [] as { value: string; label: string }[])
 
   const fetchAuthors = () => {
-    post<TCategoriesResponse>('/api/authors', pageConfig)
-      .then((response: any) => {
+    post<TAuthorsResponse>('/api/authors', pageConfig)
+      .then((response) => {
         setAuthors(response.data.docs)
         setPagePagination(response.data.pagination)
       })
@@ -91,7 +91,6 @@ export const AuthorField = observer(({
         >
           <Card>
             <span className="card__link-primary">{content.author.title}</span>
-            <br />
             <em className="card__link-secondary">{text(`authors.roles.${content.role}`)}</em>
           </Card>
         </Link> :

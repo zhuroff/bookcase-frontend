@@ -39,6 +39,7 @@ type TPageConfig = {
   isDraft: boolean,
   unlistedOf?: string
   paperWithoutFile?: boolean
+  accountableOnly?: boolean
 }
 
 export type {

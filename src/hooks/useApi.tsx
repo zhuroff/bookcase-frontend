@@ -1,10 +1,10 @@
 import { ReactNode, createContext, useContext } from 'react'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 
 const api = axios.create({
   withCredentials: true,
   baseURL: process.env.REACT_APP_SERVER_HOST
-})
+}) as AxiosInstance & { remove: AxiosInstance['delete'] }
 
 api.interceptors.request.use((config) => {
   config.headers!.Authorization = `Bearer ${localStorage.getItem('token')}`
@@ -21,6 +21,8 @@ api.interceptors.response.use((config) => {
     console.log('Unhadler error')
   }
 })
+
+api.remove = api.delete
 
 export type ApiProviderProps = {
   value?: typeof api

@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { Button } from 'primereact/button';
+import { BaseSyntheticEvent } from 'react';
 import { useLocale } from '../../hooks/useLocale';
 
 type TItemActionsProps = {
@@ -7,7 +8,7 @@ type TItemActionsProps = {
   isEditMode: boolean
   editEntity: () => void
   saveEntity: () => void
-  deleteEntity: () => void
+  deleteEntity: (event: BaseSyntheticEvent) => void
   cancelEditingEntity: () => void
   draftingOrPublishing: () => void
 }

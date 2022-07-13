@@ -5,6 +5,7 @@ export const messages = {
     authors: 'Authors',
     genres: 'Genres',
     lists: 'Lists',
+    series: 'Series',
     publishers: 'Publishers',
     emptySection: 'There is no data',
     create: 'Create',
@@ -23,6 +24,7 @@ export const messages = {
     unlistTitle: 'Off the lists',
     paperWithoutFile: 'Paperbooks without files',
     withoutFile: 'Without file',
+    confirmIntention: 'Confirm your intention',
     fileUpload: {
       image: 'Drop image here or click to upload'
     }
@@ -68,12 +70,16 @@ export const messages = {
     },
     fileButton: 'Book file',
     successSaving: 'Book was saved successfully',
+    successDeleted: 'Book was deleted successfully',
+    selectSeries: 'Select series',
+    withoutSeries: 'Without series',
     params: {
-      heading: 'Parameters in collection',
+      heading: 'Edition parameters',
       unnecessary: {
         title: 'Accountability',
         values: ['Not accounted', 'Accounted'],
-        tooltip: 'The book is not included in the collection'
+        tooltip: 'The book is not included in the collection',
+        filterTitle: 'Only accounted'
       }
     }
   },
