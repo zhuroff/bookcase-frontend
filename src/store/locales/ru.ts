@@ -2,6 +2,7 @@ export const messages = {
   error: 'Ошибка',
   success: 'Готово!',
   common: {
+    books: 'Книги',
     authors: 'Авторы',
     genres: 'Жанры',
     lists: 'Списки',
@@ -27,6 +28,11 @@ export const messages = {
     confirmIntention: 'Подтвердите свое намерение',
     fileUpload: {
       image: 'Перетащите сюда изображение или кликните для выбора файла'
+    },
+    links: {
+      heading: 'Ссылки',
+      title: 'Название ссылки',
+      url: 'URL ссылки'
     }
   },
   search: {
@@ -91,7 +97,11 @@ export const messages = {
       interpreter: 'Переводчик'
     },
     rolesPlaceholder: 'Не выбрано',
-    alreadyExist: 'Автор уже был добавлен'
+    alreadyExist: 'Автор уже был добавлен',
+    firstNamePlaceholder: 'Фамилия',
+    lastNamePlaceholder: 'Имя',
+    patronymicNamePlaceholder: 'Отчество',
+    successSaving: 'Данные об авторе успешно сохранены'
   },
   publishers: {
     alreadyExist: 'Издатель уже был добавлен'

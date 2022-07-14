@@ -1,0 +1,44 @@
+@import '../../scss/mixins.scss';
+@import 'include-media';
+
+.section {
+
+  .links {
+    margin: $paddingMax 0;
+
+    &__list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $paddingMin;
+      margin-top: $paddingMin;
+
+      &.--readonly {
+        padding-left: 20px;
+      }
+    }
+
+    &__item {
+      
+      .p-button {
+        width: 35px;
+        height: 35px;
+      }
+
+      &.--readonly {
+        list-style-type: disc;
+      }
+
+      &.--editable {
+        display: grid;
+        grid-template-columns: 1fr 1fr 35px;
+        gap: $paddingMin;
+        list-style-type: none;
+      }
+    }
+
+    &__empty {
+      margin-top: $paddingMin;
+      color: var(--surface-400);
+    }
+  }
+}

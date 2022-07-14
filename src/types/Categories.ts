@@ -4,7 +4,7 @@ import { TBooksListItem } from './Books'
 export type TCategoryBasic = {
   _id: string
   title: string
-  isDraft?: boolean
+  isDraft: boolean
   isNew?: true
   isDeleted?: boolean
 }

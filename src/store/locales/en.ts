@@ -2,6 +2,7 @@ export const messages = {
   error: 'Error',
   success: 'Success',
   common: {
+    books: 'Books',
     authors: 'Authors',
     genres: 'Genres',
     lists: 'Lists',
@@ -27,6 +28,11 @@ export const messages = {
     confirmIntention: 'Confirm your intention',
     fileUpload: {
       image: 'Drop image here or click to upload'
+    },
+    links: {
+      heading: 'Links',
+      title: 'Link title',
+      url: 'Link URL'
     }
   },
   search: {
@@ -91,7 +97,11 @@ export const messages = {
       interpreter: 'Interpreter'
     },
     rolesPlaceholder: 'Not selected',
-    alreadyExist: 'The author has already been added'
+    alreadyExist: 'The author has already been added',
+    firstNamePlaceholder: 'First name',
+    lastNamePlaceholder: 'Last Name',
+    patronymicNamePlaceholder: 'Patronymic name',
+    successSaving: 'The author\'s data has been successfully saved'
   },
   publishers: {
     alreadyExist: 'The publisher has already been added'

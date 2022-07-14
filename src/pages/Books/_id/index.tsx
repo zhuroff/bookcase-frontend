@@ -215,7 +215,7 @@ export const Book = observer(() => {
           <>
             <BookView
               book={book}
-              isEditable={params.edit !== undefined}
+              isEditable={location.pathname.includes('/edit')}
               setRating={(value) => setBook({ rating: value || undefined })}
               setFileLink={(value) => setBook({ file: value })}
               setReadingStartDate={(value) => setStatus('start', value)}
@@ -236,7 +236,7 @@ export const Book = observer(() => {
             <footer className="book__footer">
               <ItemActions
                 isDraft={book.isDraft}
-                isEditMode={params.edit !== undefined}
+                isEditMode={location.pathname.includes('/edit')}
                 saveEntity={saveBook}
                 draftingOrPublishing={draftingOrPublishing}
                 cancelEditingEntity={() => {

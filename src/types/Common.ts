@@ -3,6 +3,7 @@ import { TBookBasic } from './Books'
 import { TCategoryBasic } from './Categories'
 
 export type TEntityLink = {
+  _id?: string
   title: string
   url: string
 }

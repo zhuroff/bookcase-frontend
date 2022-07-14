@@ -38,6 +38,31 @@ a {
   }
 }
 
+.view {
+  display: grid;
+  gap: $paddingMax;
+  padding-bottom: $headerHeight;
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $paddingMin;
+
+    span {
+      @include serif;
+      font-size: 1.5rem;
+    }
+
+    .p-button {
+      width: 35px;
+      height: 35px;
+      box-sizing: border-box;
+      flex: none;
+    }
+  }
+}
+
 .cards {
   display: grid;
   gap: $paddingMin;

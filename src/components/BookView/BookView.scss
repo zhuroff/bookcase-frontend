@@ -4,10 +4,7 @@
 .section {
 
   .book {
-    display: grid;
     grid-template-columns: 250px 1fr;
-    gap: $paddingMax;
-    padding-bottom: $headerHeight;
 
     &__title {
       font-size: 2rem;

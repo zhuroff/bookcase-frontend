@@ -81,7 +81,7 @@ export const Dashboard = observer(() => {
               : readingBooks.map((book) => (
                 <BookCard
                   key={book._id}
-                  route={`books/${book._id}`}
+                  route={book._id}
                   title={book.title}
                   status={book.status}
                   coverImage={book.coverImage}
@@ -114,7 +114,7 @@ export const Dashboard = observer(() => {
               : readBooks.map((book) => (
                 <BookCard
                   key={book._id}
-                  route={`books/${book._id}`}
+                  route={book._id}
                   title={book.title}
                   status={book.status}
                   coverImage={book.coverImage}

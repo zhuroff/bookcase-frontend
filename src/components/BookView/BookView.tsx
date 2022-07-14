@@ -63,7 +63,7 @@ export const BookView = observer(({
   }, [book])
 
   return (
-    <div className="book">
+    <div className="view book">
       <aside className="book__aside">
         <CoverUploader
           image={bookContent.coverImage}
