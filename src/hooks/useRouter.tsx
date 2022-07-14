@@ -6,6 +6,7 @@ import { Dashboard } from '../pages'
 import { Books } from '../pages/Books'
 import { Book } from '../pages/Books/_id'
 import { Authors } from '../pages/Authors'
+import { Author } from '../pages/Authors/_id'
 // import { Genres } from '../pages/Genres'
 
 export const useRouter = () => {
@@ -37,6 +38,14 @@ export const useRouter = () => {
       path: '/authors',
       element: <Authors />,
       title: text('routes.authors')
+    },
+    {
+      path: '/authors/:id',
+      element: <Author />,
+    },
+    {
+      path: '/authors/:id/edit',
+      element: <Author />,
     },
     // {
     //   path: '/genres',

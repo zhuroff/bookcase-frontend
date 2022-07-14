@@ -1,4 +1,5 @@
-import { TPaginatorResponse } from "./Common"
+import { TPaginatorResponse, TEntityLink } from "./Common"
+import { TBooksListItem } from './Books'
 
 export type TCategoryBasic = {
   _id: string
@@ -13,6 +14,11 @@ export type TCategoryAuthor = TCategoryBasic & {
   firstName: string
   lastName?: string
   patronymicName?: string
+}
+
+export type TCategoryAuthorPage = Omit<TCategoryAuthor, 'books'> & {
+  books: TBooksListItem[]
+  links?: TEntityLink[]
 }
 
 export type TCategoryAuthorBook = {

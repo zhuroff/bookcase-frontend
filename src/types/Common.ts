@@ -2,6 +2,11 @@ import { ReactNode } from 'react'
 import { TBookBasic } from './Books'
 import { TCategoryBasic } from './Categories'
 
+export type TEntityLink = {
+  title: string
+  url: string
+}
+
 type TRoute = {
   path: string
   element: ReactNode

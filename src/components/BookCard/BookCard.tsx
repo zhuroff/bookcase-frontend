@@ -77,7 +77,7 @@ export const BookCard = observer(({
           (status?.start && status?.finish) && <i className="pi pi-check-circle card__status"></i>
         }
         <Link
-          to={route}
+          to={`/books/${route}`}
           className='card__link'
         >
           <img
@@ -89,14 +89,14 @@ export const BookCard = observer(({
 
         <div className="card__content">
           <Link
-            to={route}
+            to={`/books/${route}`}
             className='card__title'
             title={title}
           >{title}</Link>
 
           <ul className="card__authors">
             {
-              authorsAbbreviated.map(({ _id, title }, index, arr) => (
+              authorsAbbreviated.map(({ _id, title }) => (
                 <li
                   key={_id}
                   className="card__row"
