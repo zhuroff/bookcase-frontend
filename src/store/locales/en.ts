@@ -52,7 +52,8 @@ export const messages = {
     dashboard: 'Dashboard',
     books: 'Books',
     authors: 'Authors',
-    genres: 'Genres'
+    genres: 'Genres',
+    publishers: 'Publishers'
   },
   dashboard: {
     readingBooks: 'Read now',
@@ -86,6 +87,21 @@ export const messages = {
         values: ['Not accounted', 'Accounted'],
         tooltip: 'The book is not included in the collection',
         filterTitle: 'Only accounted'
+      },
+      publicationYear: 'Publication year',
+      pages: 'Number of pages',
+      coverType: 'Cover type',
+      coverTypes: {
+        ebook: 'Ebook',
+        hardcover: 'Hardcover',
+        paperback: 'Paperback',
+        audio: 'Audio'
+      },
+      formatType: 'Format in collection',
+      formatTypes: {
+        ebook: 'Ebook',
+        paperbook: 'Paper book',
+        audiobook: 'Audio book'
       }
     }
   },
@@ -104,7 +120,8 @@ export const messages = {
     successSaving: 'The author\'s data has been successfully saved'
   },
   publishers: {
-    alreadyExist: 'The publisher has already been added'
+    alreadyExist: 'The publisher has already been added',
+    successSaving: 'The publisher\'s data has been successfully saved'
   },
   genres: {
     alreadyExist: 'The genre has already been added'

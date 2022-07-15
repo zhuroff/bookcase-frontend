@@ -28,7 +28,7 @@ export const Input = observer(({
   onInput,
   setValue
 }: InputProps) => {
-  const textInputs = ['text', 'password', 'email', 'search']
+  const textInputs = ['text', 'password', 'email', 'search', 'number']
 
   return (
     <>

@@ -5,12 +5,12 @@ export type TCategoryBasic = {
   _id: string
   title: string
   isDraft: boolean
+  books: number
   isNew?: true
   isDeleted?: boolean
 }
 
 export type TCategoryAuthor = TCategoryBasic & {
-  books: number
   firstName: string
   lastName?: string
   patronymicName?: string
@@ -36,6 +36,10 @@ export type TCategoryPublisherBook = {
   publisher: TCategoryBasic
   isNew?: true
   isDeleted?: boolean
+}
+
+export type TCategoryPublisherPage = Omit<TCategoryBasic, 'books'> & {
+  books: TBooksListItem[]
 }
 
 export type TCategoriesResponse = {

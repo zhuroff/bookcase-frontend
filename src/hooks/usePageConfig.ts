@@ -15,7 +15,7 @@ export const usePageConfig = ({ pageKey, isModal }: TPageConfigProps) => {
     page: searchParams.get('page') || 1,
     sort: { title: 1 },
     isDraft: false,
-    limit: 30
+    limit: 50
   })
 
   const restoreSavedConfig = () => {

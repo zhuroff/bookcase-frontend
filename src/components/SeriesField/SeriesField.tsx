@@ -89,6 +89,7 @@ export const SeriesField = observer(({
           </Card> :
         <>
           <Card className={content?.isDeleted ? '--deleted' : ''}>
+            <span className="card__link-primary">{text('common.series')}</span>
             {content?.isDeleted &&
               <Button
                 icon="pi pi-undo"
@@ -111,6 +112,7 @@ export const SeriesField = observer(({
                 fetchSeries()
               }}
               className="p-button-outlined"
+              style={{ marginTop: '0.5rem' }}
             />
           </Card>
         </>

@@ -15,7 +15,6 @@ export const ParamUnnecessary = observer(({ isEditable, isAccounted, switchUnnec
   return (
     <Card>
       <span className="card__link-primary">{text('book.params.unnecessary.title')}</span>
-      <br />
       <em className="card__link-secondary">
         {isEditable &&
           <InputSwitch

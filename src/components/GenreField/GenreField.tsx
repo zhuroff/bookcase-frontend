@@ -16,7 +16,7 @@ type TGenreFieldProps = {
   isLast: boolean
   isEditable: boolean
   content: TCategoryBasic
-  deleteOrRestoreGenre: (_id: string, value: boolean) => void
+  deleteOrRestore: (key: 'genres', _id: string) => void
   selectGenre: (value: TCategoryBasic, isAppend: boolean) => void
 }
 
@@ -24,7 +24,7 @@ export const GenreField = observer(({
   isLast,
   isEditable,
   content,
-  deleteOrRestoreGenre,
+  deleteOrRestore,
   selectGenre
 }: TGenreFieldProps) => {
   const { post } = useApi()
@@ -90,14 +90,14 @@ export const GenreField = observer(({
               <Button
                 icon="pi pi-undo"
                 className="p-button-rounded p-button-warning --undo"
-                onClick={() => deleteOrRestoreGenre(content._id, false)}
+                onClick={() => deleteOrRestore('genres', content._id)}
               />
             }
 
             <Button
               icon="pi pi-times"
               className="p-button-rounded p-button-secondary --delete"
-              onClick={() => deleteOrRestoreGenre(content._id, true)}
+              onClick={() => deleteOrRestore('genres', content._id)}
             />
 
             <Button

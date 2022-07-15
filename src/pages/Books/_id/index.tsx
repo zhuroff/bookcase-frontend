@@ -158,26 +158,10 @@ export const Book = observer(() => {
     })
   }
 
-  const deleteOrRestoreAuthor = (_id: string, value: boolean) => {
+  const deleteOrRestore = (key: 'authors' | 'publishers' | 'genres', _id: string) => {
     setBook({
-      authors: book.authors.map((el) => (
-        el._id === _id ? { ...el, isDeleted: value } : el
-      ))
-    })
-  }
-
-  const deleteOrRestorePublisher = (_id: string, value: boolean) => {
-    setBook({
-      publishers: book.publishers.map((el) => (
-        el._id === _id ? { ...el, isDeleted: value } : el
-      ))
-    })
-  }
-
-  const deleteOrRestoreGenre = (_id: string, value: boolean) => {
-    setBook({
-      genres: book.genres.map((el) => (
-        el._id === _id ? { ...el, isDeleted: value } : el
+      [key]: book[key]?.map((el) => (
+        el._id === _id ? { ...el, isDeleted: !el.isDeleted } : el
       ))
     })
   }
@@ -196,6 +180,12 @@ export const Book = observer(() => {
       publishers: book.publishers.map((el) => (
         el._id === _id ? { ...el, [key]: value } : el
       ))
+    })
+  }
+
+  const setSimpleParam = (value: string, key: string) => {
+    setBook({
+      [key]: Number.isNaN(Number(value)) ? value : Number(value)
     })
   }
 
@@ -222,15 +212,14 @@ export const Book = observer(() => {
               setReadingFinishDate={(value) => setStatus('finish', value)}
               setAuthor={setAuthor}
               setAuthorRole={setAuthorRole}
-              deleteOrRestoreAuthor={deleteOrRestoreAuthor}
+              deleteOrRestore={deleteOrRestore}
               setPublisher={setPublisher}
-              deleteOrRestorePublisher={deleteOrRestorePublisher}
               setPublisherMetadata={setPublisherMetadata}
-              deleteOrRestoreGenre={deleteOrRestoreGenre}
               setGenre={setGenre}
               switchUnnecessaryState={() => setBook({ accountability: !book.accountability })}
               setSeries={(series) => setBook({ series })}
               deleteOrRestoreSeries={deleteOrRestoreSeries}
+              setSimpleParam={setSimpleParam}
             />
 
             <footer className="book__footer">

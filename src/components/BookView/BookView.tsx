@@ -11,10 +11,12 @@ import { useLocale } from '../../hooks/useLocale';
 import { AuthorField } from '../AuthorField/AuthorField';
 import { TCategoryAuthor, TCategoryBasic } from '../../types/Categories';
 import { PublisherField } from '../PublisherField/PublisherField';
-import './BookView.scss';
 import { GenreField } from '../GenreField/GenreField';
 import { ParamUnnecessary } from '../ParamFields/ParamUnnecessary';
 import { SeriesField } from '../SeriesField/SeriesField';
+import { SimpleParam } from '../ParamFields/SimpleParam';
+import { DropdownParam } from '../ParamFields/DropdownParam';
+import './BookView.scss';
 
 type TBookViewProps = {
   book: TBookPage
@@ -25,15 +27,14 @@ type TBookViewProps = {
   setFileLink: (value: string | undefined) => void
   setAuthor: (value: TCategoryAuthor, _id?: string) => void
   setAuthorRole: (value: string, _id: string) => void
-  deleteOrRestoreAuthor: (_id: string, isDeleted: boolean) => void
+  deleteOrRestore: (key: 'authors' | 'publishers' | 'genres', _id: string) => void
   setPublisher: (value: TCategoryBasic, _id?: string) => void
-  deleteOrRestorePublisher: (_id: string, isDeleted: boolean) => void
   setPublisherMetadata: (_id: string, key: string, value: string) => void
-  deleteOrRestoreGenre: (_id: string, isDeleted: boolean) => void
   setGenre: (value: TCategoryBasic, _id?: string) => void
   switchUnnecessaryState: () => void
   setSeries: (value: TCategoryBasic) => void
   deleteOrRestoreSeries: () => void
+  setSimpleParam: (value: string, key: string) => void
 }
 
 export const BookView = observer(({
@@ -45,18 +46,29 @@ export const BookView = observer(({
   setFileLink,
   setAuthor,
   setAuthorRole,
-  deleteOrRestoreAuthor,
+  deleteOrRestore,
   setPublisher,
-  deleteOrRestorePublisher,
   setPublisherMetadata,
-  deleteOrRestoreGenre,
   setGenre,
   switchUnnecessaryState,
   setSeries,
-  deleteOrRestoreSeries
+  deleteOrRestoreSeries,
+  setSimpleParam
 }: TBookViewProps) => {
-  const { text } = useLocale()
+  const { text, messages, currentLocale } = useLocale()
   const [bookContent, setBookContent] = useState(book)
+
+  const coverTypes = Object.entries(messages[currentLocale].messages.book.params.coverTypes)
+    .reduce((acc, [key, value]) => {
+      acc.push({ value: key, label: value })
+      return acc
+    }, [] as { value: string; label: string }[])
+
+  const formatTypes = Object.entries(messages[currentLocale].messages.book.params.formatTypes)
+    .reduce((acc, [key, value]) => {
+      acc.push({ value: key, label: value })
+      return acc
+    }, [] as { value: string; label: string }[])
 
   useEffect(() => {
     setBookContent(book)
@@ -137,7 +149,7 @@ export const BookView = observer(({
                     isAppend ? undefined : author._id
                   )}
                   setAuthorRole={(value) => setAuthorRole(value, author.author._id)}
-                  deleteOrRestoreAuthor={deleteOrRestoreAuthor}
+                  deleteOrRestore={deleteOrRestore}
                 />
               ))
             }
@@ -156,7 +168,7 @@ export const BookView = observer(({
                   isLast={index === arr.length - 1}
                   isEditable={isEditable}
                   content={publisher}
-                  deleteOrRestorePublisher={deleteOrRestorePublisher}
+                  deleteOrRestore={deleteOrRestore}
                   selectPublisher={(value, isAppend) => setPublisher(
                     value,
                     isAppend ? undefined : publisher._id
@@ -180,7 +192,7 @@ export const BookView = observer(({
                   isLast={index === arr.length - 1}
                   isEditable={isEditable}
                   content={genre}
-                  deleteOrRestoreGenre={deleteOrRestoreGenre}
+                  deleteOrRestore={deleteOrRestore}
                   selectGenre={(value, isAppend) => setGenre(
                     value,
                     isAppend ? undefined : genre._id
@@ -207,6 +219,38 @@ export const BookView = observer(({
               content={bookContent.series}
               selectSeries={setSeries}
               deleteOrRestoreSeries={deleteOrRestoreSeries}
+            />
+
+            <SimpleParam
+              isEditable={isEditable}
+              content={bookContent.publicationYear}
+              title={text('book.params.publicationYear')}
+              setSimpleParam={(value) => setSimpleParam(value, 'publicationYear')}
+            />
+
+            <SimpleParam
+              isEditable={isEditable}
+              content={bookContent.pages}
+              title={text('book.params.pages')}
+              setSimpleParam={(value) => setSimpleParam(value, 'pages')}
+            />
+
+            <DropdownParam
+              isEditable={isEditable}
+              options={coverTypes}
+              selected={bookContent.coverType}
+              selectedTitle={text(`book.params.coverTypes.${bookContent.coverType}`)}
+              title={text('book.params.coverType')}
+              setDropdownParam={(value) => setSimpleParam(value, 'coverType')}
+            />
+
+            <DropdownParam
+              isEditable={isEditable}
+              options={formatTypes}
+              selected={bookContent.format}
+              selectedTitle={text(`book.params.formatTypes.${bookContent.format}`)}
+              title={text('book.params.formatType')}
+              setDropdownParam={(value) => setSimpleParam(value, 'format')}
             />
           </div>
         </Fieldset>

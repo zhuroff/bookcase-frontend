@@ -7,7 +7,8 @@ import { Books } from '../pages/Books'
 import { Book } from '../pages/Books/_id'
 import { Authors } from '../pages/Authors'
 import { Author } from '../pages/Authors/_id'
-// import { Genres } from '../pages/Genres'
+import { Publishers } from '../pages/Publishers'
+import { Publisher } from '../pages/Publishers/_id'
 
 export const useRouter = () => {
   const { currentLocale, text } = useLocale()
@@ -47,11 +48,19 @@ export const useRouter = () => {
       path: '/authors/:id/edit',
       element: <Author />,
     },
-    // {
-    //   path: '/genres',
-    //   element: <Genres />,
-    //   title: text('routes.genres')
-    // }
+    {
+      path: '/publishers',
+      element: <Publishers />,
+      title: text('routes.publishers')
+    },
+    {
+      path: '/publishers/:id',
+      element: <Publisher />,
+    },
+    {
+      path: '/publishers/:id/edit',
+      element: <Publisher />,
+    },
   ]
   const [routes, setRoutes] = useState<TRoute[]>(routeList)
 

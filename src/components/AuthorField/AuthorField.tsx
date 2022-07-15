@@ -19,7 +19,7 @@ type TAuthorFieldProps = {
   content: TCategoryAuthorBook
   selectAuthor: (value: TCategoryAuthor, isAppend: boolean) => void
   setAuthorRole: (value: string) => void
-  deleteOrRestoreAuthor: (_id: string, value: boolean) => void
+  deleteOrRestore: (key: 'authors', _id: string) => void
 }
 
 export const AuthorField = observer(({
@@ -28,7 +28,7 @@ export const AuthorField = observer(({
   content,
   selectAuthor,
   setAuthorRole,
-  deleteOrRestoreAuthor
+  deleteOrRestore
 }: TAuthorFieldProps) => {
   const { text, messages, currentLocale } = useLocale()
   const { post } = useApi()
@@ -100,14 +100,14 @@ export const AuthorField = observer(({
               <Button
                 icon="pi pi-undo"
                 className="p-button-rounded p-button-warning --undo"
-                onClick={() => deleteOrRestoreAuthor(content._id, false)}
+                onClick={() => deleteOrRestore('authors', content._id)}
               />
             }
 
             <Button
               icon="pi pi-times"
               className="p-button-rounded p-button-secondary --delete"
-              onClick={() => deleteOrRestoreAuthor(content._id, true)}
+              onClick={() => deleteOrRestore('authors', content._id)}
             />
 
             <Button

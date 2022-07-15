@@ -17,7 +17,7 @@ type TPublisherFieldProps = {
   isLast: boolean
   isEditable: boolean
   content: TCategoryPublisherBook
-  deleteOrRestorePublisher: (_id: string, value: boolean) => void
+  deleteOrRestore: (key: 'publishers', _id: string) => void
   selectPublisher: (value: TCategoryBasic, isAppend: boolean) => void
   setPublisherMetadata: (_id: string, key: string, value: string) => void
 }
@@ -26,7 +26,7 @@ export const PublisherField = observer(({
   isLast,
   isEditable,
   content,
-  deleteOrRestorePublisher,
+  deleteOrRestore,
   selectPublisher,
   setPublisherMetadata
 }: TPublisherFieldProps) => {
@@ -99,14 +99,14 @@ export const PublisherField = observer(({
               <Button
                 icon="pi pi-undo"
                 className="p-button-rounded p-button-warning --undo"
-                onClick={() => deleteOrRestorePublisher(content._id, false)}
+                onClick={() => deleteOrRestore('publishers', content._id)}
               />
             }
 
             <Button
               icon="pi pi-times"
               className="p-button-rounded p-button-secondary --delete"
-              onClick={() => deleteOrRestorePublisher(content._id, true)}
+              onClick={() => deleteOrRestore('publishers', content._id)}
             />
 
             <Button

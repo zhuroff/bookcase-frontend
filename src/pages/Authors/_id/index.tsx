@@ -32,7 +32,7 @@ export const Author = observer(() => {
       .catch((error) => console.dir(error))
   }
 
-  const saveBook = () => {
+  const saveAuthor = () => {
     const payload = Array.from(updates).reduce<Partial<TCategoryAuthorPage>>((acc, next) => {
       // @ts-ignore
       acc[next] = author[next]
@@ -123,7 +123,7 @@ export const Author = observer(() => {
             <ItemActions
               isDraft={author.isDraft}
               isEditMode={location.pathname.includes('/edit')}
-              saveEntity={saveBook}
+              saveEntity={saveAuthor}
               draftingOrPublishing={draftingOrPublishing}
               cancelEditingEntity={() => {
                 navigate(`/authors/${params.id}`, { replace: true })

@@ -52,7 +52,8 @@ export const messages = {
     dashboard: 'Главная',
     books: 'Книги',
     authors: 'Авторы',
-    genres: 'Жанры'
+    genres: 'Жанры',
+    publishers: 'Издательства'
   },
   dashboard: {
     readingBooks: 'Читаю сейчас',
@@ -86,6 +87,21 @@ export const messages = {
         values: ['Не учтена', 'Учтена'],
         tooltip: 'Книга не учтена в коллекции',
         filterTitle: 'Только учтенные'
+      },
+      publicationYear: 'Год издания',
+      pages: 'Количество страниц',
+      coverType: 'Тип обложки',
+      coverTypes: {
+        ebook: 'Электронная книга',
+        hardcover: 'Твердый переплет',
+        paperback: 'Мягкий переплет',
+        audio: 'Аудио'
+      },
+      formatType: 'Формат в коллекции',
+      formatTypes: {
+        ebook: 'Электронная книга',
+        paperbook: 'Бумажная книга',
+        audiobook: 'Аудиокнига'
       }
     }
   },
@@ -104,7 +120,8 @@ export const messages = {
     successSaving: 'Данные об авторе успешно сохранены'
   },
   publishers: {
-    alreadyExist: 'Издатель уже был добавлен'
+    alreadyExist: 'Издатель уже был добавлен',
+    successSaving: 'Данные об издательстве успешно сохранены'
   },
   genres: {
     alreadyExist: 'Жанр уже был добавлен'
