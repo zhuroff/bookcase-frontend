@@ -16,6 +16,7 @@ import { ParamUnnecessary } from '../ParamFields/ParamUnnecessary';
 import { SeriesField } from '../SeriesField/SeriesField';
 import { SimpleParam } from '../ParamFields/SimpleParam';
 import { DropdownParam } from '../ParamFields/DropdownParam';
+import { Editor } from 'primereact/editor';
 import './BookView.scss';
 
 type TBookViewProps = {
@@ -35,6 +36,7 @@ type TBookViewProps = {
   setSeries: (value: TCategoryBasic) => void
   deleteOrRestoreSeries: () => void
   setSimpleParam: (value: string, key: string) => void
+  setEditorValue: (value: string, key: string) => void
 }
 
 export const BookView = observer(({
@@ -53,7 +55,8 @@ export const BookView = observer(({
   switchUnnecessaryState,
   setSeries,
   deleteOrRestoreSeries,
-  setSimpleParam
+  setSimpleParam,
+  setEditorValue
 }: TBookViewProps) => {
   const { text, messages, currentLocale } = useLocale()
   const [bookContent, setBookContent] = useState(book)
@@ -254,6 +257,40 @@ export const BookView = observer(({
             />
           </div>
         </Fieldset>
+
+        <Fieldset
+          legend={text('book.annotation')}
+          toggleable
+          className={!isEditable ? '--readonly' : ''}
+        >
+          <Editor
+            value={bookContent.description}
+            onTextChange={(e) => setEditorValue(String(e.htmlValue), 'description')} />
+        </Fieldset>
+
+        {(isEditable || bookContent.contents?.length) &&
+          <Fieldset
+            legend={text('book.contentsTable')}
+            toggleable
+            className={!isEditable ? '--readonly' : ''}
+          >
+            <Editor
+              value={bookContent.contents}
+              onTextChange={(e) => setEditorValue(String(e.htmlValue), 'contents')} />
+          </Fieldset>
+        }
+
+        {(isEditable || bookContent.summary) &&
+          <Fieldset
+            legend={text('book.summary')}
+            toggleable
+            className={!isEditable ? '--readonly' : ''}
+          >
+            <Editor
+              value={bookContent.summary}
+              onTextChange={(e) => setEditorValue(String(e.htmlValue), 'summary')} />
+          </Fieldset>
+        }
       </main>
     </div>
   )

@@ -220,6 +220,7 @@ export const Book = observer(() => {
               setSeries={(series) => setBook({ series })}
               deleteOrRestoreSeries={deleteOrRestoreSeries}
               setSimpleParam={setSimpleParam}
+              setEditorValue={(value, key) => setBook({ [key]: value })}
             />
 
             <footer className="book__footer">

@@ -103,7 +103,10 @@ export const messages = {
         paperbook: 'Paper book',
         audiobook: 'Audio book'
       }
-    }
+    },
+    annotation: 'Annotation',
+    contentsTable: 'Table of contents',
+    summary: 'Summary'
   },
   authors: {
     roles: {

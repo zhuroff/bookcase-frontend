@@ -27,6 +27,14 @@ $breakpoints: (
   letter-spacing: 0.5px;
 }
 
+@mixin bodyText {
+  color: var(--text-color);
+  font-family: $sans;
+  letter-spacing: 0.5px;
+  line-height: 1.25;
+  font-size: 1rem;
+}
+
 @mixin viewInput {
   border-radius: 0;
   border: 0;

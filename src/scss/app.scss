@@ -11,10 +11,7 @@ body {
   height: 100vh;
   overflow: hidden;
   background-color: var(--surface-b);
-  color: var(--text-color);
-  font-family: $sans;
-  letter-spacing: 0.5px;
-  line-height: 1.25;
+  @include bodyText;
 }
 
 .auth {

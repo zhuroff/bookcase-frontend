@@ -147,6 +147,98 @@ a {
   &-legend {
     margin-left: $paddingMin;
   }
+
+  .p-editor-container {
+
+    .p-editor-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .p-editor-content {
+      border: 0;
+    }
+
+    .ql-editor {
+      padding: $paddingMin 0 0;
+      overflow: hidden;
+      height: auto;
+
+      pre,
+      code {
+        font-family: $mono;
+        font-size: 0.875rem;
+      }
+
+      code {
+        background-color: var(--surface-50);
+      }
+
+      p, li {
+        @include bodyText;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+        padding-left: 0;
+        position: relative;
+
+        &:before {
+          font-size: 2rem;
+          position: absolute;
+          top: -8px;
+          left: 0;
+        }
+      }
+
+      h2, h3, h4 {
+        @include serif;
+        margin: $paddingMax 0 $paddingMin;
+        font-weight: 600;
+      }
+
+      h2 {
+        font-size: 1.75rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+      }
+
+      h4 {
+        font-size: 1rem;
+        text-transform: uppercase;
+      }
+
+      & > * {
+        margin: $paddingMin 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  &.--readonly {
+
+    .p-editor-container {
+      
+      .p-editor-toolbar {
+        display: none;
+      }
+
+      .ql-editor {
+        padding: 0;
+        pointer-events: none;
+      }
+    }
+  }
 }
 
 .field-checkbox {
