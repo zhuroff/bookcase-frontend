@@ -9,6 +9,8 @@ import { Authors } from '../pages/Authors'
 import { Author } from '../pages/Authors/_id'
 import { Categories } from '../pages/Categories'
 import { Category } from '../pages/Categories/_id'
+import { Lists } from '../pages/Lists'
+import { ListPage } from '../pages/Lists/_id'
 
 export const useRouter = () => {
   const { currentLocale, text } = useLocale()
@@ -86,6 +88,19 @@ export const useRouter = () => {
     {
       path: '/genres/:id/edit',
       element: <Category slug="genres" />,
+    },
+    {
+      path: '/lists',
+      element: <Lists />,
+      title: text('routes.lists')
+    },
+    {
+      path: '/lists/:id',
+      element: <ListPage />,
+    },
+    {
+      path: '/lists/:id/edit',
+      element: <ListPage />,
     },
   ]
   const [routes, setRoutes] = useState<TRoute[]>(routeList)

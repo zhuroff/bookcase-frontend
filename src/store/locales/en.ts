@@ -54,7 +54,8 @@ export const messages = {
     authors: 'Authors',
     genres: 'Genres',
     publishers: 'Publishers',
-    series: 'Series'
+    series: 'Series',
+    lists: 'Lists'
   },
   dashboard: {
     readingBooks: 'Read now',
