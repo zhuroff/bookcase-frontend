@@ -7,10 +7,8 @@ import { Books } from '../pages/Books'
 import { Book } from '../pages/Books/_id'
 import { Authors } from '../pages/Authors'
 import { Author } from '../pages/Authors/_id'
-import { Publishers } from '../pages/Publishers'
-import { Publisher } from '../pages/Publishers/_id'
-import { Series } from '../pages/Series'
-import { SeriesPage } from '../pages/Series/_id'
+import { Categories } from '../pages/Categories'
+import { Category } from '../pages/Categories/_id'
 
 export const useRouter = () => {
   const { currentLocale, text } = useLocale()
@@ -52,29 +50,42 @@ export const useRouter = () => {
     },
     {
       path: '/publishers',
-      element: <Publishers />,
+      element: <Categories slug="publishers" />,
       title: text('routes.publishers')
     },
     {
       path: '/publishers/:id',
-      element: <Publisher />,
+      element: <Category slug="publishers" />,
     },
     {
       path: '/publishers/:id/edit',
-      element: <Publisher />,
+      element: <Category slug="publishers" />,
     },
     {
       path: '/series',
-      element: <Series />,
+      element: <Categories slug="series" />,
       title: text('routes.series')
     },
     {
       path: '/series/:id',
-      element: <SeriesPage />,
+      element: <Category slug="series" />,
     },
     {
       path: '/series/:id/edit',
-      element: <SeriesPage />,
+      element: <Category slug="series" />,
+    },
+    {
+      path: '/genres',
+      element: <Categories slug="genres" />,
+      title: text('routes.genres')
+    },
+    {
+      path: '/genres/:id',
+      element: <Category slug="genres" />,
+    },
+    {
+      path: '/genres/:id/edit',
+      element: <Category slug="genres" />,
     },
   ]
   const [routes, setRoutes] = useState<TRoute[]>(routeList)

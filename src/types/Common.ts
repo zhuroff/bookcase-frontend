@@ -8,6 +8,10 @@ export type TEntityLink = {
   url: string
 }
 
+export type TCategoriesIndexProps = {
+  slug: string
+}
+
 type TRoute = {
   path: string
   element: ReactNode

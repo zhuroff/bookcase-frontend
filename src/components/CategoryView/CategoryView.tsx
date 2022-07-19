@@ -3,48 +3,48 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../../hooks/useLocale';
-import { TCategorySeriesPage } from '../../types/Categories';
+import { TCategoryPage } from '../../types/Categories';
 import { BookCard } from '../BookCard/BookCard';
 
-type TSeriesViewProps = {
-  series: TCategorySeriesPage
+type TCategoryViewProps = {
+  category: TCategoryPage
   isEditable?: boolean
-  updateSeriesTitle: (value: string) => void
+  updateCategoryTitle: (value: string) => void
 }
 
-export const SeriesView = observer(({
-  series,
+export const CategoryView = observer(({
+  category,
   isEditable,
-  updateSeriesTitle
-}: TSeriesViewProps) => {
+  updateCategoryTitle
+}: TCategoryViewProps) => {
   const { text } = useLocale()
   const navigate = useNavigate()
-  const [seriesContent, setSeriesContent] = useState(series)
+  const [categoryContent, setCategoryContent] = useState(category)
 
   useEffect(() => {
-    setSeriesContent(series)
-  }, [series])
+    setCategoryContent(category)
+  }, [category])
 
   return (
     <div className="view author">
       <aside className="author__aside">
         <InputTextarea
           rows={1}
-          value={seriesContent.title}
+          value={categoryContent.title}
           autoResize
           disabled={!isEditable}
           placeholder={text('authors.lastNamePlaceholder')}
           className={`book__title ${isEditable && '--editable'}`}
-          onInput={(e) => updateSeriesTitle(e.currentTarget.value)}
+          onInput={(e) => updateCategoryTitle(e.currentTarget.value)}
         />
       </aside>
 
       <main className="author__main">
         <h2 className="view__heading"><span>{text('common.books')}</span></h2>
-        {seriesContent.books.length &&
+        {categoryContent.books.length &&
           <ul className="cards">
             {
-              seriesContent.books.map((book) => (
+              categoryContent.books.map((book) => (
                 <BookCard
                   key={book._id}
                   route={book._id}

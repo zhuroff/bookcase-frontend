@@ -121,14 +121,18 @@ export const messages = {
     firstNamePlaceholder: 'Фамилия',
     lastNamePlaceholder: 'Имя',
     patronymicNamePlaceholder: 'Отчество',
-    successSaving: 'Данные об авторе успешно сохранены'
+    successSaving: 'Данные автора успешно сохранены'
   },
   publishers: {
     alreadyExist: 'Издатель уже был добавлен',
-    successSaving: 'Данные об издательстве успешно сохранены'
+    successSaving: 'Данные издательства успешно сохранены'
   },
   genres: {
-    alreadyExist: 'Жанр уже был добавлен'
+    alreadyExist: 'Жанр уже был добавлен',
+    successSaving: 'Данные жанра успешно сохранены'
+  },
+  series: {
+    successSaving: 'Данные серии успешно сохранены'
   },
   auth: {
     login: 'Войти',

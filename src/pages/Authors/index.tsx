@@ -79,11 +79,6 @@ export const Authors = observer(() => {
                 >
                   <Card>
                     <div className="card__author">
-                      {/* <Avatar
-                        shape="circle"
-                        size="large"
-                        label={String(author.books)}
-                      /> */}
                       <Avatar
                         className="p-overlay-badge"
                         icon="pi pi-book"

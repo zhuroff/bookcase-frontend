@@ -3,7 +3,7 @@ import { Avatar } from 'primereact/avatar';
 import { Badge } from 'primereact/badge';
 import { Card } from 'primereact/card';
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { ListActions } from '../../components/ListActions/ListActions';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { Preloader } from '../../components/Preloader/Preloader';
@@ -11,30 +11,38 @@ import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
-import { TPaginatorResponse } from '../../types/Common';
+import { TCategoriesIndexProps, TPaginatorResponse } from '../../types/Common';
 
-export const Publishers = observer(() => {
+export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
   const { text } = useLocale()
   const { post } = useApi()
+  const location = useLocation()
   const [searchParams] = useSearchParams()
-  const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'publishers' })
-  const [publisherListFetched, setPublisherListFetchedState] = useState(false)
-  const [publisherList, setPublisherList] = useState<TCategoryBasic[]>([])
+  const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'category' })
+  const [categoryListFetched, setCategoriesListFetchedState] = useState(false)
+  const [categoryList, setCategoriesList] = useState<TCategoryBasic[]>([])
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
 
-  const fetchPublishers = () => {
-    post<TCategoriesResponse>('/api/publishers', pageConfig)
+  const fetchCategories = () => {
+    post<TCategoriesResponse>(`/api/${slug}`, pageConfig)
       .then((response) => {
-        setPublisherList(response.data.docs)
+        setCategoriesList(response.data.docs)
         setPagePagination(response.data.pagination)
-        setPublisherListFetchedState(true)
+        setCategoriesListFetchedState(true)
       })
       .catch((error) => console.dir(error))
   }
 
   useEffect(() => {
-    if (pageConfig) fetchPublishers()
+    if (pageConfig) fetchCategories()
   }, [pageConfig])
+
+  useEffect(() => {
+    if (categoryList.length) {
+      setCategoriesListFetchedState(false)
+      fetchCategories()
+    }
+  }, [location.pathname])
 
   if (!pageConfig) return null
 
@@ -42,7 +50,7 @@ export const Publishers = observer(() => {
     <>
       <header className="section__heading">
         <h2 className="section__title">
-          {text('routes.publishers')} ({pagePagination?.totalDocs})
+          {text(`routes.${slug}`)} ({pagePagination?.totalDocs})
         </h2>
 
         <ListActions
@@ -50,12 +58,12 @@ export const Publishers = observer(() => {
           createEntity={() => console.log('Create')}
           updateConfig={(payload) => {
             if (payload.isDraft) payload.page = 1
-            setPublisherListFetchedState(false)
+            setCategoriesListFetchedState(false)
             setPageConfig({ ...pageConfig, ...payload })
           }}
           resetConfig={() => {
-            setPublisherListFetchedState(false)
-            localStorage.removeItem('publishers')
+            setCategoriesListFetchedState(false)
+            localStorage.removeItem(slug)
             setPageConfig({
               page: searchParams.get('page') || 1,
               sort: { title: 1 },
@@ -68,14 +76,14 @@ export const Publishers = observer(() => {
 
       <ul className="cards">
         {
-          !publisherListFetched ?
+          !categoryListFetched ?
             <Preloader /> :
-            !publisherList.length ?
+            !categoryList.length ?
               <li className="cards__empty">{text('common.emptySection')}</li> :
-              publisherList.map((publisher) => (
+              categoryList.map((category) => (
                 <Link
-                  key={publisher._id}
-                  to={`/publishers/${publisher._id}`}
+                  key={category._id}
+                  to={`/${slug}/${category._id}`}
                 >
                   <Card>
                     <div className="card__author">
@@ -84,11 +92,11 @@ export const Publishers = observer(() => {
                         icon="pi pi-book"
                         size="large"
                       >
-                        <Badge value={publisher.books} />
+                        <Badge value={category.books} />
                       </Avatar>
                       <div>
                         <div className="card__author-lastname">
-                          <span>{publisher.title}</span>
+                          <span>{category.title}</span>
                         </div>
                       </div>
                     </div>
@@ -98,11 +106,11 @@ export const Publishers = observer(() => {
         }
       </ul>
 
-      {pagePagination &&
+      {(pagePagination && pagePagination.totalPages > 1) &&
         <Pagination
           pagination={pagePagination}
           switchPagination={(page) => {
-            setPublisherListFetchedState(false)
+            setCategoriesListFetchedState(false)
             setPageConfig({ ...pageConfig, page })
           }}
         />

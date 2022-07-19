@@ -38,16 +38,12 @@ export type TCategoryPublisherBook = {
   isDeleted?: boolean
 }
 
-export type TCategoryPublisherPage = Omit<TCategoryBasic, 'books'> & {
-  books: TBooksListItem[]
-}
-
 export type TCategoriesResponse = {
   docs: TCategoryBasic[]
   pagination: TPaginatorResponse
 }
 
-export type TCategorySeriesPage = Omit<TCategoryBasic, 'books'> & {
+export type TCategoryPage = Omit<TCategoryBasic, 'books'> & {
   books: TBooksListItem[]
 }
 

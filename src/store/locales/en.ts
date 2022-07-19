@@ -128,7 +128,11 @@ export const messages = {
     successSaving: 'The publisher\'s data has been successfully saved'
   },
   genres: {
-    alreadyExist: 'The genre has already been added'
+    alreadyExist: 'The genre has already been added',
+    successSaving: 'The genre\'s data has been successfully saved'
+  },
+  series: {
+    successSaving: 'The series data has been successfully saved'
   },
   auth: {
     login: 'Login',
