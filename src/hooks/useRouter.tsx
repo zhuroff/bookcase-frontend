@@ -9,6 +9,8 @@ import { Authors } from '../pages/Authors'
 import { Author } from '../pages/Authors/_id'
 import { Publishers } from '../pages/Publishers'
 import { Publisher } from '../pages/Publishers/_id'
+import { Series } from '../pages/Series'
+import { SeriesPage } from '../pages/Series/_id'
 
 export const useRouter = () => {
   const { currentLocale, text } = useLocale()
@@ -60,6 +62,19 @@ export const useRouter = () => {
     {
       path: '/publishers/:id/edit',
       element: <Publisher />,
+    },
+    {
+      path: '/series',
+      element: <Series />,
+      title: text('routes.series')
+    },
+    {
+      path: '/series/:id',
+      element: <SeriesPage />,
+    },
+    {
+      path: '/series/:id/edit',
+      element: <SeriesPage />,
     },
   ]
   const [routes, setRoutes] = useState<TRoute[]>(routeList)

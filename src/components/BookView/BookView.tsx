@@ -268,7 +268,7 @@ export const BookView = observer(({
             onTextChange={(e) => setEditorValue(String(e.htmlValue), 'description')} />
         </Fieldset>
 
-        {(isEditable || bookContent.contents?.length) &&
+        {(isEditable || bookContent.contents) &&
           <Fieldset
             legend={text('book.contentsTable')}
             toggleable

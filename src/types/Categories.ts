@@ -47,6 +47,10 @@ export type TCategoriesResponse = {
   pagination: TPaginatorResponse
 }
 
+export type TCategorySeriesPage = Omit<TCategoryBasic, 'books'> & {
+  books: TBooksListItem[]
+}
+
 export type TAuthorsResponse = TCategoriesResponse & {
   docs: TCategoryAuthor[]
   pagination: TPaginatorResponse
