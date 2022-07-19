@@ -28,6 +28,12 @@ a {
     font-family: $serif;
   }
 
+  &__subtitle {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-family: $serif;
+  }
+
   .actions {
     display: flex;
     align-items: center;

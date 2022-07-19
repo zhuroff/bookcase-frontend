@@ -1,0 +1,70 @@
+@import '../../scss/mixins.scss';
+@import 'include-media';
+
+.table {
+  width: 100%;
+  margin-bottom: $paddingMax * 2;
+
+  &__header {
+    text-align: left;
+    background-color: var(--surface-e);
+    border: 1px solid var(--surface-border);
+
+    &-cell {
+      padding: $paddingMin;
+      font-weight: 600;
+    }
+  }
+
+  &__body {
+
+    &-row {
+      cursor: pointer;
+      transition: $transitionSimple;
+
+      &:hover {
+        background-color: var(--surface-e);
+        transition: $transitionSimple;
+      }
+
+      &.--read {
+        filter: grayscale(1);
+        opacity: 0.5;
+      }
+    }
+
+    &-cell {
+      border-bottom: 1px solid var(--surface-border);
+      padding: $paddingMin 0;
+      vertical-align: top;
+    }
+
+    &-book {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: $paddingMin;
+
+      &__cover {
+        width: 50px;
+        height: auto;
+      }
+
+      &__title {
+        @include serif;
+        font-size: 1.25rem;
+        color: var(--primary-color);
+      }
+
+      &__authors {
+        color: var(--text-color-secondary);
+        margin: 0.5rem 0;
+      }
+
+      &__output {
+        color: var(--text-color-secondary);
+        font-size: 0.875rem;
+        color: var(--surface-400);
+      }
+    }
+  }
+}

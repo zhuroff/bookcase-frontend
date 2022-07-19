@@ -2,10 +2,11 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
-import { ListPageView } from '../../../components/ListPageView/ListPageView';
+import { ListPageSection } from '../../../components/ListPageSection/ListPageSection';
 import { Preloader } from '../../../components/Preloader/Preloader';
 import { useApi } from '../../../hooks/useApi';
 import { useConfirm } from '../../../hooks/useConfirm';
+import { TListPage } from '../../../types/List';
 
 export const ListPage = observer(() => {
   const navigate = useNavigate()
@@ -14,10 +15,10 @@ export const ListPage = observer(() => {
   const { get, patch, remove } = useApi()
   const { callConfirmation } = useConfirm()
   const [isListPageFetched, setListPageFetchedState] = useState(false)
-  const [content, setContent] = useState({})
+  const [content, setContent] = useState({} as TListPage)
 
   const fetchListPage = () => {
-    get<any>(`/api/lists/${params.id}`)
+    get<TListPage>(`/api/lists/${params.id}`)
       .then((response) => setContent(response.data))
       .then(_ => setListPageFetchedState(true))
       .catch((error) => console.dir(error))
@@ -47,10 +48,19 @@ export const ListPage = observer(() => {
       {!isListPageFetched ?
         <Preloader /> :
         <>
-          <ListPageView
-            content={content}
-            isEditable={location.pathname.includes('/edit')}
-          />
+          <header className="section__heading">
+            <h2 className="section__title">{content.title}</h2>
+          </header>
+
+          {
+            content.lists.map((section) => (
+              <ListPageSection
+                key={section._id}
+                section={section}
+                isEditable={location.pathname.includes('/edit')}
+              />
+            ))
+          }
 
           <footer className="book__footer">
             <ItemActions

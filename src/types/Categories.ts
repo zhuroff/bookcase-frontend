@@ -1,9 +1,12 @@
 import { TPaginatorResponse, TEntityLink } from "./Common"
 import { TBooksListItem } from './Books'
 
-export type TCategoryBasic = {
+export type TCategoryMin = {
   _id: string
   title: string
+}
+
+export type TCategoryBasic = TCategoryMin & {
   isDraft: boolean
   books: number
   isNew?: true

@@ -25,8 +25,8 @@ export const AuthorView = observer(({
   removeLinkRow,
   setLinkParam
 }: TAuthorViewProps) => {
-  const { text } = useLocale()
   const navigate = useNavigate()
+  const { text } = useLocale()
   const [authorContent, setAuthorContent] = useState(author)
 
   useEffect(() => {
