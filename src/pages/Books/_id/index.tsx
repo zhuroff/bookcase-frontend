@@ -9,20 +9,22 @@ import { useConfirm } from '../../../hooks/useConfirm';
 import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TBookPage } from '../../../types/Books';
-import { TCategoryAuthor, TCategoryBasic } from '../../../types/Categories';
+import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../../types/Categories';
+import { TBookList } from '../../../types/List';
 
 export const Book = observer(() => {
   const params = useParams()
   const navigate = useNavigate()
   const toast = useToast()
   const location = useLocation()
-  const { get, post, remove } = useApi()
+  const { get, patch, remove } = useApi()
   const { text } = useLocale()
   const [isBookFetched, setIsBookFetched] = useState(false)
   const [book, setBook] = useReducer(
     (book: TBookPage, payload: Partial<TBookPage>) => ({ ...book, ...payload }),
     {} as TBookPage
   )
+  const [updates, setUpdates] = useState<Set<keyof TBookPage | string>>(new Set())
   const { callConfirmation } = useConfirm()
 
   const fetchBook = () => {
@@ -33,7 +35,13 @@ export const Book = observer(() => {
   }
 
   const saveBook = () => {
-    post<{ isSuccess: true }>(`/api/books/${params.id}`, book)
+    const payload = Array.from(updates).reduce<Partial<TBookPage>>((acc, next) => {
+      // @ts-ignore
+      acc[next] = book[next]
+      return acc
+    }, {})
+
+    patch<{ isSuccess: true }>(`/api/books/${params.id}`, payload)
       .then(_ => toast.current?.show({
         severity: 'success',
         summary: text('success'),
@@ -59,10 +67,11 @@ export const Book = observer(() => {
 
   const draftingOrPublishing = () => {
     setBook({ isDraft: !book.isDraft })
+    setUpdates(new Set(updates.add('isDraft')))
   }
 
-  const setAuthor = (value: TCategoryAuthor, _id?: string) => {
-    if (book.authors.some((el) => el.author._id === value._id)) {
+  const setAuthor = (value: TCategoryAuthor, _id: string | null) => {
+    if (book.authors.some(({ author }) => author._id === value._id)) {
       toast.current?.show({
         severity: 'warn',
         summary: text('error'),
@@ -87,10 +96,11 @@ export const Book = observer(() => {
           }
         ]
     })
+    setUpdates(new Set(updates.add('authors')))
   }
 
-  const setPublisher = (value: TCategoryBasic, _id?: string) => {
-    if (book.publishers.some((el) => el.publisher._id === value._id)) {
+  const setPublisher = (value: TCategoryBasic, _id: string | null) => {
+    if (book.publishers.some(({ publisher }) => publisher._id === value._id)) {
       toast.current?.show({
         severity: 'warn',
         summary: text('error'),
@@ -116,6 +126,7 @@ export const Book = observer(() => {
           }
         ]
     })
+    setUpdates(new Set(updates.add('publishers')))
   }
 
   const setGenre = (value: TCategoryBasic, _id?: string) => {
@@ -139,6 +150,7 @@ export const Book = observer(() => {
           { ...value, isNew: true }
         ]
     })
+    setUpdates(new Set(updates.add('genres')))
   }
 
   const setAuthorRole = (value: string, _id: string) => {
@@ -147,6 +159,7 @@ export const Book = observer(() => {
         el.author._id === _id ? { ...el, role: value } : el
       ))
     })
+    setUpdates(new Set(updates.add('authors')))
   }
 
   const setStatus = (key: string, value?: Date | Date[]) => {
@@ -156,14 +169,16 @@ export const Book = observer(() => {
         [key]: !value || Array.isArray(value) ? null : value.toISOString()
       }
     })
+    setUpdates(new Set(updates.add('status')))
   }
 
-  const deleteOrRestore = (key: 'authors' | 'publishers' | 'genres', _id: string) => {
+  const deleteOrRestore = (key: 'authors' | 'publishers' | 'genres' | 'lists', _id: string) => {
     setBook({
       [key]: book[key]?.map((el) => (
         el._id === _id ? { ...el, isDeleted: !el.isDeleted } : el
       ))
     })
+    setUpdates(new Set(updates.add(key)))
   }
 
   const deleteOrRestoreSeries = () => {
@@ -173,20 +188,116 @@ export const Book = observer(() => {
         isDeleted: !book.series?.isDeleted
       }
     })
+    setUpdates(new Set(updates.add('series')))
   }
 
   const setPublisherMetadata = (_id: string, key: string, value: string) => {
     setBook({
       publishers: book.publishers.map((el) => (
-        el._id === _id ? { ...el, [key]: value } : el
+        el.publisher._id === _id ? { ...el, [key]: value } : el
       ))
     })
+    setUpdates(new Set(updates.add('publishers')))
   }
 
-  const setSimpleParam = (value: string, key: string) => {
+  const setFieldValue = (value: string | number | null, key: string) => {
+    setBook({ [key]: value })
+    setUpdates(new Set(updates.add(key)))
+  }
+
+  const setList = (value: TBookList, _id: string | null) => {
+    if (book.lists?.some(({ _id }) => _id === value._id)) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: text('error'),
+        detail: text('lists.alreadyExist'),
+        life: 5000
+      })
+      return false
+    }
+
     setBook({
-      [key]: Number.isNaN(Number(value)) ? value : Number(value)
+      lists: _id ?
+        book.lists.map((el) => (
+          el._id === _id ? { ...value } : el
+        )) :
+        [
+          ...book.lists,
+          { ...value, isNew: true }
+        ]
     })
+    setUpdates(new Set(updates.add('lists')))
+  }
+
+  const setSublist = (listId: string, oldValue: string, newValue: TCategoryMin) => {
+    setBook({
+      lists: book.lists.map((list) => (
+        list._id !== listId
+          ? list
+          : {
+            ...list,
+            lists: list.lists.map((sublist) => (
+              sublist._id !== oldValue
+                ? sublist
+                : newValue
+            ))
+          }
+      ))
+    })
+    setUpdates(new Set(updates.add('lists')))
+  }
+
+  const addSublist = (listId: string) => {
+    setBook({
+      lists: book.lists.map((list) => (
+        list._id !== listId
+          ? list
+          : {
+            ...list,
+            lists: [...list.lists, { _id: String(list.lists.length), title: '' }]
+          }
+      ))
+    })
+    setUpdates(new Set(updates.add('lists')))
+  }
+
+  const removeSublist = (listId: string, sublistId: string) => {
+    setBook({
+      lists: book.lists.map((list) => (
+        list._id !== listId
+          ? list
+          : {
+            ...list,
+            lists: list.lists.filter(({ _id }) => _id !== sublistId)
+          }
+      ))
+    })
+    setUpdates(new Set(updates.add('lists')))
+  }
+
+  const setRating = (value?: number | null) => {
+    setBook({ rating: value || undefined })
+    setUpdates(new Set(updates.add('rating')))
+  }
+
+  const setFileLink = (value?: string) => {
+    setBook({ file: value })
+    setUpdates(new Set(updates.add('file')))
+  }
+
+  const switchUnnecessaryState = () => {
+    setBook({ accountability: !book.accountability })
+    setUpdates(new Set(updates.add('accountability')))
+  }
+
+  const setSeries = (series: TCategoryBasic) => {
+    setBook({ series })
+    setUpdates(new Set(updates.add('series')))
+  }
+
+  const setEditorValue = (value: string, key: string) => {
+    setBook({ [key]: value })
+    setUpdates(new Set(updates.add(key)))
   }
 
   useEffect(() => {
@@ -206,8 +317,8 @@ export const Book = observer(() => {
             <BookView
               book={book}
               isEditable={location.pathname.includes('/edit')}
-              setRating={(value) => setBook({ rating: value || undefined })}
-              setFileLink={(value) => setBook({ file: value })}
+              setRating={setRating}
+              setFileLink={setFileLink}
               setReadingStartDate={(value) => setStatus('start', value)}
               setReadingFinishDate={(value) => setStatus('finish', value)}
               setAuthor={setAuthor}
@@ -216,11 +327,15 @@ export const Book = observer(() => {
               setPublisher={setPublisher}
               setPublisherMetadata={setPublisherMetadata}
               setGenre={setGenre}
-              switchUnnecessaryState={() => setBook({ accountability: !book.accountability })}
-              setSeries={(series) => setBook({ series })}
+              switchUnnecessaryState={switchUnnecessaryState}
+              setSeries={setSeries}
               deleteOrRestoreSeries={deleteOrRestoreSeries}
-              setSimpleParam={setSimpleParam}
-              setEditorValue={(value, key) => setBook({ [key]: value })}
+              setFieldValue={setFieldValue}
+              setList={setList}
+              setSublist={setSublist}
+              addSublist={addSublist}
+              removeSublist={removeSublist}
+              setEditorValue={setEditorValue}
             />
 
             <footer className="book__footer">

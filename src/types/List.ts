@@ -1,4 +1,5 @@
 import { TBooksListItem } from "./Books"
+import { TCategoryMin } from "./Categories"
 
 export type TListContent = {
   _id: string
@@ -9,7 +10,7 @@ export type TListContent = {
 export type TListSection = {
   _id: string
   title: string
-  content: TListContent[]
+  contents: TListContent[]
 }
 
 export type TListPage = {
@@ -17,4 +18,10 @@ export type TListPage = {
   title: string
   isDraft: boolean
   lists: TListSection[]
+}
+
+export type TBookList = TCategoryMin & {
+  lists: TCategoryMin[]
+  isDeleted?: boolean
+  isNew?: boolean
 }

@@ -10,6 +10,7 @@ import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
 import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
 import { TPaginatorResponse } from '../../types/Common';
+import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 
 type TSeriesFieldProps = {
@@ -112,7 +113,6 @@ export const SeriesField = observer(({
                 fetchSeries()
               }}
               className="p-button-outlined"
-              style={{ marginTop: '0.5rem' }}
             />
           </Card>
         </>
@@ -136,33 +136,13 @@ export const SeriesField = observer(({
         style={{ width: '50vw' }}
         onHide={() => setSeries([])}
       >
-        <Card style={{ backgroundColor: 'var(--surface-100)' }}>
-          <h3 className='p-card-heading'>{text('common.series')}</h3>
-          <ul className='p-card-list'>
-            {
-              series.map((item) => (
-                <li
-                  key={item._id}
-                  className='p-card-item'
-                >
-                  <Button
-                    className={'p-button-sm p-button-secondary p-button-outlined'}
-                    onClick={() => {
-                      selectSeries(item)
-                      setSeries([])
-                    }}
-                  >{text('common.select')}</Button>
-
-                  <Link
-                    to={`/series/${item._id}`}
-                    className='p-card-link'
-                    style={{ marginLeft: '1rem' }}
-                  >{item.title}</Link>
-                </li>
-              ))
-            }
-          </ul>
-        </Card>
+        <ModalCategoryList<TCategoryBasic>
+          entities={series}
+          heading={text('common.series')}
+          slug="series"
+          selectEntity={(series) => selectSeries(series)}
+          clearEntities={() => setSeries([])}
+        />
       </Dialog>
     </>
   )

@@ -72,7 +72,9 @@ export const messages = {
       subtitle: 'Book subtitle',
       startReading: 'Start date of reading',
       finishReading: 'End date of reading',
-      fileLink: 'Book file link'
+      fileLink: 'Book file link',
+      publisherCity: 'Publisher city',
+      publisherCode: 'ISBN or other code'
     },
     status: {
       result: 'Duration of reading',
@@ -137,6 +139,10 @@ export const messages = {
   },
   series: {
     successSaving: 'The series data has been successfully saved'
+  },
+  lists: {
+    sublistPlaceholder: 'Choose sublist',
+    alreadyExist: 'This list already has been added'
   },
   auth: {
     login: 'Login',

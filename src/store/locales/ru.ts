@@ -72,7 +72,9 @@ export const messages = {
       subtitle: 'Подзаголовок',
       startReading: 'Дата начала чтения',
       finishReading: 'Дата окончания чтения',
-      fileLink: 'Ссылка на файл книги'
+      fileLink: 'Ссылка на файл книги',
+      publisherCity: 'Город',
+      publisherCode: 'ISBN или другой код'
     },
     status: {
       result: 'Продолжительность чтения',
@@ -137,6 +139,10 @@ export const messages = {
   },
   series: {
     successSaving: 'Данные серии успешно сохранены'
+  },
+  lists: {
+    sublistPlaceholder: 'Выберите подсписок',
+    alreadyExist: 'Этот список уже был добавлен'
   },
   auth: {
     login: 'Войти',

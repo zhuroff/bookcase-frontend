@@ -10,6 +10,7 @@ import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
 import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
 import { TPaginatorResponse } from '../../types/Common';
+import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 
 type TGenreFieldProps = {
@@ -144,33 +145,13 @@ export const GenreField = observer(({
         style={{ width: '50vw' }}
         onHide={() => setGenres([])}
       >
-        <Card style={{ backgroundColor: 'var(--surface-100)' }}>
-          <h3 className='p-card-heading'>{text('common.authors')}</h3>
-          <ul className='p-card-list'>
-            {
-              genres.map((genre) => (
-                <li
-                  key={genre._id}
-                  className='p-card-item'
-                >
-                  <Button
-                    className={'p-button-sm p-button-secondary p-button-outlined'}
-                    onClick={() => {
-                      selectGenre(genre, isAppend)
-                      setGenres([])
-                    }}
-                  >{text('common.select')}</Button>
-
-                  <Link
-                    to={`/authors/${genre._id}`}
-                    className='p-card-link'
-                    style={{ marginLeft: '1rem' }}
-                  >{genre.title}</Link>
-                </li>
-              ))
-            }
-          </ul>
-        </Card>
+        <ModalCategoryList<TCategoryBasic>
+          entities={genres}
+          heading={text('common.genres')}
+          slug="genres"
+          selectEntity={(genre) => selectGenre(genre, isAppend)}
+          clearEntities={() => setGenres([])}
+        />
       </Dialog>
     </>
   )

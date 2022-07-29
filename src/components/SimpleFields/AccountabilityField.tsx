@@ -1,15 +1,18 @@
-import { observer } from 'mobx-react-lite';
 import { Card } from 'primereact/card';
 import { InputSwitch } from 'primereact/inputswitch';
 import { useLocale } from '../../hooks/useLocale';
 
-type TParamUnnecessaryProps = {
+type TAccountabilityFieldProps = {
   isEditable: boolean
   isAccounted: boolean
   switchUnnecessaryState: () => void
 }
 
-export const ParamUnnecessary = observer(({ isEditable, isAccounted, switchUnnecessaryState }: TParamUnnecessaryProps) => {
+export const AccountabilityField = ({
+  isEditable,
+  isAccounted,
+  switchUnnecessaryState
+}: TAccountabilityFieldProps) => {
   const { text } = useLocale()
 
   return (
@@ -26,4 +29,4 @@ export const ParamUnnecessary = observer(({ isEditable, isAccounted, switchUnnec
       </em>
     </Card>
   )
-})
+}

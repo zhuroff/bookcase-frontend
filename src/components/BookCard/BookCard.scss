@@ -159,6 +159,8 @@
 
       &-primary {
         color: var(--primary-color);
+        display: block;
+        margin-bottom: 0.5rem;
       }
 
       &-secondary {

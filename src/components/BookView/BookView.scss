@@ -11,6 +11,7 @@
       padding-top: 0.3rem;
       width: 100%;
       font-weight: 400;
+      background-color: transparent;
       @include serif;
       @include viewInput;
     }
@@ -58,15 +59,15 @@
       gap: $paddingMin;
 
       @include media('>=laptop-l', '<desktop-s') {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, calc(33.3333% - 0.75rem));
       }
 
       @include media('>=desktop-s', '<desktop-l') {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, calc(25% - 0.75rem));
       }
 
       @include media('>=desktop-l') {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(5, calc(20% - 0.75rem));
       }
 
       .p-card {
@@ -74,6 +75,10 @@
 
         &-content {
           padding: 0;
+
+          & > *:last-child {
+            margin-bottom: 0;
+          }
         }
 
         .p-button:not(.--delete):not(.--undo):not(:last-child) {
@@ -156,7 +161,7 @@
       right: 0;
       bottom: 0;
       background-color: var(--surface-b);
-      z-index: 2;
+      z-index: 1000;
       padding: 0 $paddingMax;
       height: $headerHeight;
       width: calc(100vw - #{$sidebarWidth});

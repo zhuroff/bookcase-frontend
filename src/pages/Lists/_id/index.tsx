@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
 import { ListPageSection } from '../../../components/ListPageSection/ListPageSection';
 import { Preloader } from '../../../components/Preloader/Preloader';
@@ -12,14 +12,15 @@ export const ListPage = observer(() => {
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const { get, patch, remove } = useApi()
   const { callConfirmation } = useConfirm()
   const [isListPageFetched, setListPageFetchedState] = useState(false)
-  const [content, setContent] = useState({} as TListPage)
+  const [page, setPage] = useState({} as TListPage)
 
   const fetchListPage = () => {
     get<TListPage>(`/api/lists/${params.id}`)
-      .then((response) => setContent(response.data))
+      .then((response) => setPage(response.data))
       .then(_ => setListPageFetchedState(true))
       .catch((error) => console.dir(error))
   }
@@ -37,7 +38,7 @@ export const ListPage = observer(() => {
   }
 
   useEffect(() => {
-    if (!location.pathname.includes('/edit') || !content._id) {
+    if (!location.pathname.includes('/edit') || !page._id) {
       setListPageFetchedState(false)
       fetchListPage()
     }
@@ -49,14 +50,15 @@ export const ListPage = observer(() => {
         <Preloader /> :
         <>
           <header className="section__heading">
-            <h2 className="section__title">{content.title}</h2>
+            <h2 className="section__title">{page.title}</h2>
           </header>
 
           {
-            content.lists.map((section) => (
+            page.lists.map((section) => (
               <ListPageSection
                 key={section._id}
                 section={section}
+                targetBook={searchParams.get('book')}
                 isEditable={location.pathname.includes('/edit')}
               />
             ))
@@ -64,7 +66,7 @@ export const ListPage = observer(() => {
 
           <footer className="book__footer">
             <ItemActions
-              isDraft={content.isDraft}
+              isDraft={page.isDraft}
               isEditMode={location.pathname.includes('/edit')}
               saveEntity={saveListPage}
               draftingOrPublishing={draftingOrPublishing}

@@ -15,8 +15,12 @@ api.interceptors.response.use((config) => {
   return config
 }, (error) => {
   if (error.response) {
-    throw error.response.data
-    // throw new Error(errorMessages[error.response.status])
+    switch (error.response.status) {
+      case 401:
+        return window.location.href = '/'
+      default:
+        throw error.response.data
+    }
   } else {
     console.log('Unhadler error')
   }

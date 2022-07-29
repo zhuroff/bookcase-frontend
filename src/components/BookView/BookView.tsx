@@ -8,15 +8,17 @@ import { CoverUploader } from '../ImageUploader/CoverUploader';
 import { BookStatus } from '../BookStatus/BookStatus';
 import { BookFile } from '../BookFile/BookFile';
 import { useLocale } from '../../hooks/useLocale';
-import { AuthorField } from '../AuthorField/AuthorField';
-import { TCategoryAuthor, TCategoryBasic } from '../../types/Categories';
-import { PublisherField } from '../PublisherField/PublisherField';
+import { AuthorFields } from '../AuthorFields/AuthorFields';
+import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../types/Categories';
+import { PublisherFields } from '../PublisherFields/PublisherFields';
 import { GenreField } from '../GenreField/GenreField';
-import { ParamUnnecessary } from '../ParamFields/ParamUnnecessary';
+import { ListFields } from '../ListFields/ListFields';
+import { AccountabilityField } from '../SimpleFields/AccountabilityField';
 import { SeriesField } from '../SeriesField/SeriesField';
-import { SimpleParam } from '../ParamFields/SimpleParam';
-import { DropdownParam } from '../ParamFields/DropdownParam';
+import { InputField } from '../SimpleFields/InputField';
+import { DropdownField } from '../SimpleFields/DropdownField';
 import { Editor } from 'primereact/editor';
+import { TBookList } from '../../types/List';
 import './BookView.scss';
 
 type TBookViewProps = {
@@ -24,19 +26,23 @@ type TBookViewProps = {
   isEditable?: boolean
   setReadingStartDate: (value: Date | Date[] | undefined) => void
   setReadingFinishDate: (value: Date | Date[] | undefined) => void
-  setRating: (value: number | null | undefined) => void
+  setRating: (value?: number | null) => void
   setFileLink: (value: string | undefined) => void
-  setAuthor: (value: TCategoryAuthor, _id?: string) => void
+  setAuthor: (value: TCategoryAuthor, _id: string | null) => void
   setAuthorRole: (value: string, _id: string) => void
-  deleteOrRestore: (key: 'authors' | 'publishers' | 'genres', _id: string) => void
-  setPublisher: (value: TCategoryBasic, _id?: string) => void
+  deleteOrRestore: (key: 'authors' | 'publishers' | 'genres' | 'lists', _id: string) => void
+  setPublisher: (value: TCategoryBasic, _id: string | null) => void
   setPublisherMetadata: (_id: string, key: string, value: string) => void
   setGenre: (value: TCategoryBasic, _id?: string) => void
   switchUnnecessaryState: () => void
   setSeries: (value: TCategoryBasic) => void
   deleteOrRestoreSeries: () => void
-  setSimpleParam: (value: string, key: string) => void
+  setFieldValue: (value: string | number | null, key: string) => void
+  setList: (value: TBookList, _id: string | null) => void
+  setSublist: (listId: string, oldValue: string, newValue: TCategoryMin) => void
   setEditorValue: (value: string, key: string) => void
+  addSublist: (listId: string) => void
+  removeSublist: (listId: string, sublistId: string) => void
 }
 
 export const BookView = observer(({
@@ -55,8 +61,12 @@ export const BookView = observer(({
   switchUnnecessaryState,
   setSeries,
   deleteOrRestoreSeries,
-  setSimpleParam,
-  setEditorValue
+  setFieldValue,
+  setList,
+  setSublist,
+  setEditorValue,
+  addSublist,
+  removeSublist
 }: TBookViewProps) => {
   const { text, messages, currentLocale } = useLocale()
   const [bookContent, setBookContent] = useState(book)
@@ -113,10 +123,7 @@ export const BookView = observer(({
           disabled={!isEditable}
           placeholder={text('book.placeholders.title')}
           className={`book__title ${isEditable && '--editable'}`}
-          onInput={(e) => setBookContent({
-            ...bookContent,
-            title: e.currentTarget.value
-          })}
+          onInput={(e) => setEditorValue(e.currentTarget.value, 'title')}
         />
 
         {
@@ -128,10 +135,7 @@ export const BookView = observer(({
             disabled={!isEditable}
             placeholder={text('book.placeholders.subtitle')}
             className="book__subtitle"
-            onInput={(e) => setBookContent({
-              ...bookContent,
-              subtitle: e.currentTarget.value
-            })}
+            onInput={(e) => setEditorValue(e.currentTarget.value, 'subtitle')}
           />
         }
 
@@ -139,48 +143,26 @@ export const BookView = observer(({
           legend={text('common.authors')}
           toggleable
         >
-          <div className="book__repeater">
-            {
-              book.authors.map((author, index, arr) => (
-                <AuthorField
-                  key={author._id}
-                  isLast={index === arr.length - 1}
-                  isEditable={isEditable}
-                  content={author}
-                  selectAuthor={(value, isAppend) => setAuthor(
-                    value,
-                    isAppend ? undefined : author._id
-                  )}
-                  setAuthorRole={(value) => setAuthorRole(value, author.author._id)}
-                  deleteOrRestore={deleteOrRestore}
-                />
-              ))
-            }
-          </div>
+          <AuthorFields
+            isEditable={isEditable}
+            content={book.authors}
+            selectAuthor={setAuthor}
+            setAuthorRole={setAuthorRole}
+            deleteOrRestore={deleteOrRestore}
+          />
         </Fieldset>
 
         <Fieldset
           legend={text('common.publishers')}
           toggleable
         >
-          <div className="book__repeater">
-            {
-              book.publishers.map((publisher, index, arr) => (
-                <PublisherField
-                  key={publisher.publisher._id}
-                  isLast={index === arr.length - 1}
-                  isEditable={isEditable}
-                  content={publisher}
-                  deleteOrRestore={deleteOrRestore}
-                  selectPublisher={(value, isAppend) => setPublisher(
-                    value,
-                    isAppend ? undefined : publisher._id
-                  )}
-                  setPublisherMetadata={setPublisherMetadata}
-                />
-              ))
-            }
-          </div>
+          <PublisherFields
+            isEditable={isEditable}
+            content={book.publishers}
+            deleteOrRestore={deleteOrRestore}
+            selectPublisher={setPublisher}
+            setPublisherMetadata={setPublisherMetadata}
+          />
         </Fieldset>
 
         <Fieldset
@@ -206,12 +188,30 @@ export const BookView = observer(({
           </div>
         </Fieldset>
 
+        {(isEditable || book.lists?.length > 0) &&
+          <Fieldset
+            legend={text('common.lists')}
+            toggleable
+          >
+            <ListFields
+              isEditable={isEditable}
+              content={book.lists}
+              bookId={book._id}
+              setSublist={setSublist}
+              deleteOrRestore={deleteOrRestore}
+              addSublist={addSublist}
+              removeSublist={removeSublist}
+              selectList={setList}
+            />
+          </Fieldset>
+        }
+
         <Fieldset
           legend={text('book.params.heading')}
           toggleable
         >
           <div className="book__repeater">
-            <ParamUnnecessary
+            <AccountabilityField
               isEditable={isEditable}
               isAccounted={bookContent.accountability}
               switchUnnecessaryState={switchUnnecessaryState}
@@ -224,36 +224,38 @@ export const BookView = observer(({
               deleteOrRestoreSeries={deleteOrRestoreSeries}
             />
 
-            <SimpleParam
+            <InputField
               isEditable={isEditable}
+              type="number"
               content={bookContent.publicationYear}
               title={text('book.params.publicationYear')}
-              setSimpleParam={(value) => setSimpleParam(value, 'publicationYear')}
+              setFieldValue={(value) => setFieldValue(value, 'publicationYear')}
             />
 
-            <SimpleParam
+            <InputField
               isEditable={isEditable}
+              type="number"
               content={bookContent.pages}
               title={text('book.params.pages')}
-              setSimpleParam={(value) => setSimpleParam(value, 'pages')}
+              setFieldValue={(value) => setFieldValue(value, 'pages')}
             />
 
-            <DropdownParam
+            <DropdownField
               isEditable={isEditable}
               options={coverTypes}
               selected={bookContent.coverType}
               selectedTitle={text(`book.params.coverTypes.${bookContent.coverType}`)}
               title={text('book.params.coverType')}
-              setDropdownParam={(value) => setSimpleParam(value, 'coverType')}
+              setDropdownValue={(value) => setFieldValue(value, 'coverType')}
             />
 
-            <DropdownParam
+            <DropdownField
               isEditable={isEditable}
               options={formatTypes}
               selected={bookContent.format}
               selectedTitle={text(`book.params.formatTypes.${bookContent.format}`)}
               title={text('book.params.formatType')}
-              setDropdownParam={(value) => setSimpleParam(value, 'format')}
+              setDropdownValue={(value) => setFieldValue(value, 'format')}
             />
           </div>
         </Fieldset>

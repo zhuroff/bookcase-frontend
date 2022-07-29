@@ -42,6 +42,32 @@ a {
       margin-left: $paddingMin;
     }
   }
+
+  .p-dropaction {
+    display: flex;
+    margin-bottom: 0.5rem;
+
+    & > .p-dropdown {
+      flex: 1 1 0;
+
+      .p-dropdown-label {
+        white-space: initial;
+        visibility: visible;
+
+        span {
+          white-space: nowrap;
+          width: 0;
+          display: block;
+        }
+      }
+    }
+
+    & > .p-button {
+      flex: none;
+      width: 35px !important;
+      margin-left: 0.5rem;
+    }
+  }
 }
 
 .view {
@@ -286,5 +312,29 @@ a {
     transform: translate(-50%, -50%);
     text-align: center;
     font-size: 0.875rem;
+  }
+}
+
+.p-inputwrapper {
+  width: 100%;
+
+  &.p-noborder {
+
+    .p-inputtext {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      border-top: 0;
+      padding-left: 0;
+      padding-right: 0;
+      background-color: transparent;
+
+      &:enabled {
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
   }
 }

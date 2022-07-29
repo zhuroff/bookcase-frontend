@@ -17,6 +17,14 @@
 
         span {
           width: 100%;
+          color: var(--surface-400);
+
+          &.p-calendar {
+
+            .p-inputtext {
+              color: var(--primary-color);
+            }
+          }
         }
       }
 
@@ -30,10 +38,15 @@
         display: flex;
         flex-direction: column;
 
+        span {
+          color: var(--surface-400);
+        }
+
         strong {
           text-align: center;
           font-size: 1.25rem;
           margin-top: 0.875rem;
+          color: var(--primary-color);
         }
       }
     }

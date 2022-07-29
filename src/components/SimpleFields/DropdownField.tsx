@@ -1,24 +1,23 @@
-import { observer } from 'mobx-react-lite';
 import { Card } from 'primereact/card';
 import { Dropdown } from 'primereact/dropdown';
 
-type TDropdownParamProps = {
+type TDropdownFieldProps = {
   isEditable: boolean
   title: string
   selected: string
   selectedTitle: string
   options: { value: string; label: string }[]
-  setDropdownParam: (value: string) => void
+  setDropdownValue: (value: string) => void
 }
 
-export const DropdownParam = observer(({
+export const DropdownField = ({
   isEditable,
   title,
   selected,
   selectedTitle,
   options,
-  setDropdownParam
-}: TDropdownParamProps) => {
+  setDropdownValue
+}: TDropdownFieldProps) => {
   return (
     <Card>
       <span className="card__link-primary">{title}</span>
@@ -27,10 +26,10 @@ export const DropdownParam = observer(({
           <Dropdown
             options={options}
             value={selected}
-            onChange={(e) => setDropdownParam(e.value)}
+            onChange={(e) => setDropdownValue(e.value)}
           /> :
           <em className="card__link-secondary">{selectedTitle}</em>
       }
     </Card>
   )
-})
+}

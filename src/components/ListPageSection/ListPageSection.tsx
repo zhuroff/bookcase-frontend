@@ -6,11 +6,13 @@ import './ListPageSection.scss';
 
 type TListPageViewProps = {
   section: TListSection
+  targetBook: string | null
   isEditable: boolean
 }
 
 export const ListPageSection = observer(({
   section,
+  targetBook,
   isEditable
 }: TListPageViewProps) => {
   const { text } = useLocale()
@@ -37,10 +39,11 @@ export const ListPageSection = observer(({
         </thead>
         <tbody className="table__body">
           {
-            section.content.map((item) => (
+            section.contents.map((item) => (
               <ListPageSectionRow
                 key={item._id}
                 content={item}
+                isTarget={targetBook === item.book._id}
               />
             ))
           }
