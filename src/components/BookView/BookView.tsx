@@ -11,7 +11,7 @@ import { useLocale } from '../../hooks/useLocale';
 import { AuthorFields } from '../AuthorFields/AuthorFields';
 import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../types/Categories';
 import { PublisherFields } from '../PublisherFields/PublisherFields';
-import { GenreField } from '../GenreField/GenreField';
+import { GenreFields } from '../GenreFields/GenreFields';
 import { ListFields } from '../ListFields/ListFields';
 import { AccountabilityField } from '../SimpleFields/AccountabilityField';
 import { SeriesField } from '../SeriesField/SeriesField';
@@ -33,7 +33,7 @@ type TBookViewProps = {
   deleteOrRestore: (key: 'authors' | 'publishers' | 'genres' | 'lists', _id: string) => void
   setPublisher: (value: TCategoryBasic, _id: string | null) => void
   setPublisherMetadata: (_id: string, key: string, value: string) => void
-  setGenre: (value: TCategoryBasic, _id?: string) => void
+  setGenre: (value: TCategoryBasic, _id: string | null) => void
   switchUnnecessaryState: () => void
   setSeries: (value: TCategoryBasic) => void
   deleteOrRestoreSeries: () => void
@@ -169,10 +169,16 @@ export const BookView = observer(({
           legend={text('common.genres')}
           toggleable
         >
-          <div className="book__repeater">
+          <GenreFields
+            isEditable={isEditable}
+            content={book.genres}
+            deleteOrRestore={deleteOrRestore}
+            selectGenre={setGenre}
+          />
+          {/* <div className="book__repeater">
             {
               book.genres.map((genre, index, arr) => (
-                <GenreField
+                <GenreFields
                   key={genre._id}
                   isLast={index === arr.length - 1}
                   isEditable={isEditable}
@@ -185,7 +191,7 @@ export const BookView = observer(({
                 />
               ))
             }
-          </div>
+          </div> */}
         </Fieldset>
 
         {(isEditable || book.lists?.length > 0) &&

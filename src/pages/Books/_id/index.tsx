@@ -129,7 +129,7 @@ export const Book = observer(() => {
     setUpdates(new Set(updates.add('publishers')))
   }
 
-  const setGenre = (value: TCategoryBasic, _id?: string) => {
+  const setGenre = (value: TCategoryBasic, _id: string | null) => {
     if (book.genres.some((el) => el._id === value._id)) {
       toast.current?.show({
         severity: 'warn',

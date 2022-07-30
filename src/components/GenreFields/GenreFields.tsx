@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
 import { useEffect, useState } from 'react';
@@ -12,29 +11,28 @@ import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
 import { TPaginatorResponse } from '../../types/Common';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
+import { GenreSingleField } from './GenreSingleField';
 
-type TGenreFieldProps = {
-  isLast: boolean
+type TGenreFieldsProps = {
   isEditable: boolean
-  content: TCategoryBasic
+  content: TCategoryBasic[]
   deleteOrRestore: (key: 'genres', _id: string) => void
-  selectGenre: (value: TCategoryBasic, isAppend: boolean) => void
+  selectGenre: (value: TCategoryBasic, currentGenreId: string | null) => void
 }
 
-export const GenreField = observer(({
-  isLast,
+export const GenreFields = observer(({
   isEditable,
   content,
   deleteOrRestore,
   selectGenre
-}: TGenreFieldProps) => {
+}: TGenreFieldsProps) => {
   const { post } = useApi()
   const { text } = useLocale()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'genres', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'genres' })
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [genres, setGenres] = useState<TCategoryBasic[]>([])
-  const [isAppend, setIsAppend] = useState(false)
+  const [currentGenreId, setCurrentGenreId] = useState<string | null>(null)
 
   const fetchGenres = () => {
     post<TCategoriesResponse>('/api/genres', pageConfig)
@@ -76,56 +74,43 @@ export const GenreField = observer(({
 
   return (
     <>
-      {!isEditable ?
-        <Link
-          to={`/genres/${content._id}`}
-          className="card__link"
-        >
-          <Card>
-            <span className="card__link-primary">{content.title}</span>
-          </Card>
-        </Link> :
-        <>
-          <Card className={content.isDeleted ? '--deleted' : ''}>
-            {content.isDeleted &&
-              <Button
-                icon="pi pi-undo"
-                className="p-button-rounded p-button-warning --undo"
-                onClick={() => deleteOrRestore('genres', content._id)}
+      <div className="book__repeater">
+        {
+          content.map((genre) => (
+            !isEditable ?
+              <Link
+                key={genre._id}
+                to={`/genres/${genre._id}`}
+                className="card__link"
+              >
+                <Card>
+                  <span className="card__link-primary">{genre.title}</span>
+                </Card>
+              </Link> :
+              <GenreSingleField
+                key={genre._id}
+                genre={genre}
+                isDeleted={genre.isDeleted}
+                fetchGenres={fetchGenres}
+                setGenreId={() => setCurrentGenreId(genre._id)}
+                deleteOrRestore={(key) => deleteOrRestore(key, genre._id)}
               />
-            }
-
-            <Button
-              icon="pi pi-times"
-              className="p-button-rounded p-button-secondary --delete"
-              onClick={() => deleteOrRestore('genres', content._id)}
-            />
-
-            <Button
-              label={content.title}
+          ))
+        }
+        {isEditable &&
+          <Card>
+            <div
+              className="p-card-add"
               onClick={() => {
                 fetchGenres()
-                setIsAppend(false)
+                setCurrentGenreId(null)
               }}
-              className="p-button-outlined"
-            />
+            >
+              <span className="pi pi-plus"></span>
+            </div>
           </Card>
-          {
-            isLast &&
-            <Card>
-              <div
-                className="p-card-add"
-                onClick={() => {
-                  fetchGenres()
-                  setIsAppend(true)
-                }}
-              >
-                <span className="pi pi-plus"></span>
-              </div>
-            </Card>
-          }
-        </>
-      }
+        }
+      </div>
 
       <Dialog
         header={<ModalHeader
@@ -149,7 +134,7 @@ export const GenreField = observer(({
           entities={genres}
           heading={text('common.genres')}
           slug="genres"
-          selectEntity={(genre) => selectGenre(genre, isAppend)}
+          selectEntity={(genre) => selectGenre(genre, currentGenreId)}
           clearEntities={() => setGenres([])}
         />
       </Dialog>
