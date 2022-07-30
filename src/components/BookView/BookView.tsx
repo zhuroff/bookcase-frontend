@@ -37,10 +37,9 @@ type TBookViewProps = {
   switchUnnecessaryState: () => void
   setSeries: (value: TCategoryBasic) => void
   deleteOrRestoreSeries: () => void
-  setFieldValue: (value: string | number | null, key: string) => void
+  setFieldValue: (value: string | number | null, key: keyof TBookPage) => void
   setList: (value: TBookList, _id: string | null) => void
   setSublist: (listId: string, oldValue: string, newValue: TCategoryMin) => void
-  setEditorValue: (value: string, key: string) => void
   addSublist: (listId: string) => void
   removeSublist: (listId: string, sublistId: string) => void
 }
@@ -64,7 +63,6 @@ export const BookView = observer(({
   setFieldValue,
   setList,
   setSublist,
-  setEditorValue,
   addSublist,
   removeSublist
 }: TBookViewProps) => {
@@ -123,7 +121,7 @@ export const BookView = observer(({
           disabled={!isEditable}
           placeholder={text('book.placeholders.title')}
           className={`book__title ${isEditable && '--editable'}`}
-          onInput={(e) => setEditorValue(e.currentTarget.value, 'title')}
+          onInput={(e) => setFieldValue(e.currentTarget.value, 'title')}
         />
 
         {
@@ -135,7 +133,7 @@ export const BookView = observer(({
             disabled={!isEditable}
             placeholder={text('book.placeholders.subtitle')}
             className="book__subtitle"
-            onInput={(e) => setEditorValue(e.currentTarget.value, 'subtitle')}
+            onInput={(e) => setFieldValue(e.currentTarget.value, 'subtitle')}
           />
         }
 
@@ -273,7 +271,7 @@ export const BookView = observer(({
         >
           <Editor
             value={bookContent.description}
-            onTextChange={(e) => setEditorValue(String(e.htmlValue), 'description')} />
+            onTextChange={(e) => setFieldValue(String(e.htmlValue), 'description')} />
         </Fieldset>
 
         {(isEditable || bookContent.contents) &&
@@ -284,7 +282,7 @@ export const BookView = observer(({
           >
             <Editor
               value={bookContent.contents}
-              onTextChange={(e) => setEditorValue(String(e.htmlValue), 'contents')} />
+              onTextChange={(e) => setFieldValue(String(e.htmlValue), 'contents')} />
           </Fieldset>
         }
 
@@ -296,7 +294,7 @@ export const BookView = observer(({
           >
             <Editor
               value={bookContent.summary}
-              onTextChange={(e) => setEditorValue(String(e.htmlValue), 'summary')} />
+              onTextChange={(e) => setFieldValue(String(e.htmlValue), 'summary')} />
           </Fieldset>
         }
       </main>

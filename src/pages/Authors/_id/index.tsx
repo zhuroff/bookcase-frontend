@@ -33,6 +33,17 @@ export const Author = observer(() => {
   }
 
   const saveAuthor = () => {
+    if (updates.size === 0) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: text('error'),
+        detail: text('page.unchanged'),
+        life: 5000
+      })
+
+      return false
+    }
+
     const payload = Array.from(updates).reduce<Partial<TCategoryAuthorPage>>((acc, next) => {
       // @ts-ignore
       acc[next] = author[next]
@@ -46,6 +57,7 @@ export const Author = observer(() => {
         detail: text('authors.successSaving'),
         life: 5000
       }))
+      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
       .catch((error) => console.dir(error))
   }
 
@@ -59,7 +71,7 @@ export const Author = observer(() => {
 
   const updateAuthorName = (value: string, key: keyof TCategoryAuthorPage) => {
     setAuthor({ ...author, [key]: value })
-    setUpdates(new Set(updates.add(key)))
+    setUpdates((prevState) => new Set([...prevState, key]))
   }
 
   const appendLinkRow = () => {
@@ -71,7 +83,7 @@ export const Author = observer(() => {
       ]
     })
 
-    setUpdates(new Set(updates.add('links')))
+    setUpdates((prevState) => new Set([...prevState, 'links']))
   }
 
   const removeLinkRow = (index: number) => {
@@ -82,7 +94,7 @@ export const Author = observer(() => {
       ))
     })
 
-    setUpdates(new Set(updates.add('links')))
+    setUpdates((prevState) => new Set([...prevState, 'links']))
   }
 
   const setLinkParam = (value: string, index: number, key: string) => {
@@ -95,7 +107,7 @@ export const Author = observer(() => {
       ))
     })
 
-    setUpdates(new Set(updates.add('links')))
+    setUpdates((prevState) => new Set([...prevState, 'links']))
   }
 
   useEffect(() => {

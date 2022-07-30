@@ -64,6 +64,9 @@ export const messages = {
     readingBooks: 'Read now',
     readBooks: 'Read completely'
   },
+  page: {
+    unchanged: 'No modified data to save'
+  },
   book: {
     pagesFull: 'Pages',
     pagesReduced: 'p.',

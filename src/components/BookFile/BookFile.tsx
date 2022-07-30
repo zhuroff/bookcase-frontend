@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
+import { InputText } from 'primereact/inputtext';
 import { useLocale } from '../../hooks/useLocale';
-import { Input } from '../Input/Input';
 
 type TBookFileProps = {
   isEditable: boolean
@@ -15,14 +15,11 @@ export const BookFile = observer(({ isEditable, fileLink, setFileLink }: TBookFi
     <>
       {
         isEditable ?
-          <Input
-            name="fileLink"
-            type="text"
+          <InputText
             value={fileLink || ''}
             onInput={(e) => setFileLink(e.currentTarget.value)}
             placeholder={text('book.placeholders.fileLink')}
-            noBorder={true}
-            size="large"
+            className="no-border"
           /> :
           fileLink &&
           <a

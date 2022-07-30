@@ -19,13 +19,13 @@ export const Book = observer(() => {
   const location = useLocation()
   const { get, patch, remove } = useApi()
   const { text } = useLocale()
+  const { callConfirmation } = useConfirm()
   const [isBookFetched, setIsBookFetched] = useState(false)
+  const [updates, setUpdates] = useState<Set<keyof TBookPage>>(new Set())
   const [book, setBook] = useReducer(
     (book: TBookPage, payload: Partial<TBookPage>) => ({ ...book, ...payload }),
     {} as TBookPage
   )
-  const [updates, setUpdates] = useState<Set<keyof TBookPage | string>>(new Set())
-  const { callConfirmation } = useConfirm()
 
   const fetchBook = () => {
     get<TBookPage>(`/api/books/${params.id}`)
@@ -35,6 +35,17 @@ export const Book = observer(() => {
   }
 
   const saveBook = () => {
+    if (updates.size === 0) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: text('error'),
+        detail: text('page.unchanged'),
+        life: 5000
+      })
+
+      return false
+    }
+
     const payload = Array.from(updates).reduce<Partial<TBookPage>>((acc, next) => {
       // @ts-ignore
       acc[next] = book[next]
@@ -48,6 +59,7 @@ export const Book = observer(() => {
         detail: text('book.successSaving'),
         life: 5000
       }))
+      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
       .catch((error) => console.dir(error))
   }
 
@@ -67,7 +79,7 @@ export const Book = observer(() => {
 
   const draftingOrPublishing = () => {
     setBook({ isDraft: !book.isDraft })
-    setUpdates(new Set(updates.add('isDraft')))
+    setUpdates((prevState) => new Set([...prevState, 'isDraft']))
   }
 
   const setAuthor = (value: TCategoryAuthor, _id: string | null) => {
@@ -96,7 +108,7 @@ export const Book = observer(() => {
           }
         ]
     })
-    setUpdates(new Set(updates.add('authors')))
+    setUpdates((prevState) => new Set([...prevState, 'authors']))
   }
 
   const setPublisher = (value: TCategoryBasic, _id: string | null) => {
@@ -126,7 +138,7 @@ export const Book = observer(() => {
           }
         ]
     })
-    setUpdates(new Set(updates.add('publishers')))
+    setUpdates((prevState) => new Set([...prevState, 'publishers']))
   }
 
   const setGenre = (value: TCategoryBasic, _id: string | null) => {
@@ -150,7 +162,7 @@ export const Book = observer(() => {
           { ...value, isNew: true }
         ]
     })
-    setUpdates(new Set(updates.add('genres')))
+    setUpdates((prevState) => new Set([...prevState, 'genres']))
   }
 
   const setAuthorRole = (value: string, _id: string) => {
@@ -159,7 +171,7 @@ export const Book = observer(() => {
         el.author._id === _id ? { ...el, role: value } : el
       ))
     })
-    setUpdates(new Set(updates.add('authors')))
+    setUpdates((prevState) => new Set([...prevState, 'authors']))
   }
 
   const setStatus = (key: string, value?: Date | Date[]) => {
@@ -169,7 +181,7 @@ export const Book = observer(() => {
         [key]: !value || Array.isArray(value) ? null : value.toISOString()
       }
     })
-    setUpdates(new Set(updates.add('status')))
+    setUpdates((prevState) => new Set([...prevState, 'status']))
   }
 
   const deleteOrRestore = (key: 'authors' | 'publishers' | 'genres' | 'lists', _id: string) => {
@@ -178,7 +190,7 @@ export const Book = observer(() => {
         el._id === _id ? { ...el, isDeleted: !el.isDeleted } : el
       ))
     })
-    setUpdates(new Set(updates.add(key)))
+    setUpdates((prevState) => new Set([...prevState, key]))
   }
 
   const deleteOrRestoreSeries = () => {
@@ -188,7 +200,12 @@ export const Book = observer(() => {
         isDeleted: !book.series?.isDeleted
       }
     })
-    setUpdates(new Set(updates.add('series')))
+    setUpdates((prevState) => new Set([...prevState, 'series']))
+  }
+
+  const setFieldValue = (value: string | number | null, key: keyof TBookPage) => {
+    setBook({ [key]: value })
+    setUpdates((prevState) => new Set([...prevState, key]))
   }
 
   const setPublisherMetadata = (_id: string, key: string, value: string) => {
@@ -197,12 +214,7 @@ export const Book = observer(() => {
         el.publisher._id === _id ? { ...el, [key]: value } : el
       ))
     })
-    setUpdates(new Set(updates.add('publishers')))
-  }
-
-  const setFieldValue = (value: string | number | null, key: string) => {
-    setBook({ [key]: value })
-    setUpdates(new Set(updates.add(key)))
+    setUpdates((prevState) => new Set([...prevState, 'publishers']))
   }
 
   const setList = (value: TBookList, _id: string | null) => {
@@ -226,7 +238,7 @@ export const Book = observer(() => {
           { ...value, isNew: true }
         ]
     })
-    setUpdates(new Set(updates.add('lists')))
+    setUpdates((prevState) => new Set([...prevState, 'lists']))
   }
 
   const setSublist = (listId: string, oldValue: string, newValue: TCategoryMin) => {
@@ -244,7 +256,7 @@ export const Book = observer(() => {
           }
       ))
     })
-    setUpdates(new Set(updates.add('lists')))
+    setUpdates((prevState) => new Set([...prevState, 'lists']))
   }
 
   const addSublist = (listId: string) => {
@@ -258,7 +270,7 @@ export const Book = observer(() => {
           }
       ))
     })
-    setUpdates(new Set(updates.add('lists')))
+    setUpdates((prevState) => new Set([...prevState, 'lists']))
   }
 
   const removeSublist = (listId: string, sublistId: string) => {
@@ -272,32 +284,27 @@ export const Book = observer(() => {
           }
       ))
     })
-    setUpdates(new Set(updates.add('lists')))
+    setUpdates((prevState) => new Set([...prevState, 'lists']))
   }
 
   const setRating = (value?: number | null) => {
     setBook({ rating: value || undefined })
-    setUpdates(new Set(updates.add('rating')))
+    setUpdates((prevState) => new Set([...prevState, 'rating']))
   }
 
   const setFileLink = (value?: string) => {
     setBook({ file: value })
-    setUpdates(new Set(updates.add('file')))
+    setUpdates((prevState) => new Set([...prevState, 'file']))
   }
 
   const switchUnnecessaryState = () => {
     setBook({ accountability: !book.accountability })
-    setUpdates(new Set(updates.add('accountability')))
+    setUpdates((prevState) => new Set([...prevState, 'accountability']))
   }
 
   const setSeries = (series: TCategoryBasic) => {
     setBook({ series })
-    setUpdates(new Set(updates.add('series')))
-  }
-
-  const setEditorValue = (value: string, key: string) => {
-    setBook({ [key]: value })
-    setUpdates(new Set(updates.add(key)))
+    setUpdates((prevState) => new Set([...prevState, 'series']))
   }
 
   useEffect(() => {
@@ -335,7 +342,6 @@ export const Book = observer(() => {
               setSublist={setSublist}
               addSublist={addSublist}
               removeSublist={removeSublist}
-              setEditorValue={setEditorValue}
             />
 
             <footer className="book__footer">

@@ -64,6 +64,9 @@ export const messages = {
     readingBooks: 'Читаю сейчас',
     readBooks: 'Прочитано'
   },
+  page: {
+    unchanged: 'Нет измененных данных для сохранения'
+  },
   book: {
     pagesFull: 'Страниц',
     pagesReduced: 'стр.',

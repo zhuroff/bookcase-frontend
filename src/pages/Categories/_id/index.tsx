@@ -35,10 +35,21 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
 
   const updateCategoryTitle = (value: string) => {
     setCategory({ ...category, title: value })
-    setUpdates(new Set(updates.add('title')))
+    setUpdates((prevState) => new Set([...prevState, 'title']))
   }
 
   const saveCategory = () => {
+    if (updates.size === 0) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: text('error'),
+        detail: text('page.unchanged'),
+        life: 5000
+      })
+
+      return false
+    }
+
     const payload = Array.from(updates).reduce<Partial<TCategoryPage>>((acc, next) => {
       // @ts-ignore
       acc[next] = category[next]
@@ -52,6 +63,7 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
         detail: text(`${slug}.successSaving`),
         life: 5000
       }))
+      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
       .catch((error) => console.dir(error))
   }
 
