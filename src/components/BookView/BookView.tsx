@@ -4,7 +4,7 @@ import { TBookPage } from '../../types/Books';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Rating } from 'primereact/rating';
 import { Fieldset } from 'primereact/fieldset';
-import { CoverUploader } from '../ImageUploader/CoverUploader';
+import { CoverUploader } from '../CoverUploader/CoverUploader';
 import { BookStatus } from '../BookStatus/BookStatus';
 import { BookFile } from '../BookFile/BookFile';
 import { useLocale } from '../../hooks/useLocale';
@@ -24,6 +24,7 @@ import './BookView.scss';
 type TBookViewProps = {
   book: TBookPage
   isEditable?: boolean
+  uploadPreCover: (file?: File) => void
   setReadingStartDate: (value: Date | Date[] | undefined) => void
   setReadingFinishDate: (value: Date | Date[] | undefined) => void
   setRating: (value?: number | null) => void
@@ -47,6 +48,7 @@ type TBookViewProps = {
 export const BookView = observer(({
   book,
   isEditable = true,
+  uploadPreCover,
   setReadingStartDate,
   setReadingFinishDate,
   setRating,
@@ -90,7 +92,9 @@ export const BookView = observer(({
       <aside className="book__aside">
         <CoverUploader
           image={bookContent.coverImage}
+          preloadedImage={bookContent.preCoverImage}
           isDisabled={!isEditable}
+          uploadPreCover={uploadPreCover}
         />
         <BookFile
           isEditable={isEditable}

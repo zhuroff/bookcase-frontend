@@ -116,7 +116,8 @@ export const messages = {
     },
     annotation: 'Annotation',
     contentsTable: 'Table of contents',
-    summary: 'Summary'
+    summary: 'Summary',
+    updateError: 'Error updating data'
   },
   authors: {
     roles: {

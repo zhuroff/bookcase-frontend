@@ -116,7 +116,8 @@ export const messages = {
     },
     annotation: 'Аннотация',
     contentsTable: 'Содержание',
-    summary: 'Конспект'
+    summary: 'Конспект',
+    updateError: 'Ошибка при обновлении данных'
   },
   authors: {
     roles: {

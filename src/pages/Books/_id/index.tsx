@@ -17,7 +17,7 @@ export const Book = observer(() => {
   const navigate = useNavigate()
   const toast = useToast()
   const location = useLocation()
-  const { get, patch, remove } = useApi()
+  const { get, post, patch, remove } = useApi()
   const { text } = useLocale()
   const { callConfirmation } = useConfirm()
   const [isBookFetched, setIsBookFetched] = useState(false)
@@ -74,6 +74,27 @@ export const Book = observer(() => {
         })
         navigate('/books', { replace: true })
       })
+      .catch((error) => console.dir(error))
+  }
+
+  const uploadPreCover = (file?: File) => {
+    if (!file) return false
+
+    const formData = new FormData()
+
+    formData.append('preCoverImage', file)
+
+    post<TBookPage>(`/api/books/${book._id}/precover?folder=covers`, formData)
+      .then((response) => {
+        setBook({ preCoverImage: response.data.preCoverImage })
+        setUpdates((prevState) => new Set([...prevState, 'preCoverImage']))
+      })
+      .then(_ => toast.current?.show({
+        severity: 'success',
+        summary: text('success'),
+        detail: text('book.successSaving'),
+        life: 5000
+      }))
       .catch((error) => console.dir(error))
   }
 
@@ -324,6 +345,7 @@ export const Book = observer(() => {
             <BookView
               book={book}
               isEditable={location.pathname.includes('/edit')}
+              uploadPreCover={uploadPreCover}
               setRating={setRating}
               setFileLink={setFileLink}
               setReadingStartDate={(value) => setStatus('start', value)}
