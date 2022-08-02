@@ -8,6 +8,7 @@ type TAuthorSingleFieldProps = {
   author: TCategoryAuthor
   role: string
   isDeleted?: boolean
+  isUndeletable: boolean
   dropdownPlaceholder: string
   setAuthorId: () => void
   fetchAuthors: () => void
@@ -19,6 +20,7 @@ export const AuthorSingleField = ({
   author,
   role,
   isDeleted,
+  isUndeletable,
   dropdownPlaceholder,
   setAuthorId,
   fetchAuthors,
@@ -43,11 +45,13 @@ export const AuthorSingleField = ({
         />
       }
 
-      <Button
-        icon="pi pi-times"
-        className="p-button-rounded p-button-secondary --delete"
-        onClick={() => deleteOrRestore('authors')}
-      />
+      {!isUndeletable &&
+        <Button
+          icon="pi pi-times"
+          className="p-button-rounded p-button-secondary --delete"
+          onClick={() => deleteOrRestore('authors')}
+        />
+      }
 
       <Button
         label={author.title}

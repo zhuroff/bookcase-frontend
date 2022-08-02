@@ -10,8 +10,8 @@ import { useConfirm } from '../../../hooks/useConfirm';
 import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TBookPage } from '../../../types/Books';
-import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../../types/Categories';
 import { TBookList } from '../../../types/List';
+import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../../types/Categories';
 
 export const Book = observer(() => {
   const params = useParams()
@@ -54,17 +54,17 @@ export const Book = observer(() => {
       acc[next] = book[next]
       return acc
     }, {})
-    console.log(payload)
 
-    // patch<{ isSuccess: true }>(`/api/books/${params.id}`, payload)
-    //   .then(_ => toast.current?.show({
-    //     severity: 'success',
-    //     summary: text('success'),
-    //     detail: text('book.successSaving'),
-    //     life: 5000
-    //   }))
-    //   .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
-    //   .catch((error) => console.dir(error))
+    patch<{ isSuccess: true }>(`/api/books/${params.id}`, payload)
+      .then(_ => toast.current?.show({
+        severity: 'success',
+        summary: text('success'),
+        detail: text('book.successSaving'),
+        life: 5000
+      }))
+      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
+      .then(() => localStorage.removeItem(book._id))
+      .catch((error) => console.dir(error))
   }
 
   const deleteBook = () => {
@@ -121,7 +121,7 @@ export const Book = observer(() => {
     setBook({
       authors: _id ?
         book.authors.map((el) => (
-          el._id === _id ? { ...el, author: value } : el
+          el._id === _id ? { ...el, author: value, isChanged: true } : el
         )) :
         [
           ...book.authors,
@@ -129,7 +129,7 @@ export const Book = observer(() => {
             author: value,
             role: '',
             _id: value._id,
-            isNew: true
+            isAdded: true
           }
         ]
     })
@@ -159,7 +159,7 @@ export const Book = observer(() => {
             city: '',
             code: '',
             publisher: value,
-            isNew: true
+            isAdded: true
           }
         ]
     })
@@ -184,7 +184,7 @@ export const Book = observer(() => {
         )) :
         [
           ...book.genres,
-          { ...value, isNew: true }
+          { ...value, isAdded: true }
         ]
     })
     setUpdates((prevState) => new Set([...prevState, 'genres']))
@@ -260,7 +260,7 @@ export const Book = observer(() => {
         )) :
         [
           ...book.lists,
-          { ...value, isNew: true }
+          { ...value, isAdded: true }
         ]
     })
     setUpdates((prevState) => new Set([...prevState, 'lists']))
@@ -332,11 +332,30 @@ export const Book = observer(() => {
     setUpdates((prevState) => new Set([...prevState, 'series']))
   }
 
+  const restoreFromDraft = () => {
+    if (localDraft) {
+      setBook(JSON.parse(localDraft))
+      setIsBookFetched(true)
+      extractLocalDraft(null)
+    }
+  }
+
+  const removeDraftAndFetchBook = () => {
+    localStorage.removeItem(String(params.id))
+    fetchBook()
+  }
+
   useEffect(() => {
     if (location.pathname.includes('/edit') && updates.size > 0) {
       localStorage.setItem(book._id, JSON.stringify(book))
     }
   }, [book])
+
+  useEffect(() => {
+    if (location.pathname.includes('/edit') && updates.size > 0) {
+      saveBook()
+    }
+  }, [book.isDraft])
 
   useEffect(() => {
     if (!location.pathname.includes('/edit') && !localDraft) {
@@ -352,19 +371,6 @@ export const Book = observer(() => {
       }
     }
   }, [location])
-
-  const restoreFromDraft = () => {
-    if (localDraft) {
-      setBook(JSON.parse(localDraft))
-      setIsBookFetched(true)
-      extractLocalDraft(null)
-    }
-  }
-
-  const removeDraftAndFetchBook = () => {
-    localStorage.removeItem(String(params.id))
-    fetchBook()
-  }
 
   if (localDraft) {
     return (

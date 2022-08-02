@@ -76,7 +76,7 @@ export const GenreFields = observer(({
     <>
       <div className="book__repeater">
         {
-          content.map((genre) => (
+          content.map((genre, _, genres) => (
             !isEditable ?
               <Link
                 key={genre._id}
@@ -91,6 +91,7 @@ export const GenreFields = observer(({
                 key={genre._id}
                 genre={genre}
                 isDeleted={genre.isDeleted}
+                isUndeletable={genres.filter((el) => !el.isDeleted).length === 1}
                 fetchGenres={fetchGenres}
                 setGenreId={() => setCurrentGenreId(genre._id)}
                 deleteOrRestore={(key) => deleteOrRestore(key, genre._id)}

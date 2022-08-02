@@ -23,5 +23,6 @@ export type TListPage = {
 export type TBookList = TCategoryMin & {
   lists: TCategoryMin[]
   isDeleted?: boolean
-  isNew?: boolean
+  isAdded?: boolean
+  isChanged?: boolean
 }

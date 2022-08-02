@@ -5,6 +5,7 @@ import { TCategoryBasic } from '../../types/Categories'
 type TGenreSingleFieldProps = {
   genre: TCategoryBasic
   isDeleted?: boolean
+  isUndeletable: boolean
   fetchGenres: () => void
   setGenreId: () => void
   deleteOrRestore: (key: 'genres') => void
@@ -13,6 +14,7 @@ type TGenreSingleFieldProps = {
 export const GenreSingleField = ({
   genre,
   isDeleted,
+  isUndeletable,
   fetchGenres,
   setGenreId,
   deleteOrRestore
@@ -27,11 +29,13 @@ export const GenreSingleField = ({
         />
       }
 
-      <Button
-        icon="pi pi-times"
-        className="p-button-rounded p-button-secondary --delete"
-        onClick={() => deleteOrRestore('genres')}
-      />
+      {!isUndeletable &&
+        <Button
+          icon="pi pi-times"
+          className="p-button-rounded p-button-secondary --delete"
+          onClick={() => deleteOrRestore('genres')}
+        />
+      }
 
       <Button
         label={genre.title}

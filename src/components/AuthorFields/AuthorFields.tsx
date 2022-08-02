@@ -80,7 +80,7 @@ export const AuthorFields = observer(({
     <>
       <div className="book__repeater">
         {
-          content.map(({ _id, author, role, isDeleted }) => (
+          content.map(({ _id, author, role, isDeleted }, _, authors) => (
             !isEditable ?
               <Card key={author._id}>
                 <Link to={`/authors/${author._id}`}>
@@ -93,6 +93,7 @@ export const AuthorFields = observer(({
                 author={author}
                 role={role}
                 isDeleted={isDeleted}
+                isUndeletable={authors.filter((el) => !el.isDeleted).length === 1}
                 dropdownPlaceholder={text('authors.rolesPlaceholder')}
                 setAuthorId={() => setCurrentAuthorId(_id)}
                 deleteOrRestore={(key) => deleteOrRestore(key, _id)}

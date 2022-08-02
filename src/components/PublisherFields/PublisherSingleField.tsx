@@ -10,6 +10,7 @@ type TPublisherSingleFieldProps = {
   city: string
   code: string
   isDeleted?: boolean
+  isUndeletable: boolean
   fetchPublishers: () => void
   setPublisherId: () => void
   deleteOrRestore: (key: 'publishers') => void
@@ -21,6 +22,7 @@ export const PublisherSingleField = observer(({
   city,
   code,
   isDeleted,
+  isUndeletable,
   fetchPublishers,
   setPublisherId,
   deleteOrRestore,
@@ -38,11 +40,13 @@ export const PublisherSingleField = observer(({
         />
       }
 
-      <Button
-        icon="pi pi-times"
-        className="p-button-rounded p-button-secondary --delete"
-        onClick={() => deleteOrRestore('publishers')}
-      />
+      {!isUndeletable &&
+        <Button
+          icon="pi pi-times"
+          className="p-button-rounded p-button-secondary --delete"
+          onClick={() => deleteOrRestore('publishers')}
+        />
+      }
 
       <Button
         label={publisher.title}

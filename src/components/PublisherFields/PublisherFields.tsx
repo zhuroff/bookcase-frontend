@@ -78,7 +78,7 @@ export const PublisherFields = observer(({
     <>
       <div className="book__repeater">
         {
-          content.map(({ _id, publisher, city, code, isDeleted }) => (
+          content.map(({ _id, publisher, city, code, isDeleted }, _, publishers) => (
             !isEditable ?
               <Link
                 key={publisher._id}
@@ -97,6 +97,7 @@ export const PublisherFields = observer(({
                 city={city}
                 code={code}
                 isDeleted={isDeleted}
+                isUndeletable={publishers.filter((el) => !el.isDeleted).length === 1}
                 fetchPublishers={fetchPublishers}
                 setPublisherId={() => setCurrentPublisherId(_id)}
                 deleteOrRestore={(key) => deleteOrRestore(key, _id)}

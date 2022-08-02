@@ -9,8 +9,9 @@ export type TCategoryMin = {
 export type TCategoryBasic = TCategoryMin & {
   isDraft: boolean
   books: number
-  isNew?: true
+  isAdded?: true
   isDeleted?: boolean
+  isChanged?: boolean
 }
 
 export type TCategoryAuthor = TCategoryBasic & {
@@ -28,8 +29,9 @@ export type TCategoryAuthorBook = {
   author: TCategoryAuthor,
   _id: string
   role: string
-  isNew?: true
+  isAdded?: true
   isDeleted?: boolean
+  isChanged?: boolean
 }
 
 export type TCategoryPublisherBook = {
@@ -37,8 +39,9 @@ export type TCategoryPublisherBook = {
   city: string
   code: string
   publisher: TCategoryBasic
-  isNew?: true
+  isAdded?: true
   isDeleted?: boolean
+  isChanged?: boolean
 }
 
 export type TCategoriesResponse = {
