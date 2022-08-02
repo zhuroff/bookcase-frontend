@@ -29,6 +29,8 @@ export const messages = {
     paperWithoutFile: 'Paperbooks without files',
     withoutFile: 'Without file',
     confirmIntention: 'Confirm your intention',
+    yes: 'Yes',
+    no: 'No',
     fileUpload: {
       image: 'Drop image here or click to upload'
     },
@@ -65,7 +67,11 @@ export const messages = {
     readBooks: 'Read completely'
   },
   page: {
-    unchanged: 'No modified data to save'
+    unchanged: 'No modified data to save',
+    restoreFromDraft: {
+      heading: 'Draft',
+      message: 'Restore saved draft?'
+    }
   },
   book: {
     pagesFull: 'Pages',

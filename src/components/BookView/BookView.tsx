@@ -177,23 +177,6 @@ export const BookView = observer(({
             deleteOrRestore={deleteOrRestore}
             selectGenre={setGenre}
           />
-          {/* <div className="book__repeater">
-            {
-              book.genres.map((genre, index, arr) => (
-                <GenreFields
-                  key={genre._id}
-                  isLast={index === arr.length - 1}
-                  isEditable={isEditable}
-                  content={genre}
-                  deleteOrRestore={deleteOrRestore}
-                  selectGenre={(value, isAppend) => setGenre(
-                    value,
-                    isAppend ? undefined : genre._id
-                  )}
-                />
-              ))
-            }
-          </div> */}
         </Fieldset>
 
         {(isEditable || book.lists?.length > 0) &&

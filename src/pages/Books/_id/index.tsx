@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useReducer, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 import { BookView } from '../../../components/BookView/BookView';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
 import { Preloader } from '../../../components/Preloader/Preloader';
@@ -20,6 +21,7 @@ export const Book = observer(() => {
   const { get, post, patch, remove } = useApi()
   const { text } = useLocale()
   const { callConfirmation } = useConfirm()
+  const [localDraft, extractLocalDraft] = useState<null | string>(null)
   const [isBookFetched, setIsBookFetched] = useState(false)
   const [updates, setUpdates] = useState<Set<keyof TBookPage>>(new Set())
   const [book, setBook] = useReducer(
@@ -28,6 +30,7 @@ export const Book = observer(() => {
   )
 
   const fetchBook = () => {
+    extractLocalDraft(null)
     get<TBookPage>(`/api/books/${params.id}`)
       .then((response) => setBook(response.data))
       .then(_ => setIsBookFetched(true))
@@ -51,16 +54,17 @@ export const Book = observer(() => {
       acc[next] = book[next]
       return acc
     }, {})
+    console.log(payload)
 
-    patch<{ isSuccess: true }>(`/api/books/${params.id}`, payload)
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text('book.successSaving'),
-        life: 5000
-      }))
-      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
-      .catch((error) => console.dir(error))
+    // patch<{ isSuccess: true }>(`/api/books/${params.id}`, payload)
+    //   .then(_ => toast.current?.show({
+    //     severity: 'success',
+    //     summary: text('success'),
+    //     detail: text('book.successSaving'),
+    //     life: 5000
+    //   }))
+    //   .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
+    //   .catch((error) => console.dir(error))
   }
 
   const deleteBook = () => {
@@ -216,9 +220,9 @@ export const Book = observer(() => {
 
   const deleteOrRestoreSeries = () => {
     setBook({
-      series: book.series && {
+      series: {
         ...book.series,
-        isDeleted: !book.series?.isDeleted
+        isDeleted: !book.series.isDeleted
       }
     })
     setUpdates((prevState) => new Set([...prevState, 'series']))
@@ -329,12 +333,53 @@ export const Book = observer(() => {
   }
 
   useEffect(() => {
-    if (!location.pathname.includes('/edit') || !book._id) {
+    if (location.pathname.includes('/edit') && updates.size > 0) {
+      localStorage.setItem(book._id, JSON.stringify(book))
+    }
+  }, [book])
+
+  useEffect(() => {
+    if (!location.pathname.includes('/edit') && !localDraft) {
       setIsBookFetched(false)
-      delete book.series
       fetchBook()
+    } else {
+      const bookDraft = localStorage.getItem(String(params?.id))
+
+      if (bookDraft) {
+        extractLocalDraft(bookDraft)
+      } else {
+        fetchBook()
+      }
     }
   }, [location])
+
+  const restoreFromDraft = () => {
+    if (localDraft) {
+      setBook(JSON.parse(localDraft))
+      setIsBookFetched(true)
+      extractLocalDraft(null)
+    }
+  }
+
+  const removeDraftAndFetchBook = () => {
+    localStorage.removeItem(String(params.id))
+    fetchBook()
+  }
+
+  if (localDraft) {
+    return (
+      <ConfirmDialog
+        visible={true}
+        header={text('page.restoreFromDraft.heading')}
+        message={text('page.restoreFromDraft.message')}
+        acceptLabel={text('common.yes')}
+        rejectLabel={text('common.no')}
+        icon="pi pi-question-circle"
+        accept={restoreFromDraft}
+        reject={removeDraftAndFetchBook}
+      />
+    )
+  }
 
   return (
     <>

@@ -29,6 +29,8 @@ export const messages = {
     paperWithoutFile: 'Бумажные книги без файлов',
     withoutFile: 'Без файлов',
     confirmIntention: 'Подтвердите свое намерение',
+    yes: 'Да',
+    no: 'Нет',
     fileUpload: {
       image: 'Перетащите сюда изображение или кликните для выбора файла'
     },
@@ -65,7 +67,11 @@ export const messages = {
     readBooks: 'Прочитано'
   },
   page: {
-    unchanged: 'Нет измененных данных для сохранения'
+    unchanged: 'Нет измененных данных для сохранения',
+    restoreFromDraft: {
+      heading: 'Черновик',
+      message: 'Восстановить последний черновик?'
+    }
   },
   book: {
     pagesFull: 'Страниц',

@@ -85,7 +85,7 @@ export const AuthorFields = observer(({
               <Card key={author._id}>
                 <Link to={`/authors/${author._id}`}>
                   <span className="card__link-primary">{author.title}</span>
-                  <span className="card__link-secondary">{role}</span>
+                  <span className="card__link-secondary">{text(`authors.roles.${role}`)}</span>
                 </Link>
               </Card> :
               <AuthorSingleField

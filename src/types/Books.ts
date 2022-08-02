@@ -38,7 +38,7 @@ export type TBookPage = Omit<TBooksListItem, 'authors' | 'lists'> & {
   authors: TCategoryAuthorBook[]
   lists: TBookList[]
   rating?: number
-  series?: TCategoryBasic
+  series: TCategoryBasic
   summary?: string
 }
 
