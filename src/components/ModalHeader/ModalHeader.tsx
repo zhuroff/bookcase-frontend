@@ -14,6 +14,7 @@ type TModalHeaderProps = {
   pagePagination?: TPaginatorResponse | null
   setSearchQuery?: (query: string) => void
   switchPagination?: (page: number) => void
+  createEntity?: () => void
 }
 
 export const ModalHeader = observer(({
@@ -23,7 +24,8 @@ export const ModalHeader = observer(({
   isCreatable,
   pagePagination,
   setSearchQuery,
-  switchPagination
+  switchPagination,
+  createEntity
 }: TModalHeaderProps) => {
   const { text } = useLocale()
 
@@ -49,6 +51,7 @@ export const ModalHeader = observer(({
           label={text('common.create')}
           className="p-button-sm p-button-outlined"
           style={{ marginLeft: '1rem' }}
+          onClick={createEntity}
         />
       }
 

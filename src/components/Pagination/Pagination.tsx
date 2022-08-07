@@ -3,6 +3,7 @@ import CSS from 'csstype';
 import { TPaginatorResponse } from '../../types/Common';
 import { Dropdown } from 'primereact/dropdown';
 import { useLocale } from '../../hooks/useLocale';
+import './Pagination.scss';
 
 type TPaginationProps = {
   pagination: TPaginatorResponse

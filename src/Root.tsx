@@ -59,11 +59,15 @@ export const Root = observer(() => {
   return (
     <>
       {
-        !isAuthChecked
-          ? <Preloader />
-          : isAuthenticated
-            ? <LayoutAdmin><AdminRoutes /></LayoutAdmin>
-            : <LayoutAuth><AuthRoutes /></LayoutAuth>
+        !isAuthChecked ?
+          <Preloader /> :
+          isAuthenticated ?
+            <LayoutAdmin>
+              <AdminRoutes />
+            </LayoutAdmin> :
+            <LayoutAuth>
+              <AuthRoutes />
+            </LayoutAuth>
       }
     </>
   )

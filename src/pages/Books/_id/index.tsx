@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useReducer, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { idb } from '../../../idb'
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { BookView } from '../../../components/BookView/BookView';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
@@ -12,6 +13,7 @@ import { useToast } from '../../../hooks/useToast';
 import { TBookPage } from '../../../types/Books';
 import { TBookList } from '../../../types/List';
 import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../../types/Categories';
+import { Collection, IndexableType } from 'dexie';
 
 export const Book = observer(() => {
   const params = useParams()
@@ -21,7 +23,7 @@ export const Book = observer(() => {
   const { get, post, patch, remove } = useApi()
   const { text } = useLocale()
   const { callConfirmation } = useConfirm()
-  const [localDraft, extractLocalDraft] = useState<null | string>(null)
+  // const [localDraft, setLocalDraft] = useState<Collection<TBookPage, IndexableType>>()
   const [isBookFetched, setIsBookFetched] = useState(false)
   const [updates, setUpdates] = useState<Set<keyof TBookPage>>(new Set())
   const [book, setBook] = useReducer(
@@ -30,7 +32,7 @@ export const Book = observer(() => {
   )
 
   const fetchBook = () => {
-    extractLocalDraft(null)
+    // extractLocalDraft(null)
     get<TBookPage>(`/api/books/${params.id}`)
       .then((response) => setBook(response.data))
       .then(_ => setIsBookFetched(true))
@@ -63,7 +65,7 @@ export const Book = observer(() => {
         life: 5000
       }))
       .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
-      .then(() => localStorage.removeItem(book._id))
+      // .then(() => localStorage.removeItem(book._id))
       .catch((error) => console.dir(error))
   }
 
@@ -332,24 +334,23 @@ export const Book = observer(() => {
     setUpdates((prevState) => new Set([...prevState, 'series']))
   }
 
-  const restoreFromDraft = () => {
-    if (localDraft) {
-      setBook(JSON.parse(localDraft))
-      setIsBookFetched(true)
-      extractLocalDraft(null)
-    }
-  }
+  // const restoreFromDraft = () => {
+  // if (localDraft) {
+  //   setBook(JSON.parse(localDraft))
+  //   setIsBookFetched(true)
+  //   extractLocalDraft(null)
+  // }
+  // }
 
-  const removeDraftAndFetchBook = () => {
-    localStorage.removeItem(String(params.id))
-    fetchBook()
-  }
+  // const removeDraftAndFetchBook = () => {
+  //   fetchBook()
+  // }
 
-  useEffect(() => {
-    if (location.pathname.includes('/edit') && updates.size > 0) {
-      localStorage.setItem(book._id, JSON.stringify(book))
-    }
-  }, [book])
+  // useEffect(() => {
+  //   if (location.pathname.includes('/edit') && updates.size > 0) {
+  //     idb.books.update(book._id, book)
+  //   }
+  // }, [book])
 
   useEffect(() => {
     if (location.pathname.includes('/edit') && updates.size > 0) {
@@ -357,35 +358,42 @@ export const Book = observer(() => {
     }
   }, [book.isDraft])
 
+  // useEffect(() => {
+  //   if (!location.pathname.includes('/edit')) {
+  //     setIsBookFetched(false)
+  //     fetchBook()
+  //   } else {
+  //     idb.books.get(String(book._id))
+  //       .then((response) => console.log(response))
+  //       .catch((error) => console.dir(error))
+
+  //     // if (bookDraft) {
+  //     //   // setLocalDraft(bookDraft)
+  //     // } else {
+  //     //   fetchBook()
+  //     // }
+  //   }
+  // }, [location])
+
+  // if (localDraft) {
+  //   return (
+  //     <ConfirmDialog
+  //       visible={true}
+  //       header={text('page.restoreFromDraft.heading')}
+  //       message={text('page.restoreFromDraft.message')}
+  //       acceptLabel={text('common.yes')}
+  //       rejectLabel={text('common.no')}
+  //       icon="pi pi-question-circle"
+  //       accept={restoreFromDraft}
+  //       reject={removeDraftAndFetchBook}
+  //     />
+  //   )
+  // }
+
+  // TODO: Revome after initializing Dexie
   useEffect(() => {
-    if (!location.pathname.includes('/edit') && !localDraft) {
-      setIsBookFetched(false)
-      fetchBook()
-    } else {
-      const bookDraft = localStorage.getItem(String(params?.id))
-
-      if (bookDraft) {
-        extractLocalDraft(bookDraft)
-      } else {
-        fetchBook()
-      }
-    }
-  }, [location])
-
-  if (localDraft) {
-    return (
-      <ConfirmDialog
-        visible={true}
-        header={text('page.restoreFromDraft.heading')}
-        message={text('page.restoreFromDraft.message')}
-        acceptLabel={text('common.yes')}
-        rejectLabel={text('common.no')}
-        icon="pi pi-question-circle"
-        accept={restoreFromDraft}
-        reject={removeDraftAndFetchBook}
-      />
-    )
-  }
+    fetchBook()
+  }, [])
 
   return (
     <>

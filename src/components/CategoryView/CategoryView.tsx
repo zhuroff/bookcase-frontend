@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react-lite';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../../hooks/useLocale';
 import { TCategoryPage } from '../../types/Categories';
 import { BookCard } from '../BookCard/BookCard';
+import { CategoryForm } from './CategoryForm';
 
 type TCategoryViewProps = {
   category: TCategoryPage
-  isEditable?: boolean
+  isEditable: boolean
   updateCategoryTitle: (value: string) => void
 }
 
@@ -28,14 +28,10 @@ export const CategoryView = observer(({
   return (
     <div className="view author">
       <aside className="author__aside">
-        <InputTextarea
-          rows={1}
-          value={categoryContent.title}
-          autoResize
-          disabled={!isEditable}
-          placeholder={text('authors.lastNamePlaceholder')}
-          className={`book__title ${isEditable && '--editable'}`}
-          onInput={(e) => updateCategoryTitle(e.currentTarget.value)}
+        <CategoryForm
+          isEditable={isEditable}
+          title={categoryContent.title}
+          updateCategoryTitle={updateCategoryTitle}
         />
       </aside>
 

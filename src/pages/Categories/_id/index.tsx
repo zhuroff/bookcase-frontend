@@ -29,7 +29,7 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   const fetchCategory = () => {
     get<TCategoryPage>(`/api/${slug}/${params.id}`)
       .then((response) => setCategory(response.data))
-      .then(_ => setIsCategoryFetched(true))
+      .then(() => setIsCategoryFetched(true))
       .catch((error) => console.dir(error))
   }
 

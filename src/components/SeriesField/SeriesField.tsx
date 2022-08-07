@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
@@ -10,6 +10,7 @@ import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
 import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
 import { TPaginatorResponse } from '../../types/Common';
+import { CategoryForm } from '../CategoryView/CategoryForm';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 
@@ -32,6 +33,11 @@ export const SeriesField = observer(({
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'series' })
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [series, setSeries] = useState<TCategoryBasic[]>([])
+  const [creatingMode, setCreatingMode] = useState(false)
+  const [seriesForm, fillSeriesForm] = useReducer(
+    (category: TCategoryBasic, payload: Partial<TCategoryBasic>) => ({ ...category, ...payload }),
+    { isDraft: false } as TCategoryBasic
+  )
 
   const fetchSeries = () => {
     post<TCategoriesResponse>('/api/series', pageConfig)
@@ -40,6 +46,10 @@ export const SeriesField = observer(({
         setPagePagination(response.data.pagination)
       })
       .catch((error) => console.dir(error))
+  }
+
+  const createNewSeries = () => {
+    console.log(seriesForm)
   }
 
   useEffect(() => {
@@ -109,9 +119,7 @@ export const SeriesField = observer(({
 
             <Button
               label={content?.title || text('book.selectSeries')}
-              onClick={() => {
-                fetchSeries()
-              }}
+              onClick={() => fetchSeries()}
               className="p-button-outlined"
             />
           </Card>
@@ -119,12 +127,13 @@ export const SeriesField = observer(({
       }
 
       <Dialog
-        header={<ModalHeader
+        header={!creatingMode && <ModalHeader
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
           pagePagination={pagePagination}
           setSearchQuery={(value) => setSearchQuery(value)}
+          createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {
             if (pageConfig) {
               setPageConfig({ ...pageConfig, page })
@@ -136,13 +145,25 @@ export const SeriesField = observer(({
         style={{ width: '50vw' }}
         onHide={() => setSeries([])}
       >
-        <ModalCategoryList<TCategoryBasic>
-          entities={series}
-          heading={text('common.series')}
-          slug="series"
-          selectEntity={(series) => selectSeries(series)}
-          clearEntities={() => setSeries([])}
-        />
+        {!creatingMode ?
+          <ModalCategoryList<TCategoryBasic>
+            entities={series}
+            heading={text('common.series')}
+            slug="series"
+            selectEntity={(series) => selectSeries(series)}
+            clearEntities={() => setSeries([])}
+          /> :
+          <div className="p-dialog-form">
+            <CategoryForm
+              isEditable={true}
+              title={seriesForm.title}
+              withSaveButton={true}
+              updateCategoryTitle={(title) => fillSeriesForm({ title })}
+              saveCategory={createNewSeries}
+              cancelCreating={() => setCreatingMode(false)}
+            />
+          </div>
+        }
       </Dialog>
     </>
   )

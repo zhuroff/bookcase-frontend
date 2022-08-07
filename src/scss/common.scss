@@ -95,6 +95,10 @@ a {
   }
 }
 
+.p-button {
+  overflow: initial;
+}
+
 .cards {
   display: grid;
   gap: $paddingMin;
@@ -334,6 +338,27 @@ a {
         &:focus {
           box-shadow: none;
         }
+      }
+    }
+  }
+}
+
+.p-dialog-form {
+  display: grid;
+  gap: $paddingMin;
+
+  .p-inputtextarea {
+    border-radius: 0;
+    border: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom: 1px solid var(--surface-border);
+    background-color: transparent;
+
+    &:enabled {
+
+      &:focus {
+        box-shadow: none;
       }
     }
   }

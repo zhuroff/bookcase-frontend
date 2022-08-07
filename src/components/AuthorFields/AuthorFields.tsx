@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocale } from '../../hooks/useLocale';
 import { TAuthorsResponse, TCategoryAuthor, TCategoryAuthorBook } from '../../types/Categories';
@@ -12,6 +12,7 @@ import { TPaginatorResponse } from '../../types/Common';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { AuthorSingleField } from './AuthorSingleField';
+import { AuthorForm } from '../AuthorView/AuthorForm';
 
 type TAuthorFieldsProps = {
   isEditable: boolean
@@ -35,6 +36,11 @@ export const AuthorFields = observer(({
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [authors, setAuthors] = useState<TCategoryAuthor[]>([])
   const [currentAuthorId, setCurrentAuthorId] = useState<string | null>(null)
+  const [creatingMode, setCreatingMode] = useState(false)
+  const [authorForm, fillAuthorForm] = useReducer(
+    (author: TCategoryAuthor, payload: Partial<TCategoryAuthor>) => ({ ...author, ...payload }),
+    { isDraft: false } as TCategoryAuthor
+  )
 
   const fetchAuthors = () => {
     post<TAuthorsResponse>('/api/authors', pageConfig)
@@ -43,6 +49,10 @@ export const AuthorFields = observer(({
         setPagePagination(response.data.pagination)
       })
       .catch((error) => console.dir(error))
+  }
+
+  const createNewAuthor = () => {
+    console.log(authorForm)
   }
 
   useEffect(() => {
@@ -119,12 +129,13 @@ export const AuthorFields = observer(({
       </div>
 
       <Dialog
-        header={<ModalHeader
+        header={!creatingMode && <ModalHeader
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
           pagePagination={pagePagination}
           setSearchQuery={(value) => setSearchQuery(value)}
+          createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {
             if (pageConfig) {
               setPageConfig({ ...pageConfig, page })
@@ -136,13 +147,27 @@ export const AuthorFields = observer(({
         style={{ width: '50vw' }}
         onHide={() => setAuthors([])}
       >
-        <ModalCategoryList<TCategoryAuthor>
-          entities={authors}
-          heading={text('common.authors')}
-          slug="authors"
-          selectEntity={(author) => selectAuthor(author, currentAuthorId)}
-          clearEntities={() => setAuthors([])}
-        />
+        {!creatingMode ?
+          <ModalCategoryList<TCategoryAuthor>
+            entities={authors}
+            heading={text('common.authors')}
+            slug="authors"
+            selectEntity={(author) => selectAuthor(author, currentAuthorId)}
+            clearEntities={() => setAuthors([])}
+          /> :
+          <div className="p-dialog-form">
+            <AuthorForm
+              isEditable={true}
+              withSaveButton={true}
+              firstName={authorForm.firstName}
+              lastName={authorForm.lastName}
+              patronymicName={authorForm.patronymicName}
+              updateAuthorName={(value, key) => fillAuthorForm({ [key]: value })}
+              saveAuthor={createNewAuthor}
+              cancelCreating={() => setCreatingMode(false)}
+            />
+          </div>
+        }
       </Dialog>
     </>
   )

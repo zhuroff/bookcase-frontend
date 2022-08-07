@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
@@ -9,6 +9,7 @@ import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
 import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
 import { TPaginatorResponse } from '../../types/Common';
+import { CategoryForm } from '../CategoryView/CategoryForm';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 import { GenreSingleField } from './GenreSingleField';
@@ -33,6 +34,11 @@ export const GenreFields = observer(({
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [genres, setGenres] = useState<TCategoryBasic[]>([])
   const [currentGenreId, setCurrentGenreId] = useState<string | null>(null)
+  const [creatingMode, setCreatingMode] = useState(false)
+  const [genreForm, fillGenreForm] = useReducer(
+    (category: TCategoryBasic, payload: Partial<TCategoryBasic>) => ({ ...category, ...payload }),
+    { isDraft: false } as TCategoryBasic
+  )
 
   const fetchGenres = () => {
     post<TCategoriesResponse>('/api/genres', pageConfig)
@@ -41,6 +47,10 @@ export const GenreFields = observer(({
         setPagePagination(response.data.pagination)
       })
       .catch((error) => console.dir(error))
+  }
+
+  const createNewGenre = () => {
+    console.log(genreForm)
   }
 
   useEffect(() => {
@@ -114,12 +124,13 @@ export const GenreFields = observer(({
       </div>
 
       <Dialog
-        header={<ModalHeader
+        header={!creatingMode && <ModalHeader
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
           pagePagination={pagePagination}
           setSearchQuery={(value) => setSearchQuery(value)}
+          createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {
             if (pageConfig) {
               setPageConfig({ ...pageConfig, page })
@@ -131,13 +142,25 @@ export const GenreFields = observer(({
         style={{ width: '50vw' }}
         onHide={() => setGenres([])}
       >
-        <ModalCategoryList<TCategoryBasic>
-          entities={genres}
-          heading={text('common.genres')}
-          slug="genres"
-          selectEntity={(genre) => selectGenre(genre, currentGenreId)}
-          clearEntities={() => setGenres([])}
-        />
+        {!creatingMode ?
+          <ModalCategoryList<TCategoryBasic>
+            entities={genres}
+            heading={text('common.genres')}
+            slug="genres"
+            selectEntity={(genre) => selectGenre(genre, currentGenreId)}
+            clearEntities={() => setGenres([])}
+          /> :
+          <div className="p-dialog-form">
+            <CategoryForm
+              isEditable={true}
+              title={genreForm.title}
+              withSaveButton={true}
+              updateCategoryTitle={(title) => fillGenreForm({ title })}
+              saveCategory={createNewGenre}
+              cancelCreating={() => setCreatingMode(false)}
+            />
+          </div>
+        }
       </Dialog>
     </>
   )

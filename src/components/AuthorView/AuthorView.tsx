@@ -1,16 +1,16 @@
 import { observer } from 'mobx-react-lite';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../../hooks/useLocale';
 import { TCategoryAuthorPage } from '../../types/Categories';
 import { BookCard } from '../BookCard/BookCard';
 import { LinksList } from '../LinksList/LinksList';
+import { AuthorForm } from './AuthorForm';
 import './AuthorView.scss';
 
 type TAuthorViewProps = {
   author: TCategoryAuthorPage
-  isEditable?: boolean
+  isEditable: boolean
   updateAuthorName: (value: string, key: keyof TCategoryAuthorPage) => void
   appendLinkRow: () => void
   removeLinkRow: (index: number) => void
@@ -36,41 +36,13 @@ export const AuthorView = observer(({
   return (
     <div className="view author">
       <aside className="author__aside">
-        {(isEditable || (!isEditable && authorContent.lastName)) &&
-          <InputTextarea
-            rows={1}
-            value={authorContent.lastName}
-            autoResize
-            disabled={!isEditable}
-            placeholder={text('authors.lastNamePlaceholder')}
-            className={`book__title ${isEditable && '--editable'}`}
-            onInput={(e) => updateAuthorName(e.currentTarget.value, 'lastName')}
-          />
-        }
-
-        {(isEditable || (!isEditable && authorContent.firstName)) &&
-          <InputTextarea
-            rows={1}
-            value={authorContent.firstName || ''}
-            autoResize
-            disabled={!isEditable}
-            placeholder={text('authors.firstNamePlaceholder')}
-            className="book__subtitle"
-            onInput={(e) => updateAuthorName(e.currentTarget.value, 'firstName')}
-          />
-        }
-
-        {(isEditable || (!isEditable && authorContent.patronymicName)) &&
-          <InputTextarea
-            rows={1}
-            value={authorContent.patronymicName || ''}
-            autoResize
-            disabled={!isEditable}
-            placeholder={text('authors.patronymicNamePlaceholder')}
-            className="book__subtitle"
-            onInput={(e) => updateAuthorName(e.currentTarget.value, 'patronymicName')}
-          />
-        }
+        <AuthorForm
+          isEditable={isEditable}
+          firstName={authorContent.firstName}
+          lastName={authorContent.lastName}
+          patronymicName={authorContent.patronymicName}
+          updateAuthorName={updateAuthorName}
+        />
       </aside>
 
       <main className="author__main">

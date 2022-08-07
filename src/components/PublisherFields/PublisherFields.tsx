@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
@@ -9,6 +9,7 @@ import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
 import { TCategoriesResponse, TCategoryBasic, TCategoryPublisherBook } from '../../types/Categories';
 import { TPaginatorResponse } from '../../types/Common';
+import { CategoryForm } from '../CategoryView/CategoryForm';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 import { PublisherSingleField } from './PublisherSingleField';
@@ -35,6 +36,11 @@ export const PublisherFields = observer(({
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [publishers, setPublishers] = useState<TCategoryBasic[]>([])
   const [currentPublisherId, setCurrentPublisherId] = useState<string | null>(null)
+  const [creatingMode, setCreatingMode] = useState(false)
+  const [publisherForm, fillPublisherForm] = useReducer(
+    (category: TCategoryBasic, payload: Partial<TCategoryBasic>) => ({ ...category, ...payload }),
+    { isDraft: false } as TCategoryBasic
+  )
 
   const fetchPublishers = () => {
     post<TCategoriesResponse>('/api/publishers', pageConfig)
@@ -43,6 +49,10 @@ export const PublisherFields = observer(({
         setPagePagination(response.data.pagination)
       })
       .catch((error) => console.dir(error))
+  }
+
+  const createNewPublisher = () => {
+    console.log(publisherForm)
   }
 
   useEffect(() => {
@@ -121,12 +131,13 @@ export const PublisherFields = observer(({
       </div>
 
       <Dialog
-        header={<ModalHeader
+        header={!creatingMode && <ModalHeader
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
           pagePagination={pagePagination}
           setSearchQuery={(value) => setSearchQuery(value)}
+          createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {
             if (pageConfig) {
               setPageConfig({ ...pageConfig, page })
@@ -138,13 +149,25 @@ export const PublisherFields = observer(({
         style={{ width: '50vw' }}
         onHide={() => setPublishers([])}
       >
-        <ModalCategoryList<TCategoryBasic>
-          entities={publishers}
-          heading={text('common.publishers')}
-          slug="publishers"
-          selectEntity={(publisher) => selectPublisher(publisher, currentPublisherId)}
-          clearEntities={() => setPublishers([])}
-        />
+        {!creatingMode ?
+          <ModalCategoryList<TCategoryBasic>
+            entities={publishers}
+            heading={text('common.publishers')}
+            slug="publishers"
+            selectEntity={(publisher) => selectPublisher(publisher, currentPublisherId)}
+            clearEntities={() => setPublishers([])}
+          /> :
+          <div className="p-dialog-form">
+            <CategoryForm
+              isEditable={true}
+              title={publisherForm.title}
+              withSaveButton={true}
+              updateCategoryTitle={(title) => fillPublisherForm({ title })}
+              saveCategory={createNewPublisher}
+              cancelCreating={() => setCreatingMode(false)}
+            />
+          </div>
+        }
       </Dialog>
     </>
   )
