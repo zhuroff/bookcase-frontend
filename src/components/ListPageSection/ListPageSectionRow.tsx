@@ -5,16 +5,20 @@ import { TBooksListItem } from '../../types/Books';
 import { TCategoryAuthor, TCategoryMin } from '../../types/Categories';
 import { TListContent } from '../../types/List';
 import { Dialog } from 'primereact/dialog';
-import { Link } from 'react-router-dom';
+import { Button } from 'primereact/button';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { BookViewDialog } from '../BookView/BookViewDialog';
 
 type TListPageSectionRowProps = {
   content: TListContent
   isTarget: boolean
+  isEditable: boolean
 }
 
 export const ListPageSectionRow = observer(({
   content,
-  isTarget
+  isTarget,
+  isEditable
 }: TListPageSectionRowProps) => {
   const { text } = useLocale()
   const [isBookModalShow, showHideBookModal] = useState(false)
@@ -39,8 +43,15 @@ export const ListPageSectionRow = observer(({
     }, [])
   )
 
+  const callBookModal = () => {
+    showHideBookModal(true)
+  }
+
   const BookCell = (book: TBooksListItem) => (
-    <div className="table__body-book">
+    <div
+      className="table__body-book"
+      onClick={callBookModal}
+    >
       <img className="table__body-book__cover" src={bookCoverUrl(book.coverImage)} />
       <div className="table__body-book__content">
         <div className="table__body-book__title">
@@ -59,19 +70,40 @@ export const ListPageSectionRow = observer(({
     </div>
   )
 
-  const callBookModal = () => {
-    showHideBookModal(true)
-  }
-
   return (
     <>
       <tr
         className={`table__body-row ${content.book.status?.finish ? '--read' : ''}`}
-        onClick={callBookModal}
         style={isTarget ? { backgroundColor: 'var(--gray-800)' } : {}}
       >
         <td className="table__body-cell">{BookCell(content.book)}</td>
-        <td className="table__body-cell">{content.comment}</td>
+        <td className="table__body-cell">
+          <div className="table__body-comment">
+            {!isEditable ?
+              content.comment :
+              <InputTextarea
+                rows={1}
+                value={content.comment || ''}
+                autoResize
+                onInput={(e) => console.log(e.currentTarget.value)}
+              />
+            }
+          </div>
+        </td>
+        {isEditable &&
+          <td className="table__body-cell">
+            <div style={{ display: 'grid', gap: '0.5rem' }}>
+              <Button
+                label={text('common.replace')}
+                className="p-button p-component p-button-sm p-button-outlined"
+              />
+              <Button
+                label={text('common.delete')}
+                className="p-button p-component p-button-sm p-button-outlined p-button-danger"
+              />
+            </div>
+          </td>
+        }
       </tr>
 
       <Dialog
@@ -80,9 +112,7 @@ export const ListPageSectionRow = observer(({
         style={{ width: '50vw' }}
         onHide={() => showHideBookModal(false)}
       >
-        <Link
-          to={`/books/${content.book._id}`}
-        >{content.book.title}</Link>
+        <BookViewDialog _id={content.book._id} />
       </Dialog>
     </>
   )

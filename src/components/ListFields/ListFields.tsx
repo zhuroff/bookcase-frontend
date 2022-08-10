@@ -7,7 +7,7 @@ import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
-import { TCategoryBasic, TCategoryMin } from '../../types/Categories';
+import { TCategoriesResponse, TCategoryBasic, TCategoryMin } from '../../types/Categories';
 import { TBookList, TListPage } from '../../types/List';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
@@ -34,7 +34,7 @@ export const ListFields = observer(({
   addSublist,
   removeSublist
 }: TListFieldProps) => {
-  const { get } = useApi()
+  const { post } = useApi()
   const { text } = useLocale()
   const [lists, setLists] = useState<TCategoryBasic[]>([])
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'lists', isModal: true })
@@ -42,8 +42,8 @@ export const ListFields = observer(({
   const [currentListId, setCurrentListId] = useState<string | null>(null)
 
   const fetchLists = () => {
-    get<TCategoryBasic[]>('/api/lists')
-      .then((response) => setLists(response.data))
+    post<TCategoriesResponse>('/api/lists', pageConfig)
+      .then((response) => setLists(response.data.docs))
       .catch((error) => console.dir(error))
   }
 

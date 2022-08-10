@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react-lite';
+import { Button } from 'primereact/button';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
@@ -6,15 +7,17 @@ import { ListPageSection } from '../../../components/ListPageSection/ListPageSec
 import { Preloader } from '../../../components/Preloader/Preloader';
 import { useApi } from '../../../hooks/useApi';
 import { useConfirm } from '../../../hooks/useConfirm';
+import { useLocale } from '../../../hooks/useLocale';
 import { TListPage } from '../../../types/List';
 
 export const ListPage = observer(() => {
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
-  const [searchParams] = useSearchParams()
+  const { text } = useLocale()
   const { get, patch, remove } = useApi()
   const { callConfirmation } = useConfirm()
+  const [searchParams] = useSearchParams()
   const [isListPageFetched, setListPageFetchedState] = useState(false)
   const [page, setPage] = useState({} as TListPage)
 
@@ -51,6 +54,11 @@ export const ListPage = observer(() => {
         <>
           <header className="section__heading">
             <h2 className="section__title">{page.title}</h2>
+            {location.pathname.includes('/edit') &&
+              <Button
+                label={text('common.add')}
+              />
+            }
           </header>
 
           {

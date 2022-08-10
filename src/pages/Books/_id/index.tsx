@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useReducer, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { idb } from '../../../idb'
-import { ConfirmDialog } from 'primereact/confirmdialog';
+// import { idb } from '../../../idb'
+// import { ConfirmDialog } from 'primereact/confirmdialog';
 import { BookView } from '../../../components/BookView/BookView';
 import { ItemActions } from '../../../components/ItemActions/ItemActions';
 import { Preloader } from '../../../components/Preloader/Preloader';
@@ -13,9 +13,9 @@ import { useToast } from '../../../hooks/useToast';
 import { TBookPage } from '../../../types/Books';
 import { TBookList } from '../../../types/List';
 import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../../types/Categories';
-import { Collection, IndexableType } from 'dexie';
+// import { Collection, IndexableType } from 'dexie';
 
-export const Book = observer(() => {
+export const Book = observer(({ _id }: { _id?: string }) => {
   const params = useParams()
   const navigate = useNavigate()
   const toast = useToast()
@@ -33,7 +33,7 @@ export const Book = observer(() => {
 
   const fetchBook = () => {
     // extractLocalDraft(null)
-    get<TBookPage>(`/api/books/${params.id}`)
+    get<TBookPage>(`/api/books/${_id || params.id}`)
       .then((response) => setBook(response.data))
       .then(_ => setIsBookFetched(true))
       .catch((error) => console.dir(error))
@@ -403,7 +403,7 @@ export const Book = observer(() => {
           <>
             <BookView
               book={book}
-              isEditable={location.pathname.includes('/edit')}
+              isEditable={location.pathname.includes('/edit') && location.pathname.includes('/books')}
               uploadPreCover={uploadPreCover}
               setRating={setRating}
               setFileLink={setFileLink}
@@ -425,21 +425,23 @@ export const Book = observer(() => {
               removeSublist={removeSublist}
             />
 
-            <footer className="book__footer">
-              <ItemActions
-                isDraft={book.isDraft}
-                isEditMode={location.pathname.includes('/edit')}
-                saveEntity={saveBook}
-                draftingOrPublishing={draftingOrPublishing}
-                cancelEditingEntity={() => {
-                  navigate(`/books/${params.id}`, { replace: true })
-                }}
-                editEntity={() => {
-                  navigate(`/books/${params.id}/edit`, { replace: true })
-                }}
-                deleteEntity={(event) => callConfirmation(event, deleteBook)}
-              />
-            </footer>
+            {location.pathname.includes('/books') &&
+              <footer className="book__footer">
+                <ItemActions
+                  isDraft={book.isDraft}
+                  isEditMode={location.pathname.includes('/edit')}
+                  saveEntity={saveBook}
+                  draftingOrPublishing={draftingOrPublishing}
+                  cancelEditingEntity={() => {
+                    navigate(`/books/${params.id}`, { replace: true })
+                  }}
+                  editEntity={() => {
+                    navigate(`/books/${params.id}/edit`, { replace: true })
+                  }}
+                  deleteEntity={(event) => callConfirmation(event, deleteBook)}
+                />
+              </footer>
+            }
           </>
       }
     </>
