@@ -47,7 +47,7 @@ export const AuthorView = observer(({
 
       <main className="author__main">
         <h2 className="view__heading"><span>{text('common.books')}</span></h2>
-        {authorContent.books.length &&
+        {Boolean(authorContent.books.length) ?
           <ul className="cards">
             {
               authorContent.books.map((book) => (
@@ -65,7 +65,8 @@ export const AuthorView = observer(({
                 />
               ))
             }
-          </ul>
+          </ul> :
+          <div className="empty">{text('common.emptySection')}</div>
         }
 
         {(isEditable || (!isEditable && authorContent.links)) &&

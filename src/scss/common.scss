@@ -69,6 +69,11 @@ a {
       margin-left: 0.5rem;
     }
   }
+
+  .empty {
+    margin-top: $paddingMin;
+    color: var(--surface-400);
+  }
 }
 
 .view {

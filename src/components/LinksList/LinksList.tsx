@@ -37,7 +37,7 @@ export const LinksList = observer(({
       </h2>
       {
         !links?.length
-          ? <div className="links__empty">{text('common.emptySection')}</div>
+          ? <div className="empty">{text('common.emptySection')}</div>
           : <ul className={`links__list ${!isEditable ? '--readonly' : ''}`}>
             {
               links.map((link, index) => (

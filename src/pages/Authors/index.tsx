@@ -6,6 +6,7 @@ import { Pagination } from '../../components/Pagination/Pagination';
 import { Preloader } from '../../components/Preloader/Preloader';
 import { Avatar } from 'primereact/avatar';
 import { useApi } from '../../hooks/useApi';
+import { useCreator } from '../../hooks/useCreator'
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { TAuthorsResponse, TCategoryAuthor } from '../../types/Categories';
@@ -17,6 +18,7 @@ export const Authors = observer(() => {
   const { text } = useLocale()
   const { post } = useApi()
   const [searchParams] = useSearchParams()
+  const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'authors' })
   const [authorListFetched, setAuthorListFetchedState] = useState(false)
   const [authorList, setAuthorList] = useState<TCategoryAuthor[]>([])
@@ -47,7 +49,7 @@ export const Authors = observer(() => {
 
         <ListActions
           isDraft={pageConfig.isDraft}
-          createEntity={() => console.log('Create')}
+          createEntity={() => createEntity('authors')}
           updateConfig={(payload) => {
             if (payload.isDraft) payload.page = 1
             setAuthorListFetchedState(false)

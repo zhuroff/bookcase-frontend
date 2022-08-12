@@ -1,13 +1,11 @@
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
 import { useLocale } from '../../hooks/useLocale';
 import { TBooksListItem } from '../../types/Books';
 import { TCategoryAuthor, TCategoryMin } from '../../types/Categories';
 import { TListContent } from '../../types/List';
-import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { BookViewDialog } from '../BookView/BookViewDialog';
+import { Link } from 'react-router-dom';
 
 type TListPageSectionRowProps = {
   content: TListContent
@@ -21,7 +19,6 @@ export const ListPageSectionRow = observer(({
   isEditable
 }: TListPageSectionRowProps) => {
   const { text } = useLocale()
-  const [isBookModalShow, showHideBookModal] = useState(false)
 
   const bookCoverUrl = (cover?: string) => (
     String(process.env.REACT_APP_SERVER_HOST) +
@@ -43,24 +40,27 @@ export const ListPageSectionRow = observer(({
     }, [])
   )
 
-  const callBookModal = () => {
-    showHideBookModal(true)
-  }
-
   const BookCell = (book: TBooksListItem) => (
-    <div
-      className="table__body-book"
-      onClick={callBookModal}
-    >
-      <img className="table__body-book__cover" src={bookCoverUrl(book.coverImage)} />
+    <div className="table__body-book">
+      <Link to={`/books/${book._id}`}>
+        <img
+          className="table__body-book__cover"
+          src={bookCoverUrl(book.coverImage)}
+        />
+      </Link>
       <div className="table__body-book__content">
-        <div className="table__body-book__title">
-          {book.title}
-          {book.subtitle ? `. ${book.subtitle}` : ''}
-        </div>
+        <Link to={`/books/${book._id}`}>
+          <div className="table__body-book__title">
+            {book.title}
+            {book.subtitle ? `. ${book.subtitle}` : ''}
+          </div>
+        </Link>
         <div className="table__body-book__authors">
           {authorsAbbreviated(book.authors).map(({ _id, title }) => (
-            <span key={_id}>{title}</span>
+            <Link
+              key={_id}
+              to={`/authors/${_id}`}
+            >{title}</Link>
           ))}
         </div>
         <div className="table__body-book__output">
@@ -77,7 +77,10 @@ export const ListPageSectionRow = observer(({
         style={isTarget ? { backgroundColor: 'var(--gray-800)' } : {}}
       >
         <td className="table__body-cell">{BookCell(content.book)}</td>
-        <td className="table__body-cell">
+        <td
+          className="table__body-cell"
+          style={{ width: '250px' }}
+        >
           <div className="table__body-comment">
             {!isEditable ?
               content.comment :
@@ -91,7 +94,10 @@ export const ListPageSectionRow = observer(({
           </div>
         </td>
         {isEditable &&
-          <td className="table__body-cell">
+          <td
+            className="table__body-cell"
+            style={{ width: '110px' }}
+          >
             <div style={{ display: 'grid', gap: '0.5rem' }}>
               <Button
                 label={text('common.replace')}
@@ -105,15 +111,6 @@ export const ListPageSectionRow = observer(({
           </td>
         }
       </tr>
-
-      <Dialog
-        visible={isBookModalShow}
-        draggable={false}
-        style={{ width: '50vw' }}
-        onHide={() => showHideBookModal(false)}
-      >
-        <BookViewDialog _id={content.book._id} />
-      </Dialog>
     </>
   )
 })

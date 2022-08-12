@@ -9,6 +9,7 @@ import { useConfirm } from '../../../hooks/useConfirm';
 import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TCategoryAuthorPage } from '../../../types/Categories';
+import { EntityError } from '../../../types/Common';
 
 export const Author = observer(() => {
   const params = useParams()
@@ -46,11 +47,11 @@ export const Author = observer(() => {
 
     const payload = Array.from(updates).reduce<Partial<TCategoryAuthorPage>>((acc, next) => {
       // @ts-ignore
-      acc[next] = author[next]
+      acc[next] = author[next].replace(/\s+/g, ' ').trim()
       return acc
     }, {})
 
-    patch<{ isSuccess: true }>(`/api/authors/${params.id}`, payload)
+    patch(`/api/authors/${params.id}`, payload)
       .then(_ => toast.current?.show({
         severity: 'success',
         summary: text('success'),
@@ -58,15 +59,73 @@ export const Author = observer(() => {
         life: 5000
       }))
       .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
-      .catch((error) => console.dir(error))
+      .catch((error: EntityError[]) => {
+        error.forEach((err) => {
+          toast.current?.show({
+            severity: 'error',
+            summary: text('error'),
+            detail: text(err.msg),
+            life: 5000
+          })
+        })
+      })
   }
 
   const deleteAuthor = () => {
+    if (author.books.length > 0) {
+      toast.current?.show({
+        severity: 'error',
+        summary: text('error'),
+        detail: text('common.removingImpossible'),
+        life: 5000
+      })
 
+      return false
+    }
+
+    remove(`/api/authors/${params.id}`)
+      .then(_ => toast.current?.show({
+        severity: 'success',
+        summary: text('success'),
+        detail: text('authors.successDelete'),
+        life: 5000
+      }))
+      .then(_ => {
+        navigate('/authors', { replace: true })
+      })
+      .catch((error) => console.dir(error))
   }
 
   const draftingOrPublishing = () => {
+    if (!author.isDraft && author.books.length > 0) {
+      toast.current?.show({
+        severity: 'error',
+        summary: text('error'),
+        detail: text('common.draftImpossible'),
+        life: 5000
+      })
 
+      return false
+    }
+
+    patch<{ isSuccess: true }>(`/api/authors/${params.id}`, { isDraft: !author.isDraft, firstName: author.firstName })
+      .then(_ => toast.current?.show({
+        severity: 'success',
+        summary: text('success'),
+        detail: text(author.isDraft ? 'common.successPublished' : 'common.successDrafted'),
+        life: 5000
+      }))
+      .then(_ => setAuthor({ ...author, isDraft: !author.isDraft }))
+      .catch((error: EntityError[]) => {
+        error.forEach((err) => {
+          toast.current?.show({
+            severity: 'error',
+            summary: text('error'),
+            detail: text(err.msg),
+            life: 5000
+          })
+        })
+      })
   }
 
   const updateAuthorName = (value: string, key: keyof TCategoryAuthorPage) => {

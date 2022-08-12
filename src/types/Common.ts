@@ -2,6 +2,12 @@ import { ReactNode } from 'react'
 import { TBookBasic } from './Books'
 import { TCategoryBasic } from './Categories'
 
+export type EntityError = {
+  value: unknown
+  msg: string
+  param: string
+}
+
 export type TEntityLink = {
   _id?: string
   title: string

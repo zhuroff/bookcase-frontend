@@ -32,6 +32,10 @@ export const messages = {
     paperWithoutFile: 'Бумажные книги без файлов',
     withoutFile: 'Без файлов',
     confirmIntention: 'Подтвердите свое намерение',
+    successPublished: 'Успешно опубликовано',
+    successDrafted: 'Снято с публикации и перенесено в черновики',
+    draftImpossible: 'Невозможно снять с публикации: категория привязана к книгам',
+    removingImpossible: 'Невозможно удалить: категория привязана к книгам',
     yes: 'Да',
     no: 'Нет',
     fileUpload: {
@@ -137,10 +141,13 @@ export const messages = {
     },
     rolesPlaceholder: 'Не выбрано',
     alreadyExist: 'Автор уже был добавлен',
-    firstNamePlaceholder: 'Фамилия',
-    lastNamePlaceholder: 'Имя',
+    firstNamePlaceholder: 'Имя',
+    lastNamePlaceholder: 'Фамилия',
     patronymicNamePlaceholder: 'Отчество',
-    successSaving: 'Данные автора успешно сохранены'
+    successSaving: 'Данные автора успешно сохранены',
+    errors: {
+      firstName: 'Имя автора является обязательным полем'
+    }
   },
   publishers: {
     alreadyExist: 'Издатель уже был добавлен',

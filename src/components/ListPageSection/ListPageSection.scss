@@ -46,7 +46,6 @@
       display: grid;
       grid-template-columns: 50px 1fr;
       gap: $paddingMin;
-      cursor: pointer;
 
       &__cover {
         width: 50px;
@@ -62,6 +61,10 @@
       &__authors {
         color: var(--text-color-secondary);
         margin: 0.5rem 0;
+
+        a {
+          color: inherit;
+        }
       }
 
       &__output {

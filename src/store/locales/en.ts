@@ -32,6 +32,10 @@ export const messages = {
     paperWithoutFile: 'Paperbooks without files',
     withoutFile: 'Without file',
     confirmIntention: 'Confirm your intention',
+    successPublished: 'Successfully published',
+    successDrafted: 'Withdrawn from publication and moved to drafts',
+    draftImpossible: 'Cannot be removed from publication: there are related books',
+    removingImpossible: 'Cannot be removed: there are related books',
     yes: 'Yes',
     no: 'No',
     fileUpload: {
@@ -140,7 +144,10 @@ export const messages = {
     firstNamePlaceholder: 'First name',
     lastNamePlaceholder: 'Last Name',
     patronymicNamePlaceholder: 'Patronymic name',
-    successSaving: 'The author\'s data has been successfully saved'
+    successSaving: 'The author\'s data has been successfully saved',
+    errors: {
+      firstName: 'Author name is required'
+    }
   },
   publishers: {
     alreadyExist: 'The publisher has already been added',
