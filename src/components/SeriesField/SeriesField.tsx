@@ -5,6 +5,7 @@ import { Dialog } from 'primereact/dialog';
 import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
+import { useCreator } from '../../hooks/useCreator';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
@@ -29,6 +30,7 @@ export const SeriesField = observer(({
 }: TSeriesFieldProps) => {
   const { text } = useLocale()
   const { post } = useApi()
+  const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'series', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'series' })
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
@@ -48,8 +50,14 @@ export const SeriesField = observer(({
       .catch((error) => console.dir(error))
   }
 
-  const createNewSeries = () => {
-    console.log(seriesForm)
+  const createNewSeries = async () => {
+    const response = await createEntity<TCategoryBasic>('series', seriesForm, false)
+
+    if (response) {
+      selectSeries(response)
+      setCreatingMode(false)
+      setSeries([])
+    }
   }
 
   useEffect(() => {

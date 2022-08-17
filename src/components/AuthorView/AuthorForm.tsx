@@ -31,7 +31,7 @@ export const AuthorForm = ({
       {(isEditable || (!isEditable && lastName)) &&
         <InputTextarea
           rows={1}
-          value={lastName}
+          value={lastName || ''}
           autoResize
           disabled={!isEditable}
           placeholder={text('authors.lastNamePlaceholder')}

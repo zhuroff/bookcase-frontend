@@ -8,6 +8,7 @@ import { ListActions } from '../../components/ListActions/ListActions';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { Preloader } from '../../components/Preloader/Preloader';
 import { useApi } from '../../hooks/useApi';
+import { useCreator } from '../../hooks/useCreator';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
@@ -18,6 +19,7 @@ export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
   const { post } = useApi()
   const location = useLocation()
   const [searchParams] = useSearchParams()
+  const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'category' })
   const [categoryListFetched, setCategoriesListFetchedState] = useState(false)
   const [categoryList, setCategoriesList] = useState<TCategoryBasic[]>([])
@@ -55,7 +57,7 @@ export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
 
         <ListActions
           isDraft={pageConfig.isDraft}
-          createEntity={() => console.log('Create')}
+          createEntity={() => createEntity(slug, { isDraft: true })}
           updateConfig={(payload) => {
             if (payload.isDraft) payload.page = 1
             setCategoriesListFetchedState(false)

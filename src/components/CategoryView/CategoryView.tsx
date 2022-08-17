@@ -37,7 +37,7 @@ export const CategoryView = observer(({
 
       <main className="author__main">
         <h2 className="view__heading"><span>{text('common.books')}</span></h2>
-        {categoryContent.books.length &&
+        {Boolean(categoryContent.books.length) ?
           <ul className="cards">
             {
               categoryContent.books.map((book) => (
@@ -55,7 +55,8 @@ export const CategoryView = observer(({
                 />
               ))
             }
-          </ul>
+          </ul> :
+          <div className="empty">{text('common.emptySection')}</div>
         }
       </main>
     </div>

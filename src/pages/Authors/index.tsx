@@ -49,7 +49,7 @@ export const Authors = observer(() => {
 
         <ListActions
           isDraft={pageConfig.isDraft}
-          createEntity={() => createEntity('authors')}
+          createEntity={() => createEntity('authors', { isDraft: true })}
           updateConfig={(payload) => {
             if (payload.isDraft) payload.page = 1
             setAuthorListFetchedState(false)

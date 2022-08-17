@@ -1,6 +1,6 @@
 export const messages = {
   error: 'Ошибка',
-  success: 'Готово!',
+  success: 'Выполнено',
   common: {
     books: 'Книги',
     book: 'Книга',
@@ -32,8 +32,10 @@ export const messages = {
     paperWithoutFile: 'Бумажные книги без файлов',
     withoutFile: 'Без файлов',
     confirmIntention: 'Подтвердите свое намерение',
+    successCreated: 'Успешно создано',
     successPublished: 'Успешно опубликовано',
     successDrafted: 'Снято с публикации и перенесено в черновики',
+    successDeleted: 'Успешно удалено',
     draftImpossible: 'Невозможно снять с публикации: категория привязана к книгам',
     removingImpossible: 'Невозможно удалить: категория привязана к книгам',
     yes: 'Да',
@@ -45,6 +47,9 @@ export const messages = {
       heading: 'Ссылки',
       title: 'Название ссылки',
       url: 'URL ссылки'
+    },
+    errors: {
+      title: 'Название категории является обязательным полем'
     }
   },
   search: {
@@ -146,7 +151,9 @@ export const messages = {
     patronymicNamePlaceholder: 'Отчество',
     successSaving: 'Данные автора успешно сохранены',
     errors: {
-      firstName: 'Имя автора является обязательным полем'
+      firstName: {
+        required: 'Имя автора является обязательным полем'
+      }
     }
   },
   publishers: {

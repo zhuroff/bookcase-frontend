@@ -33,6 +33,14 @@ export const Author = observer(() => {
       .catch((error) => console.dir(error))
   }
 
+  const patchedPayload = () => (
+    Array.from(updates).reduce<Partial<TCategoryAuthorPage>>((acc, next) => {
+      // @ts-ignore
+      acc[next] = author[next].replace(/\s+/g, ' ').trim()
+      return acc
+    }, {})
+  )
+
   const saveAuthor = () => {
     if (updates.size === 0) {
       toast.current?.show({
@@ -45,20 +53,49 @@ export const Author = observer(() => {
       return false
     }
 
-    const payload = Array.from(updates).reduce<Partial<TCategoryAuthorPage>>((acc, next) => {
-      // @ts-ignore
-      acc[next] = author[next].replace(/\s+/g, ' ').trim()
-      return acc
-    }, {})
+    patchAuthor({ isDraft: author.isDraft }, 'authors.successSaving')
+      .then((response?: { isSuccess: true } | void) => (
+        response?.isSuccess && setUpdates((prevState) => (
+          new Set([...prevState].filter(() => false))
+        ))
+      ))
+  }
 
-    patch(`/api/authors/${params.id}`, payload)
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text('authors.successSaving'),
+  const draftingOrPublishing = () => {
+    if (!author.isDraft && author.books.length > 0) {
+      toast.current?.show({
+        severity: 'error',
+        summary: text('error'),
+        detail: text('common.draftImpossible'),
         life: 5000
-      }))
-      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
+      })
+
+      return false
+    }
+
+    patchAuthor({ isDraft: !author.isDraft }, author.isDraft ? 'common.successPublished' : 'common.successDrafted')
+      .then((response?: { isSuccess: true } | void) => (
+        response?.isSuccess && setAuthor({ ...author, isDraft: !author.isDraft })
+      ))
+  }
+
+  const patchAuthor = async (
+    requiredPayload: Pick<TCategoryAuthorPage, 'isDraft'>,
+    message: string
+  ) => {
+    return await patch<{ isSuccess: true }>(
+      `/api/authors/${params.id}`,
+      { ...patchedPayload(), ...requiredPayload }
+    )
+      .then((response) => {
+        toast.current?.show({
+          severity: 'success',
+          summary: text('success'),
+          detail: text(message),
+          life: 5000
+        })
+        return response.data
+      })
       .catch((error: EntityError[]) => {
         error.forEach((err) => {
           toast.current?.show({
@@ -87,45 +124,13 @@ export const Author = observer(() => {
       .then(_ => toast.current?.show({
         severity: 'success',
         summary: text('success'),
-        detail: text('authors.successDelete'),
+        detail: text('common.successDeleted'),
         life: 5000
       }))
       .then(_ => {
         navigate('/authors', { replace: true })
       })
       .catch((error) => console.dir(error))
-  }
-
-  const draftingOrPublishing = () => {
-    if (!author.isDraft && author.books.length > 0) {
-      toast.current?.show({
-        severity: 'error',
-        summary: text('error'),
-        detail: text('common.draftImpossible'),
-        life: 5000
-      })
-
-      return false
-    }
-
-    patch<{ isSuccess: true }>(`/api/authors/${params.id}`, { isDraft: !author.isDraft, firstName: author.firstName })
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text(author.isDraft ? 'common.successPublished' : 'common.successDrafted'),
-        life: 5000
-      }))
-      .then(_ => setAuthor({ ...author, isDraft: !author.isDraft }))
-      .catch((error: EntityError[]) => {
-        error.forEach((err) => {
-          toast.current?.show({
-            severity: 'error',
-            summary: text('error'),
-            detail: text(err.msg),
-            life: 5000
-          })
-        })
-      })
   }
 
   const updateAuthorName = (value: string, key: keyof TCategoryAuthorPage) => {

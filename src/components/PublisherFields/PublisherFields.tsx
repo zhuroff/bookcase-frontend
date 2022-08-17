@@ -4,6 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
+import { useCreator } from '../../hooks/useCreator';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
@@ -31,6 +32,7 @@ export const PublisherFields = observer(({
 }: TPublisherFieldProps) => {
   const { post } = useApi()
   const { text } = useLocale()
+  const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'publishers', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'publishers' })
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
@@ -51,8 +53,14 @@ export const PublisherFields = observer(({
       .catch((error) => console.dir(error))
   }
 
-  const createNewPublisher = () => {
-    console.log(publisherForm)
+  const createNewPublisher = async () => {
+    const response = await createEntity<TCategoryBasic>('publishers', publisherForm, false)
+
+    if (response) {
+      selectPublisher(response, currentPublisherId)
+      setCreatingMode(false)
+      setPublishers([])
+    }
   }
 
   useEffect(() => {

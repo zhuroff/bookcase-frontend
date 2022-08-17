@@ -4,6 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
+import { useCreator } from '../../hooks/useCreator';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
@@ -29,6 +30,7 @@ export const GenreFields = observer(({
 }: TGenreFieldsProps) => {
   const { post } = useApi()
   const { text } = useLocale()
+  const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'genres', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'genres' })
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
@@ -49,8 +51,14 @@ export const GenreFields = observer(({
       .catch((error) => console.dir(error))
   }
 
-  const createNewGenre = () => {
-    console.log(genreForm)
+  const createNewGenre = async () => {
+    const response = await createEntity<TCategoryBasic>('genres', genreForm, false)
+
+    if (response) {
+      selectGenre(response, currentGenreId)
+      setCreatingMode(false)
+      setGenres([])
+    }
   }
 
   useEffect(() => {

@@ -53,7 +53,7 @@ export const Book = observer(({ _id }: { _id?: string }) => {
 
     const payload = Array.from(updates).reduce<Partial<TBookPage>>((acc, next) => {
       // @ts-ignore
-      acc[next] = book[next]
+      acc[next] = typeof book[next] === 'string' ? book[next].replace(/\s+/g, ' ').trim() : book[next]
       return acc
     }, {})
 

@@ -32,8 +32,10 @@ export const messages = {
     paperWithoutFile: 'Paperbooks without files',
     withoutFile: 'Without file',
     confirmIntention: 'Confirm your intention',
+    successCreated: 'Successfully created',
     successPublished: 'Successfully published',
     successDrafted: 'Withdrawn from publication and moved to drafts',
+    successDeleted: 'Successfully deleted',
     draftImpossible: 'Cannot be removed from publication: there are related books',
     removingImpossible: 'Cannot be removed: there are related books',
     yes: 'Yes',
@@ -45,6 +47,9 @@ export const messages = {
       heading: 'Links',
       title: 'Link title',
       url: 'Link URL'
+    },
+    errors: {
+      title: 'The category title is a required field'
     }
   },
   search: {
@@ -146,7 +151,9 @@ export const messages = {
     patronymicNamePlaceholder: 'Patronymic name',
     successSaving: 'The author\'s data has been successfully saved',
     errors: {
-      firstName: 'Author name is required'
+      firstName: {
+        required: 'Author name is required'
+      }
     }
   },
   publishers: {

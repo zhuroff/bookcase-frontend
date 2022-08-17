@@ -13,6 +13,7 @@ import { ModalHeader } from '../ModalHeader/ModalHeader';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { AuthorSingleField } from './AuthorSingleField';
 import { AuthorForm } from '../AuthorView/AuthorForm';
+import { useCreator } from '../../hooks/useCreator';
 
 type TAuthorFieldsProps = {
   isEditable: boolean
@@ -31,6 +32,7 @@ export const AuthorFields = observer(({
 }: TAuthorFieldsProps) => {
   const { text } = useLocale()
   const { post } = useApi()
+  const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'authors', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryAuthor[]>({ collection: 'authors' })
   const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
@@ -51,8 +53,14 @@ export const AuthorFields = observer(({
       .catch((error) => console.dir(error))
   }
 
-  const createNewAuthor = () => {
-    console.log(authorForm)
+  const createNewAuthor = async () => {
+    const response = await createEntity<TCategoryAuthor>('authors', authorForm, false)
+
+    if (response) {
+      selectAuthor(response, currentAuthorId)
+      setCreatingMode(false)
+      setAuthors([])
+    }
   }
 
   useEffect(() => {
