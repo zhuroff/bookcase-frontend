@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { TPageConfig } from '../types/Common'
 
 type TPageConfigProps = {
@@ -9,6 +9,7 @@ type TPageConfigProps = {
 
 export const usePageConfig = ({ pageKey, isModal }: TPageConfigProps) => {
   const notInitialRender = useRef(false)
+  const params = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const [isConfigReady, setIsConfigReady] = useState(false)
   const [pageConfig, setPageConfig] = useState<TPageConfig>({
@@ -33,7 +34,7 @@ export const usePageConfig = ({ pageKey, isModal }: TPageConfigProps) => {
   }
 
   useEffect(() => {
-    if (!isModal) {
+    if (!isModal && !Object.prototype.hasOwnProperty.call(params, 'id')) {
       restoreSavedConfig()
       setSearchParams(`?page=${pageConfig.page}`)
     }

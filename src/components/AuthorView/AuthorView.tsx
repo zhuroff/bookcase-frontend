@@ -6,7 +6,6 @@ import { TCategoryAuthorPage } from '../../types/Categories';
 import { BookCard } from '../BookCard/BookCard';
 import { LinksList } from '../LinksList/LinksList';
 import { AuthorForm } from './AuthorForm';
-import './AuthorView.scss';
 
 type TAuthorViewProps = {
   author: TCategoryAuthorPage
@@ -34,8 +33,8 @@ export const AuthorView = observer(({
   }, [author])
 
   return (
-    <div className="view author">
-      <aside className="author__aside">
+    <div className="view">
+      <div>
         <AuthorForm
           isEditable={isEditable}
           firstName={authorContent.firstName}
@@ -43,14 +42,14 @@ export const AuthorView = observer(({
           patronymicName={authorContent.patronymicName}
           updateAuthorName={updateAuthorName}
         />
-      </aside>
+      </div>
 
-      <main className="author__main">
+      <div>
         <h2 className="view__heading"><span>{text('common.books')}</span></h2>
-        {Boolean(authorContent.books.length) ?
+        {Boolean(authorContent.books.docs?.length) ?
           <ul className="cards">
             {
-              authorContent.books.map((book) => (
+              authorContent.books.docs?.map((book) => (
                 <BookCard
                   key={book._id}
                   route={book._id}
@@ -78,7 +77,7 @@ export const AuthorView = observer(({
             setLinkParam={setLinkParam}
           />
         }
-      </main>
+      </div>
     </div>
   )
 })

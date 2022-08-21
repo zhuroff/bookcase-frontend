@@ -8,10 +8,17 @@ export type TCategoryMin = {
 
 export type TCategoryBasic = TCategoryMin & {
   isDraft: boolean
-  books: number
+  booksCount: number
   isAdded?: true
   isDeleted?: boolean
   isChanged?: boolean
+}
+
+export type TCategoryPage = TCategoryBasic & {
+  books: {
+    docs: TBooksListItem[],
+    pagination: TPaginatorResponse
+  }
 }
 
 export type TCategoryAuthor = TCategoryBasic & {
@@ -20,8 +27,7 @@ export type TCategoryAuthor = TCategoryBasic & {
   patronymicName?: string
 }
 
-export type TCategoryAuthorPage = Omit<TCategoryAuthor, 'books'> & {
-  books: TBooksListItem[]
+export type TCategoryAuthorPage = Omit<TCategoryAuthor, 'books'> & TCategoryPage & {
   links?: TEntityLink[]
 }
 
@@ -47,10 +53,6 @@ export type TCategoryPublisherBook = {
 export type TCategoriesResponse = {
   docs: TCategoryBasic[]
   pagination: TPaginatorResponse
-}
-
-export type TCategoryPage = Omit<TCategoryBasic, 'books'> & {
-  books: TBooksListItem[]
 }
 
 export type TAuthorsResponse = TCategoriesResponse & {

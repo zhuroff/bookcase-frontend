@@ -94,7 +94,7 @@ export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
                         icon="pi pi-book"
                         size="large"
                       >
-                        <Badge value={category.books} />
+                        <Badge value={category.booksCount} />
                       </Avatar>
                       <div>
                         <div className="card__author-lastname">

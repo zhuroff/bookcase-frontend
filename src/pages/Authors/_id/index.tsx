@@ -7,6 +7,7 @@ import { Preloader } from '../../../components/Preloader/Preloader';
 import { useApi } from '../../../hooks/useApi';
 import { useConfirm } from '../../../hooks/useConfirm';
 import { useLocale } from '../../../hooks/useLocale';
+import { usePageConfig } from '../../../hooks/usePageConfig';
 import { useToast } from '../../../hooks/useToast';
 import { TCategoryAuthorPage } from '../../../types/Categories';
 import { EntityError } from '../../../types/Common';
@@ -17,7 +18,8 @@ export const Author = observer(() => {
   const navigate = useNavigate()
   const toast = useToast()
   const { text } = useLocale()
-  const { get, patch, remove } = useApi()
+  const { post, patch, remove } = useApi()
+  const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'category:authors' })
   const [isAuthorFetched, setIsAuthorFetched] = useState(false)
   const [author, setAuthor] = useReducer(
     (author: TCategoryAuthorPage, payload: Partial<TCategoryAuthorPage>) => ({ ...author, ...payload }),
@@ -27,7 +29,7 @@ export const Author = observer(() => {
   const { callConfirmation } = useConfirm()
 
   const fetchAuthor = () => {
-    get<TCategoryAuthorPage>(`/api/authors/${params.id}`)
+    post<TCategoryAuthorPage>(`/api/authors/${params.id}`, { ...pageConfig, slug: 'authors' })
       .then((response) => setAuthor(response.data))
       .then(_ => setIsAuthorFetched(true))
       .catch((error) => console.dir(error))
@@ -36,7 +38,7 @@ export const Author = observer(() => {
   const patchedPayload = () => (
     Array.from(updates).reduce<Partial<TCategoryAuthorPage>>((acc, next) => {
       // @ts-ignore
-      acc[next] = author[next].replace(/\s+/g, ' ').trim()
+      acc[next] = typeof author[next] === 'string' ? author[next].replace(/\s+/g, ' ').trim() : author[next]
       return acc
     }, {})
   )
@@ -62,7 +64,7 @@ export const Author = observer(() => {
   }
 
   const draftingOrPublishing = () => {
-    if (!author.isDraft && author.books.length > 0) {
+    if (!author.isDraft && author.books.docs?.length > 0) {
       toast.current?.show({
         severity: 'error',
         summary: text('error'),
@@ -109,7 +111,7 @@ export const Author = observer(() => {
   }
 
   const deleteAuthor = () => {
-    if (author.books.length > 0) {
+    if (author.books.docs?.length > 0) {
       toast.current?.show({
         severity: 'error',
         summary: text('error'),

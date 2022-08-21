@@ -86,7 +86,7 @@ export const Lists = observer(() => {
                         icon="pi pi-book"
                         size="large"
                       >
-                        <Badge value={item.books} />
+                        <Badge value={item.booksCount} />
                       </Avatar>
                       <div>
                         <div className="card__author-lastname">

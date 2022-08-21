@@ -10,6 +10,7 @@ import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TCategoryPage } from '../../../types/Categories';
 import { EntityError, TCategoriesIndexProps } from '../../../types/Common';
+import { usePageConfig } from '../../../hooks/usePageConfig';
 
 export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   const params = useParams()
@@ -17,7 +18,8 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   const navigate = useNavigate()
   const toast = useToast()
   const { text } = useLocale()
-  const { get, patch, remove } = useApi()
+  const { post, patch, remove } = useApi()
+  const [pageConfig, setPageConfig] = usePageConfig({ pageKey: `category:${slug}` })
   const [isCategoryFetched, setIsCategoryFetched] = useState(false)
   const [category, setCategory] = useReducer(
     (category: TCategoryPage, payload: Partial<TCategoryPage>) => ({ ...category, ...payload }),
@@ -27,7 +29,7 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   const { callConfirmation } = useConfirm()
 
   const fetchCategory = () => {
-    get<TCategoryPage>(`/api/${slug}/${params.id}`)
+    post<TCategoryPage>(`/api/${slug}/${params.id}`, { ...pageConfig, slug })
       .then((response) => setCategory(response.data))
       .then(() => setIsCategoryFetched(true))
       .catch((error) => console.dir(error))
@@ -62,7 +64,7 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   }
 
   const draftingOrPublishing = () => {
-    if (!category.isDraft && category.books.length > 0) {
+    if (!category.isDraft && category.books.docs?.length > 0) {
       toast.current?.show({
         severity: 'error',
         summary: text('error'),
@@ -109,7 +111,7 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   }
 
   const deleteCategory = () => {
-    if (category.books.length > 0) {
+    if (category.books.docs?.length > 0) {
       toast.current?.show({
         severity: 'error',
         summary: text('error'),

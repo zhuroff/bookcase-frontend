@@ -26,21 +26,21 @@ export const CategoryView = observer(({
   }, [category])
 
   return (
-    <div className="view author">
-      <aside className="author__aside">
+    <div className="view">
+      <div>
         <CategoryForm
           isEditable={isEditable}
           title={categoryContent.title}
           updateCategoryTitle={updateCategoryTitle}
         />
-      </aside>
+      </div>
 
-      <main className="author__main">
+      <div>
         <h2 className="view__heading"><span>{text('common.books')}</span></h2>
-        {Boolean(categoryContent.books.length) ?
+        {Boolean(categoryContent.books.docs?.length) ?
           <ul className="cards">
             {
-              categoryContent.books.map((book) => (
+              categoryContent.books.docs.map((book) => (
                 <BookCard
                   key={book._id}
                   route={book._id}
@@ -58,7 +58,7 @@ export const CategoryView = observer(({
           </ul> :
           <div className="empty">{text('common.emptySection')}</div>
         }
-      </main>
+      </div>
     </div>
   )
 })

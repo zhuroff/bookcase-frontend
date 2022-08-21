@@ -29,7 +29,7 @@ export const LinksList = observer(({
         {isEditable &&
           <Button
             className="p-button-sm p-button-secondary p-button-outlined"
-            icon="pi pi-minus"
+            icon="pi pi-plus"
             title={text('common.create')}
             onClick={appendLinkRow}
           />
