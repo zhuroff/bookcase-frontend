@@ -9,29 +9,22 @@ import { useApi } from '../../hooks/useApi';
 import { useCreator } from '../../hooks/useCreator'
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
-import { TAuthorsResponse, TCategoryAuthor } from '../../types/Categories';
-import { TPaginatorResponse } from '../../types/Common';
+import { TCategoryAuthor } from '../../types/Categories';
 import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';
 
 export const Authors = observer(() => {
   const { text } = useLocale()
-  const { post } = useApi()
+  const { api: { getPaginatedList }, pagination } = useApi()
   const [searchParams] = useSearchParams()
   const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'authors' })
   const [authorListFetched, setAuthorListFetchedState] = useState(false)
   const [authorList, setAuthorList] = useState<TCategoryAuthor[]>([])
-  const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
 
   const fetchAuthors = () => {
-    post<TAuthorsResponse>('/api/authors', pageConfig)
-      .then((response) => {
-        setAuthorList(response.data.docs)
-        setPagePagination(response.data.pagination)
-        setAuthorListFetchedState(true)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryAuthor>('authors', pageConfig, setAuthorList)
+      .then(() => setAuthorListFetchedState(true))
   }
 
   useEffect(() => {
@@ -44,7 +37,7 @@ export const Authors = observer(() => {
     <>
       <header className="section__heading">
         <h2 className="section__title">
-          {text('routes.authors')} ({pagePagination?.totalDocs})
+          {text('routes.authors')} ({pagination?.totalDocs})
         </h2>
 
         <ListActions
@@ -104,9 +97,9 @@ export const Authors = observer(() => {
         }
       </ul>
 
-      {pagePagination &&
+      {pagination &&
         <Pagination
-          pagination={pagePagination}
+          pagination={pagination}
           switchPagination={(page) => {
             setAuthorListFetchedState(false)
             setPageConfig({ ...pageConfig, page })

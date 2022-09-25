@@ -29,11 +29,10 @@ export const SeriesField = observer(({
   deleteOrRestoreSeries
 }: TSeriesFieldProps) => {
   const { text } = useLocale()
-  const { post } = useApi()
+  const { api: { getPaginatedList }, pagination } = useApi()
   const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'series', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'series' })
-  const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [series, setSeries] = useState<TCategoryBasic[]>([])
   const [creatingMode, setCreatingMode] = useState(false)
   const [seriesForm, fillSeriesForm] = useReducer(
@@ -42,12 +41,7 @@ export const SeriesField = observer(({
   )
 
   const fetchSeries = () => {
-    post<TCategoriesResponse>('/api/series', pageConfig)
-      .then((response) => {
-        setSeries(response.data.docs)
-        setPagePagination(response.data.pagination)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryBasic>('authors', pageConfig, setSeries)
   }
 
   const createNewSeries = async () => {
@@ -139,7 +133,7 @@ export const SeriesField = observer(({
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
-          pagePagination={pagePagination}
+          pagePagination={pagination}
           setSearchQuery={(value) => setSearchQuery(value)}
           createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {

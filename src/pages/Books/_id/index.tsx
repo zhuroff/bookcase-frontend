@@ -12,7 +12,8 @@ import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TBookPage } from '../../../types/Books';
 import { TBookList } from '../../../types/List';
-import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../../types/Categories';
+import { TCategoryAuthor, TCategoryBasic, TCategoryKeys } from '../../../types/Categories';
+import { TEntityBasic } from '../../../types/Common';
 // import { Collection, IndexableType } from 'dexie';
 
 export const Book = observer(({ _id }: { _id?: string }) => {
@@ -20,7 +21,8 @@ export const Book = observer(({ _id }: { _id?: string }) => {
   const navigate = useNavigate()
   const toast = useToast()
   const location = useLocation()
-  const { get, post, patch, remove } = useApi()
+  // const { get, post, patch, remove } = useApi()
+  const { api: { getEntity, saveEntity, deleteEntity, uploadFile } } = useApi()
   const { text } = useLocale()
   const { callConfirmation } = useConfirm()
   // const [localDraft, setLocalDraft] = useState<Collection<TBookPage, IndexableType>>()
@@ -33,10 +35,12 @@ export const Book = observer(({ _id }: { _id?: string }) => {
 
   const fetchBook = () => {
     // extractLocalDraft(null)
-    get<TBookPage>(`/api/books/${_id || params.id}`)
-      .then((response) => setBook(response.data))
-      .then(_ => setIsBookFetched(true))
-      .catch((error) => console.dir(error))
+    getEntity<TBookPage>(`books/${_id || params.id}`)
+      .then((data) => {
+        setBook(data)
+        setIsBookFetched(true)
+      })
+      .catch((error) => console.error(error))
   }
 
   const saveBook = () => {
@@ -57,51 +61,34 @@ export const Book = observer(({ _id }: { _id?: string }) => {
       return acc
     }, {})
 
-    patch<{ isSuccess: true }>(`/api/books/${params.id}`, payload)
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text('book.successSaving'),
-        life: 5000
-      }))
-      .then(() => setUpdates((prevState) => new Set([...prevState].filter(() => false))))
-      // .then(() => localStorage.removeItem(book._id))
-      .catch((error) => console.dir(error))
-  }
-
-  const deleteBook = () => {
-    remove(`/api/books/${params.id}`)
-      .then(_ => {
+    saveEntity<{ isSuccess: true }, typeof payload>(`books/${params.id}`, payload)
+      .then(() => {
         toast.current?.show({
           severity: 'success',
           summary: text('success'),
-          detail: text('book.successDeleted'),
+          detail: text('book.successSaving'),
           life: 5000
         })
-        navigate('/books', { replace: true })
+        setUpdates((prevState) => new Set([...prevState].filter(() => false)))
       })
-      .catch((error) => console.dir(error))
+      .catch((error) => console.error(error))
+  }
+
+  const deleteBook = () => {
+    deleteEntity(`books/${params.id}`)
+      .then(() => navigate('/books', { replace: true }))
   }
 
   const uploadPreCover = (file?: File) => {
     if (!file) return false
 
-    const formData = new FormData()
-
-    formData.append('preCoverImage', file)
-
-    post<TBookPage>(`/api/books/${book._id}/precover?folder=covers`, formData)
-      .then((response) => {
-        setBook({ preCoverImage: response.data.preCoverImage })
-        setUpdates((prevState) => new Set([...prevState, 'preCoverImage']))
+    uploadFile<Partial<TBookPage>>(`books/${book._id}/precover?folder=covers`, 'preCoverImage', file)
+      .then((data) => {
+        if (data) {
+          setBook({ preCoverImage: data.preCoverImage })
+          setUpdates((prevState) => new Set([...prevState, 'preCoverImage']))
+        }
       })
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text('book.successSaving'),
-        life: 5000
-      }))
-      .catch((error) => console.dir(error))
   }
 
   const draftingOrPublishing = () => {
@@ -192,6 +179,10 @@ export const Book = observer(({ _id }: { _id?: string }) => {
     setUpdates((prevState) => new Set([...prevState, 'genres']))
   }
 
+  const selectCategory = <T extends TCategoryBasic>(key: TCategoryKeys, value: T, _id: string | null) => {
+    console.log(key, value, _id)
+  }
+
   const setAuthorRole = (value: string, _id: string) => {
     setBook({
       authors: book.authors.map((el) => (
@@ -268,7 +259,7 @@ export const Book = observer(({ _id }: { _id?: string }) => {
     setUpdates((prevState) => new Set([...prevState, 'lists']))
   }
 
-  const setSublist = (listId: string, oldValue: string, newValue: TCategoryMin) => {
+  const setSublist = (listId: string, oldValue: string, newValue: TEntityBasic) => {
     setBook({
       lists: book.lists.map((list) => (
         list._id !== listId
@@ -423,6 +414,7 @@ export const Book = observer(({ _id }: { _id?: string }) => {
               setSublist={setSublist}
               addSublist={addSublist}
               removeSublist={removeSublist}
+              selectCategory={selectCategory}
             />
 
             {location.pathname.includes('/books') &&

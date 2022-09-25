@@ -7,8 +7,9 @@ import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
-import { TCategoriesResponse, TCategoryBasic, TCategoryMin } from '../../types/Categories';
-import { TBookList, TListPage } from '../../types/List';
+import { TCategoryBasic } from '../../types/Categories';
+import { TEntityBasic } from '../../types/Common';
+import { TBookList } from '../../types/List';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 import { ListSingleField } from './ListSingleField';
@@ -17,7 +18,7 @@ type TListFieldProps = {
   isEditable: boolean
   content: TBookList[]
   bookId: string
-  setSublist: (listId: string, oldValue: string, newValue: TCategoryMin) => void
+  setSublist: (listId: string, oldValue: string, newValue: TEntityBasic) => void
   deleteOrRestore: (key: 'lists', _id: string) => void
   selectList: (value: TBookList, currentListId: string | null) => void
   addSublist: (listId: string) => void
@@ -34,7 +35,7 @@ export const ListFields = observer(({
   addSublist,
   removeSublist
 }: TListFieldProps) => {
-  const { post } = useApi()
+  const { api: { getPaginatedList } } = useApi()
   const { text } = useLocale()
   const [lists, setLists] = useState<TCategoryBasic[]>([])
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'lists', isModal: true })
@@ -42,9 +43,7 @@ export const ListFields = observer(({
   const [currentListId, setCurrentListId] = useState<string | null>(null)
 
   const fetchLists = () => {
-    post<TCategoriesResponse>('/api/lists', pageConfig)
-      .then((response) => setLists(response.data.docs))
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryBasic>('lists', pageConfig, setLists)
   }
 
   useEffect(() => {

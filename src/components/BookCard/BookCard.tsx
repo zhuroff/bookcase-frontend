@@ -2,9 +2,10 @@ import { observer } from 'mobx-react-lite';
 import { BaseSyntheticEvent, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { TBookStatus } from '../../types/Books';
-import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../types/Categories';
+import { TCategoryAuthor, TCategoryBasic } from '../../types/Categories';
 import { useLocale } from '../../hooks/useLocale';
 import { Card } from 'primereact/card'
+import { TEntityBasic } from '../../types/Common';
 import './BookCard.scss';
 
 type BookCardProps = {
@@ -40,7 +41,7 @@ export const BookCard = observer(({
   ), [coverImage])
 
   const authorsAbbreviated = useMemo(() => (
-    authors.reduce<TCategoryMin[]>((acc, author) => {
+    authors.reduce<TEntityBasic[]>((acc, author) => {
       acc.push({
         _id: author._id,
         title: author.lastName

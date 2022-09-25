@@ -1,14 +1,23 @@
 import { ReactNode } from 'react'
 import { TBookBasic } from './Books'
-import { TCategoryBasic } from './Categories'
 
-export type EntityError = {
+export type TAuthPayload = {
+  email: string
+  password: string
+}
+
+export type TEntityBasic = {
+  _id: string
+  title: string
+}
+
+export type TEntityError = {
   value: unknown
   msg: string
   param: string
 }
 
-export type TEntityLink = {
+export type EntityLink = {
   _id?: string
   title: string
   url: string
@@ -18,13 +27,13 @@ export type TCategoriesIndexProps = {
   slug: string
 }
 
-type TRoute = {
+export type TRoute = {
   path: string
   element: ReactNode
   title?: string
 }
 
-type TCollectionEntities =
+export type TCollectionEntities =
   'books' |
   'genres' |
   'series' |
@@ -32,23 +41,19 @@ type TCollectionEntities =
   'lists' |
   'publishers'
 
-type TSearchResponse = {
-  [key in TCollectionEntities]: TBookBasic[] | TCategoryBasic[]
-}
+export type TSearchResponse = Record<TCollectionEntities, TBookBasic[] | TEntityBasic[]>
 
-type TPaginatorResponse = {
+export type TPaginatorResponse = {
   page: number
   totalDocs: number
   totalPages: number
 }
 
-type TEntitySortingKeys = 'dateCreated' | 'title'
+export type TEntitySortingKeys = 'dateCreated' | 'title'
 
-type TEntitySorting = {
-  [key in TEntitySortingKeys]: 1 | -1
-}
+export type TEntitySorting = Record<TEntitySortingKeys, 1 | -1>
 
-type TPageConfig = {
+export type TPageConfig = {
   page: string | number,
   sort: Partial<TEntitySorting>,
   limit: number,
@@ -56,14 +61,10 @@ type TPageConfig = {
   unlistedOf?: string
   paperWithoutFile?: boolean
   accountableOnly?: boolean
+  year?: number
 }
 
-export type {
-  TRoute,
-  TCollectionEntities,
-  TSearchResponse,
-  TPaginatorResponse,
-  TEntitySortingKeys,
-  TEntitySorting,
-  TPageConfig
+export type TPaginatedListResponse<T> = {
+  docs: T[]
+  pagination: TPaginatorResponse
 }

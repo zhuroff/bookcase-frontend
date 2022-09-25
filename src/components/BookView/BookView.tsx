@@ -9,9 +9,9 @@ import { BookStatus } from '../BookStatus/BookStatus';
 import { BookFile } from '../BookFile/BookFile';
 import { useLocale } from '../../hooks/useLocale';
 import { AuthorFields } from '../AuthorFields/AuthorFields';
-import { TCategoryAuthor, TCategoryBasic, TCategoryMin } from '../../types/Categories';
+import { TCategoryAuthor, TCategoryBasic, TCategoryKeys } from '../../types/Categories';
 import { PublisherFields } from '../PublisherFields/PublisherFields';
-import { GenreFields } from '../GenreFields/GenreFields';
+// import { GenreFields } from '../GenreFields/GenreFields';
 import { ListFields } from '../ListFields/ListFields';
 import { AccountabilityField } from '../SimpleFields/AccountabilityField';
 import { SeriesField } from '../SeriesField/SeriesField';
@@ -19,6 +19,10 @@ import { InputField } from '../SimpleFields/InputField';
 import { DropdownField } from '../SimpleFields/DropdownField';
 import { Editor } from 'primereact/editor';
 import { TBookList } from '../../types/List';
+import { NoteFields } from '../NoteFields/NoteFields';
+import { TEntityBasic } from '../../types/Common';
+import { ComplexFieldListWrapper } from '../Fields/ComplexFieldListWrapper';
+import { GenreFieldList } from '../Fields/GenreFieldList';
 import './BookView.scss';
 
 type TBookViewProps = {
@@ -40,9 +44,10 @@ type TBookViewProps = {
   deleteOrRestoreSeries: () => void
   setFieldValue: (value: string | number | null, key: keyof TBookPage) => void
   setList: (value: TBookList, _id: string | null) => void
-  setSublist: (listId: string, oldValue: string, newValue: TCategoryMin) => void
+  setSublist: (listId: string, oldValue: string, newValue: TEntityBasic) => void
   addSublist: (listId: string) => void
   removeSublist: (listId: string, sublistId: string) => void
+  selectCategory: (key: TCategoryKeys, value: TCategoryBasic, _id: string | null) => void
 }
 
 export const BookView = observer(({
@@ -66,7 +71,8 @@ export const BookView = observer(({
   setList,
   setSublist,
   addSublist,
-  removeSublist
+  removeSublist,
+  selectCategory
 }: TBookViewProps) => {
   const { text, messages, currentLocale } = useLocale()
   const [bookContent, setBookContent] = useState(book)
@@ -171,12 +177,22 @@ export const BookView = observer(({
           legend={text('common.genres')}
           toggleable
         >
-          <GenreFields
+          {/* <GenreFields
             isEditable={isEditable}
             content={book.genres}
             deleteOrRestore={deleteOrRestore}
             selectGenre={setGenre}
-          />
+          /> */}
+          <ComplexFieldListWrapper<TCategoryBasic>
+            categoryKey="genres"
+            isEditable={isEditable}
+            selectCategory={selectCategory}
+          >
+            <GenreFieldList
+              isEditable={isEditable}
+              genres={book.genres}
+            />
+          </ComplexFieldListWrapper>
         </Fieldset>
 
         {(isEditable || book.lists?.length > 0) &&
@@ -282,6 +298,19 @@ export const BookView = observer(({
             <Editor
               value={bookContent.summary}
               onTextChange={(e) => setFieldValue(String(e.htmlValue), 'summary')} />
+          </Fieldset>
+        }
+
+        {(isEditable || bookContent.notes?.length > 0) &&
+          <Fieldset
+            legend={text('notes.heading')}
+            toggleable
+            className={!isEditable ? '--readonly' : ''}
+          >
+            <NoteFields
+              isEditable={isEditable}
+              content={bookContent.notes}
+            />
           </Fieldset>
         }
       </main>

@@ -15,17 +15,19 @@ export const ListPage = observer(() => {
   const params = useParams()
   const location = useLocation()
   const { text } = useLocale()
-  const { get, patch, remove } = useApi()
+  const { api: { getEntity } } = useApi()
   const { callConfirmation } = useConfirm()
   const [searchParams] = useSearchParams()
   const [isListPageFetched, setListPageFetchedState] = useState(false)
   const [page, setPage] = useState({} as TListPage)
 
   const fetchListPage = () => {
-    get<TListPage>(`/api/lists/${params.id}`)
-      .then((response) => setPage(response.data))
-      .then(_ => setListPageFetchedState(true))
-      .catch((error) => console.dir(error))
+    getEntity<TListPage>(`lists/${params.id}`)
+      .then((data) => {
+        setPage(data)
+        setListPageFetchedState(true)
+      })
+      .catch((error) => console.error(error))
   }
 
   const saveListPage = () => {

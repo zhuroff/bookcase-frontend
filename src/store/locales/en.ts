@@ -186,6 +186,12 @@ export const messages = {
     page: 'Page',
     of: 'of'
   },
+  notes: {
+    heading: 'Notes',
+    modal: {
+      heading: 'New note'
+    }
+  },
   languages: {
     ru: 'Russian',
     en: 'English'

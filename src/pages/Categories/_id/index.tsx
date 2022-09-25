@@ -9,7 +9,7 @@ import { useConfirm } from '../../../hooks/useConfirm';
 import { useLocale } from '../../../hooks/useLocale';
 import { useToast } from '../../../hooks/useToast';
 import { TCategoryPage } from '../../../types/Categories';
-import { EntityError, TCategoriesIndexProps } from '../../../types/Common';
+import { TCategoriesIndexProps } from '../../../types/Common';
 import { usePageConfig } from '../../../hooks/usePageConfig';
 
 export const Category = observer(({ slug }: TCategoriesIndexProps) => {
@@ -18,8 +18,8 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   const navigate = useNavigate()
   const toast = useToast()
   const { text } = useLocale()
-  const { post, patch, remove } = useApi()
-  const [pageConfig, setPageConfig] = usePageConfig({ pageKey: `category:${slug}` })
+  const { api: { getConfiguredEntity, saveEntity, deleteEntity } } = useApi()
+  const [pageConfig] = usePageConfig({ pageKey: `category:${slug}` })
   const [isCategoryFetched, setIsCategoryFetched] = useState(false)
   const [category, setCategory] = useReducer(
     (category: TCategoryPage, payload: Partial<TCategoryPage>) => ({ ...category, ...payload }),
@@ -29,16 +29,15 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
   const { callConfirmation } = useConfirm()
 
   const fetchCategory = () => {
-    post<TCategoryPage>(`/api/${slug}/${params.id}`, { ...pageConfig, slug })
-      .then((response) => setCategory(response.data))
+    getConfiguredEntity(`${slug}/${params.id}`, pageConfig, slug, setCategory)
       .then(() => setIsCategoryFetched(true))
-      .catch((error) => console.dir(error))
+      .catch((error) => console.error(error))
   }
 
   const patchedPayload = () => (
     Array.from(updates).reduce<Partial<TCategoryPage>>((acc, next) => {
       // @ts-ignore
-      acc[next] = category[next].replace(/\s+/g, ' ').trim()
+      acc[next] = typeof category[next] === 'string' ? category[next].replace(/\s+/g, ' ').trim() : category[next]
       return acc
     }, {})
   )
@@ -85,28 +84,16 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
     requiredPayload: Pick<TCategoryPage, 'isDraft'>,
     message: string
   ) => {
-    return await patch<{ isSuccess: true }>(
-      `/api/${slug}/${params.id}`,
-      { ...patchedPayload(), ...requiredPayload }
-    )
-      .then((response) => {
+    const payload = { ...patchedPayload(), ...requiredPayload }
+    return saveEntity<{ isSuccess: true }, typeof payload>(`${slug}/${params.id}`, payload)
+      .then((data) => {
         toast.current?.show({
           severity: 'success',
           summary: text('success'),
           detail: text(message),
           life: 5000
         })
-        return response.data
-      })
-      .catch((error: EntityError[]) => {
-        error.forEach((err) => {
-          toast.current?.show({
-            severity: 'error',
-            summary: text('error'),
-            detail: text(err.msg),
-            life: 5000
-          })
-        })
+        return data
       })
   }
 
@@ -122,17 +109,8 @@ export const Category = observer(({ slug }: TCategoriesIndexProps) => {
       return false
     }
 
-    remove(`/api/${slug}/${params.id}`)
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text('common.successDeleted'),
-        life: 5000
-      }))
-      .then(_ => {
-        navigate(`/${slug}`, { replace: true })
-      })
-      .catch((error) => console.dir(error))
+    deleteEntity(`${slug}/${params.id}`)
+      .then(() => navigate(`/${slug}`, { replace: true }))
   }
 
   const updateCategoryTitle = (value: string) => {

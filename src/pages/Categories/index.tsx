@@ -11,28 +11,23 @@ import { useApi } from '../../hooks/useApi';
 import { useCreator } from '../../hooks/useCreator';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
-import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
-import { TCategoriesIndexProps, TPaginatorResponse } from '../../types/Common';
+import { TCategoryBasic } from '../../types/Categories';
+import { TCategoriesIndexProps } from '../../types/Common';
 
 export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
   const { text } = useLocale()
-  const { post } = useApi()
+  const { api: { getPaginatedList }, pagination } = useApi()
   const location = useLocation()
   const [searchParams] = useSearchParams()
   const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'category' })
   const [categoryListFetched, setCategoriesListFetchedState] = useState(false)
   const [categoryList, setCategoriesList] = useState<TCategoryBasic[]>([])
-  const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
 
   const fetchCategories = () => {
-    post<TCategoriesResponse>(`/api/${slug}`, pageConfig)
-      .then((response) => {
-        setCategoriesList(response.data.docs)
-        setPagePagination(response.data.pagination)
-        setCategoriesListFetchedState(true)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryBasic>(slug, pageConfig, setCategoriesList)
+      .then(() => setCategoriesListFetchedState(true))
+      .catch((error) => console.error(error))
   }
 
   useEffect(() => {
@@ -52,7 +47,7 @@ export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
     <>
       <header className="section__heading">
         <h2 className="section__title">
-          {text(`routes.${slug}`)} ({pagePagination?.totalDocs})
+          {text(`routes.${slug}`)} ({pagination?.totalDocs})
         </h2>
 
         <ListActions
@@ -108,9 +103,9 @@ export const Categories = observer(({ slug }: TCategoriesIndexProps) => {
         }
       </ul>
 
-      {(pagePagination && pagePagination.totalPages > 1) &&
+      {(pagination && pagination.totalPages > 1) &&
         <Pagination
-          pagination={pagePagination}
+          pagination={pagination}
           switchPagination={(page) => {
             setCategoriesListFetchedState(false)
             setPageConfig({ ...pageConfig, page })

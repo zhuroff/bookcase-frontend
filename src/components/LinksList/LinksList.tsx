@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { Button } from 'primereact/button';
 import { useLocale } from '../../hooks/useLocale';
-import { TEntityLink } from '../../types/Common';
+import { EntityLink } from '../../types/Common';
 import { Input } from '../Input/Input';
 import './LinkList.scss';
 
 type TLinksListProps = {
-  links?: TEntityLink[]
+  links?: EntityLink[]
   isEditable?: boolean
   appendLinkRow: () => void
   removeLinkRow: (index: number) => void

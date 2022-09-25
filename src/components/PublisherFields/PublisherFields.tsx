@@ -8,8 +8,7 @@ import { useCreator } from '../../hooks/useCreator';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
-import { TCategoriesResponse, TCategoryBasic, TCategoryPublisherBook } from '../../types/Categories';
-import { TPaginatorResponse } from '../../types/Common';
+import { TCategoryBasic, TCategoryPublisherBook } from '../../types/Categories';
 import { CategoryForm } from '../CategoryView/CategoryForm';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
@@ -30,12 +29,11 @@ export const PublisherFields = observer(({
   selectPublisher,
   setPublisherMetadata
 }: TPublisherFieldProps) => {
-  const { post } = useApi()
+  const { api: { getPaginatedList }, pagination } = useApi()
   const { text } = useLocale()
   const [createEntity] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'publishers', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryBasic[]>({ collection: 'publishers' })
-  const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [publishers, setPublishers] = useState<TCategoryBasic[]>([])
   const [currentPublisherId, setCurrentPublisherId] = useState<string | null>(null)
   const [creatingMode, setCreatingMode] = useState(false)
@@ -43,14 +41,8 @@ export const PublisherFields = observer(({
     (category: TCategoryBasic, payload: Partial<TCategoryBasic>) => ({ ...category, ...payload }),
     { isDraft: false } as TCategoryBasic
   )
-
   const fetchPublishers = () => {
-    post<TCategoriesResponse>('/api/publishers', pageConfig)
-      .then((response: any) => {
-        setPublishers(response.data.docs)
-        setPagePagination(response.data.pagination)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryBasic>('publishers', pageConfig, setPublishers)
   }
 
   const createNewPublisher = async () => {
@@ -143,7 +135,7 @@ export const PublisherFields = observer(({
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
-          pagePagination={pagePagination}
+          pagePagination={pagination}
           setSearchQuery={(value) => setSearchQuery(value)}
           createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {

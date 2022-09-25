@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
-import { useApi } from '../../hooks/useApi';
+import { BaseSyntheticEvent, useState } from 'react';
+// import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
 import { registerForm } from './authForms';
 import { Button } from 'primereact/button';
@@ -12,20 +12,20 @@ type RegisterFormProps = {
 
 export const AuthRegister = observer(({ onError }: RegisterFormProps) => {
   const { text } = useLocale()
-  const { post } = useApi()
+  // const { post } = useApi()
   const [registerData, setRegisterData] = useState({
     email: '',
     password: '',
     passwordConfirm: ''
   })
 
-  const tryRegister = (event: any) => {
+  const tryRegister = (event: BaseSyntheticEvent) => {
     event.preventDefault()
-    post('/api/users/registration', registerData)
-      .then((response) => console.log(response))
-      .catch((error) => {
-        onError(text(error.message))
-      })
+    // post('/api/users/registration', registerData)
+    //   .then((response) => console.log(response))
+    //   .catch((error) => {
+    //     onError(text(error.message))
+    //   })
   }
 
   return (

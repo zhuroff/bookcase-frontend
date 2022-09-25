@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite';
 
 export const Dashboard = observer(() => {
   const navigate = useNavigate()
-  const { get, post } = useApi()
+  const { api: { getPaginatedList } } = useApi()
   const { text } = useLocale()
   const [readingBooksFetched, setReadingBooksFetched] = useState(false)
   const [readBooksFetched, setReadBooksFetched] = useState(false)
@@ -19,21 +19,15 @@ export const Dashboard = observer(() => {
   const [readYear, setReadYear] = useState(new Date().getFullYear())
 
   const fetchReadingBooks = () => {
-    get('/api/dashboard/reading-books')
-      .then((response) => {
-        setReadingBooks(response.data.docs)
-        setReadingBooksFetched(true)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TBooksListItem>('dashboard/reading-books', null, setReadingBooks)
+      .then(() => setReadingBooksFetched(true))
+      .catch((error) => console.error(error))
   }
 
   const fetchReadBooks = () => {
-    post('/api/dashboard/read-books', { year: readYear })
-      .then((response) => {
-        setReadBooks(response.data.docs)
-        setReadBooksFetched(true)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TBooksListItem>('dashboard/read-books', { year: readYear }, setReadBooks)
+      .then(() => setReadBooksFetched(true))
+      .catch((error) => console.error(error))
   }
 
   const openBookPage = (id: string) => {

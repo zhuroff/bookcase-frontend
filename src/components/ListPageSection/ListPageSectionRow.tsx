@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { useLocale } from '../../hooks/useLocale';
 import { TBooksListItem } from '../../types/Books';
-import { TCategoryAuthor, TCategoryMin } from '../../types/Categories';
+import { TCategoryAuthor } from '../../types/Categories';
 import { TListContent } from '../../types/List';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Link } from 'react-router-dom';
+import { TEntityBasic } from '../../types/Common';
 
 type TListPageSectionRowProps = {
   content: TListContent
@@ -28,7 +29,7 @@ export const ListPageSectionRow = observer(({
   )
 
   const authorsAbbreviated = (authors: TCategoryAuthor[]) => (
-    authors.reduce<TCategoryMin[]>((acc, author) => {
+    authors.reduce<TEntityBasic[]>((acc, author) => {
       acc.push({
         _id: author._id,
         title: author.lastName

@@ -1,5 +1,5 @@
 import { TBooksListItem } from "./Books"
-import { TCategoryMin } from "./Categories"
+import { TEntityBasic } from "./Common"
 
 export type TListContent = {
   _id: string
@@ -20,8 +20,8 @@ export type TListPage = {
   lists: TListSection[]
 }
 
-export type TBookList = TCategoryMin & {
-  lists: TCategoryMin[]
+export type TBookList = TEntityBasic & {
+  lists: TEntityBasic[]
   isDeleted?: boolean
   isAdded?: boolean
   isChanged?: boolean

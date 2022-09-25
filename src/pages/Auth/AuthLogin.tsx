@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
 import { loginForm } from './authForms';
 import { Button } from 'primereact/button';
-import { Authentication } from '../../store/auth';
 import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
 import { useAuth } from '../../hooks/useAuth';
 import { useAccount } from '../../hooks/useAccount';
+import { TAuthPayload } from '../../types/Common';
 import formFieldsMap from '../../maps/formFieldsMap';
 
 type LoginFormProps = {
@@ -17,19 +17,15 @@ export const AuthLogin = observer(({ onError }: LoginFormProps) => {
   const { text } = useLocale()
   const { setAuthStatus } = useAuth()
   const { setAccount } = useAccount()
-  const { post } = useApi()
-  const [authData, setAuthData] = useState({
-    email: '',
-    password: ''
-  })
+  const { api: { login } } = useApi()
+  const [authData, setAuthData] = useState<TAuthPayload>({ email: '', password: '' })
 
-  const tryAuth = (event: any) => {
+  const tryAuth = (event: BaseSyntheticEvent) => {
     event.preventDefault()
-    post<Authentication>('/api/users/login', authData)
-      .then((response) => {
-        localStorage.setItem('token', response.data.accessToken)
+    login(authData)
+      .then((user) => {
         setAuthStatus(true)
-        setAccount(response.data.user)
+        setAccount(user)
       })
       .catch((error) => {
         onError(text(error.message))

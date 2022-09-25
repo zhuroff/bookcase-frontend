@@ -1,12 +1,9 @@
-import { TPaginatorResponse, TEntityLink } from "./Common"
+import { TPaginatorResponse, EntityLink, TEntityBasic } from "./Common"
 import { TBooksListItem } from './Books'
 
-export type TCategoryMin = {
-  _id: string
-  title: string
-}
+export type TCategoryKeys = 'authors' | 'genres' | 'publishers' | 'series'
 
-export type TCategoryBasic = TCategoryMin & {
+export type TCategoryBasic = TEntityBasic & {
   isDraft: boolean
   booksCount: number
   isAdded?: true
@@ -28,7 +25,7 @@ export type TCategoryAuthor = TCategoryBasic & {
 }
 
 export type TCategoryAuthorPage = Omit<TCategoryAuthor, 'books'> & TCategoryPage & {
-  links?: TEntityLink[]
+  links?: EntityLink[]
 }
 
 export type TCategoryAuthorBook = {

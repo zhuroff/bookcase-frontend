@@ -7,43 +7,39 @@ import { Preloader } from '../../components/Preloader/Preloader';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
-import { TBooksListItem, TBooksResponse } from '../../types/Books';
-import { TPaginatorResponse } from '../../types/Common';
+import { TBooksListItem } from '../../types/Books';
+import { TPageConfig, TPaginatorResponse } from '../../types/Common';
 import { usePageConfig } from '../../hooks/usePageConfig';
-import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
+import { TCategoryBasic } from '../../types/Categories';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 
 export const Books = observer(() => {
   const navigate = useNavigate()
   const { text } = useLocale()
-  const { post } = useApi()
+  const { api: { getPaginatedList }, pagination } = useApi()
   const [searchParams] = useSearchParams()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'books' })
   const [bookListFetched, setBookListFetchedState] = useState(false)
   const [genres, setGenres] = useState<TCategoryBasic[]>([])
   const [bookList, setBookList] = useState<TBooksListItem[]>([])
-  const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
 
   const fetchBooks = () => {
-    post<TBooksResponse>('/api/books', pageConfig)
-      .then((response) => {
-        setBookList(response.data.docs)
-        setPagePagination(response.data.pagination)
-        setBookListFetchedState(true)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TBooksListItem>('books', pageConfig, setBookList)
+      .then(() => setBookListFetchedState(true))
+      .catch((error) => console.error(error))
   }
 
   const fetchGenres = () => {
-    post<TCategoriesResponse>('/api/genres', {
+    const config: TPageConfig = {
       page: 1,
       sort: { title: 1 },
       limit: 50,
       isDraft: false
-    })
-      .then((response) => setGenres(response.data.docs))
-      .catch((error) => console.dir(error))
+    }
+
+    getPaginatedList<TCategoryBasic>('genres', config, setGenres)
+      .catch((error) => console.error(error))
   }
 
   const genresOptions = (placeholder: string) => {
@@ -70,7 +66,7 @@ export const Books = observer(() => {
     <>
       <header className="section__heading">
         <h2 className="section__title">
-          {text('routes.books')} ({pagePagination?.totalDocs})
+          {text('routes.books')} ({pagination?.totalDocs})
         </h2>
 
         <ListActions
@@ -158,9 +154,9 @@ export const Books = observer(() => {
         }
       </ul>
 
-      {pagePagination &&
+      {pagination &&
         <Pagination
-          pagination={pagePagination}
+          pagination={pagination}
           switchPagination={(page) => {
             setBookListFetchedState(false)
             setPageConfig({ ...pageConfig, page })

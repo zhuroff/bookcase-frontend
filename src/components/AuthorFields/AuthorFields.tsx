@@ -2,13 +2,12 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocale } from '../../hooks/useLocale';
-import { TAuthorsResponse, TCategoryAuthor, TCategoryAuthorBook } from '../../types/Categories';
+import { TCategoryAuthor, TCategoryAuthorBook } from '../../types/Categories';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
 import { useApi } from '../../hooks/useApi';
 import { usePageConfig } from '../../hooks/usePageConfig';
 import { useSearch } from '../../hooks/useSearch';
-import { TPaginatorResponse } from '../../types/Common';
 import { ModalHeader } from '../ModalHeader/ModalHeader';
 import { ModalCategoryList } from '../ModalCategoryList/ModalCategoryList';
 import { AuthorSingleField } from './AuthorSingleField';
@@ -31,11 +30,10 @@ export const AuthorFields = observer(({
   deleteOrRestore
 }: TAuthorFieldsProps) => {
   const { text } = useLocale()
-  const { post } = useApi()
-  const [createEntity] = useCreator()
+  const { api: { getPaginatedList }, pagination } = useApi()
+  const [create] = useCreator()
   const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'authors', isModal: true })
   const [searchQuery, setSearchQuery, searchResults, setSearchResults] = useSearch<TCategoryAuthor[]>({ collection: 'authors' })
-  const [pagePagination, setPagePagination] = useState<TPaginatorResponse | null>(null)
   const [authors, setAuthors] = useState<TCategoryAuthor[]>([])
   const [currentAuthorId, setCurrentAuthorId] = useState<string | null>(null)
   const [creatingMode, setCreatingMode] = useState(false)
@@ -45,16 +43,11 @@ export const AuthorFields = observer(({
   )
 
   const fetchAuthors = () => {
-    post<TAuthorsResponse>('/api/authors', pageConfig)
-      .then((response) => {
-        setAuthors(response.data.docs)
-        setPagePagination(response.data.pagination)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryAuthor>('authors', pageConfig, setAuthors)
   }
 
   const createNewAuthor = async () => {
-    const response = await createEntity<TCategoryAuthor>('authors', authorForm, false)
+    const response = await create<TCategoryAuthor>('authors', authorForm, false)
 
     if (response) {
       selectAuthor(response, currentAuthorId)
@@ -141,7 +134,7 @@ export const AuthorFields = observer(({
           searchName="modalSearch"
           searchQuery={searchQuery}
           isCreatable={true}
-          pagePagination={pagePagination}
+          pagePagination={pagination}
           setSearchQuery={(value) => setSearchQuery(value)}
           createEntity={() => setCreatingMode(true)}
           switchPagination={(page) => {

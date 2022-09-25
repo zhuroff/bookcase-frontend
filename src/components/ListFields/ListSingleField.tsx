@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { TCategoryMin } from '../../types/Categories';
+import { TEntityBasic } from '../../types/Common';
 import { TBookList, TListPage } from '../../types/List';
 import { ListSingleSublist } from './ListSingleSublist';
 import { useApi } from '../../hooks/useApi';
@@ -10,7 +10,7 @@ type TListFieldProps = {
   list: TBookList
   sublistPlaceholder: string
   setListId: (listId: string) => void
-  setSublist: (listId: string, oldValue: string, newValue: TCategoryMin) => void
+  setSublist: (listId: string, oldValue: string, newValue: TEntityBasic) => void
   deleteOrRestore: (key: 'lists', _id: string) => void
   addSublist: (listId: string) => void
   removeSublist: (listId: string, sublistId: string) => void
@@ -27,8 +27,8 @@ export const ListSingleField = ({
   removeSublist,
   fetchLists
 }: TListFieldProps) => {
-  const { get } = useApi()
-  const [fullSublist, setFullSublist] = useState<TCategoryMin[]>([])
+  const { api: { getEntity } } = useApi()
+  const [fullSublist, setFullSublist] = useState<TEntityBasic[]>([])
 
   const sublistOptions = useMemo(() => (
     fullSublist.filter((sublist) => (
@@ -37,9 +37,9 @@ export const ListSingleField = ({
   ), [fullSublist, list.lists])
 
   useEffect(() => {
-    get<TListPage>(`/api/lists/${list._id}`)
-      .then((response) => {
-        setFullSublist(response.data.lists.map(({ title, _id }) => ({ title, _id })))
+    getEntity<TListPage>(`lists/${list._id}`)
+      .then((data) => {
+        setFullSublist(data.lists.map(({ title, _id }) => ({ title, _id })))
       })
   }, [list._id])
 

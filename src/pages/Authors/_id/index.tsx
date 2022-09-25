@@ -10,7 +10,6 @@ import { useLocale } from '../../../hooks/useLocale';
 import { usePageConfig } from '../../../hooks/usePageConfig';
 import { useToast } from '../../../hooks/useToast';
 import { TCategoryAuthorPage } from '../../../types/Categories';
-import { EntityError } from '../../../types/Common';
 
 export const Author = observer(() => {
   const params = useParams()
@@ -18,8 +17,8 @@ export const Author = observer(() => {
   const navigate = useNavigate()
   const toast = useToast()
   const { text } = useLocale()
-  const { post, patch, remove } = useApi()
-  const [pageConfig, setPageConfig] = usePageConfig({ pageKey: 'category:authors' })
+  const { api: { getConfiguredEntity, saveEntity, deleteEntity } } = useApi()
+  const [pageConfig] = usePageConfig({ pageKey: 'category:authors' })
   const [isAuthorFetched, setIsAuthorFetched] = useState(false)
   const [author, setAuthor] = useReducer(
     (author: TCategoryAuthorPage, payload: Partial<TCategoryAuthorPage>) => ({ ...author, ...payload }),
@@ -29,10 +28,8 @@ export const Author = observer(() => {
   const { callConfirmation } = useConfirm()
 
   const fetchAuthor = () => {
-    post<TCategoryAuthorPage>(`/api/authors/${params.id}`, { ...pageConfig, slug: 'authors' })
-      .then((response) => setAuthor(response.data))
-      .then(_ => setIsAuthorFetched(true))
-      .catch((error) => console.dir(error))
+    getConfiguredEntity<Partial<TCategoryAuthorPage>>(`authors/${params.id}`, pageConfig, 'authors', setAuthor)
+      .then(() => setIsAuthorFetched(true))
   }
 
   const patchedPayload = () => (
@@ -56,7 +53,7 @@ export const Author = observer(() => {
     }
 
     patchAuthor({ isDraft: author.isDraft }, 'authors.successSaving')
-      .then((response?: { isSuccess: true } | void) => (
+      .then((response) => (
         response?.isSuccess && setUpdates((prevState) => (
           new Set([...prevState].filter(() => false))
         ))
@@ -85,28 +82,16 @@ export const Author = observer(() => {
     requiredPayload: Pick<TCategoryAuthorPage, 'isDraft'>,
     message: string
   ) => {
-    return await patch<{ isSuccess: true }>(
-      `/api/authors/${params.id}`,
-      { ...patchedPayload(), ...requiredPayload }
-    )
-      .then((response) => {
+    const payload = { ...patchedPayload(), ...requiredPayload }
+    return saveEntity<{ isSuccess: true }, typeof payload>(`authors/${params.id}`, payload)
+      .then((data) => {
         toast.current?.show({
           severity: 'success',
           summary: text('success'),
           detail: text(message),
           life: 5000
         })
-        return response.data
-      })
-      .catch((error: EntityError[]) => {
-        error.forEach((err) => {
-          toast.current?.show({
-            severity: 'error',
-            summary: text('error'),
-            detail: text(err.msg),
-            life: 5000
-          })
-        })
+        return data
       })
   }
 
@@ -122,17 +107,8 @@ export const Author = observer(() => {
       return false
     }
 
-    remove(`/api/authors/${params.id}`)
-      .then(_ => toast.current?.show({
-        severity: 'success',
-        summary: text('success'),
-        detail: text('common.successDeleted'),
-        life: 5000
-      }))
-      .then(_ => {
-        navigate('/authors', { replace: true })
-      })
-      .catch((error) => console.dir(error))
+    deleteEntity(`authors/${params.id}`)
+      .then(() => navigate('/authors', { replace: true }))
   }
 
   const updateAuthorName = (value: string, key: keyof TCategoryAuthorPage) => {

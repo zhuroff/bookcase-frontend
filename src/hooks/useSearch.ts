@@ -9,29 +9,16 @@ export type TUseSearchProps = {
 }
 
 export const useSearch = <T>({ collection }: TUseSearchProps) => {
-  const { post } = useApi()
+  const { api: { getSearchResults } } = useApi()
   const { text } = useLocale()
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<T | null>(null)
   const toast = useToast()
   const debouncedValue = useDebounce<string>(searchQuery)
 
-  const fetchSearchResults = () => {
-    post<T>('/api/search', { query: searchQuery, collection })
-      .then((response) => setSearchResults(response.data))
-      .catch((error) => {
-        toast.current?.show({
-          severity: 'error',
-          summary: text('error'),
-          detail: text(error.message),
-          life: 3000
-        });
-      })
-  }
-
   useEffect(() => {
     if (debouncedValue.length) {
-      fetchSearchResults()
+      getSearchResults<T>(searchQuery, setSearchResults, collection)
     }
   }, [debouncedValue])
 

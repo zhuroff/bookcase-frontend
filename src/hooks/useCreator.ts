@@ -5,16 +5,16 @@ import { useLocale } from './useLocale';
 import { useToast } from './useToast';
 
 export const useCreator = () => {
-  const { post } = useApi()
+  const { api: { createEntity } } = useApi()
   const { text } = useLocale()
   const toast = useToast()
   const navigate = useNavigate()
 
-  const createEntity = async <T extends Partial<TCategoryBasic>>(entityType: string, payload: T, isRedirect = true) => {
-    return await post<T>(`/api/${entityType}/create`, payload)
-      .then((response) => {
+  const create = async <T extends Partial<TCategoryBasic>>(entityType: string, payload: T, isRedirect = true) => {
+    return createEntity<T, Partial<TCategoryBasic>>(`${entityType}/create`, payload)
+      .then((data) => {
         if (isRedirect) {
-          navigate(`/${entityType}/${response.data._id}/edit`, { replace: true })
+          navigate(`/${entityType}/${data._id}/edit`, { replace: true })
         } else {
           toast.current?.show({
             severity: 'success',
@@ -22,11 +22,11 @@ export const useCreator = () => {
             detail: text('common.successCreated'),
             life: 5000
           })
-          return response.data
+          return data
         }
       })
-      .catch((error) => console.dir(error))
+      .catch((error) => console.error(error))
   }
 
-  return [createEntity] as const
+  return [create] as const
 }

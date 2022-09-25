@@ -18,16 +18,16 @@ export const Root = observer(() => {
   const { setLocale, text } = useLocale()
   const { isAuthenticated, setAuthStatus } = useAuth()
   const { setAccount } = useAccount()
-  const { get } = useApi()
+  const { api } = useApi()
   const toast = useToast()
 
   const checkAuthentication = () => {
     if (localStorage.getItem('token')) {
-      get<Authentication>('api/users/refresh')
-        .then((response) => {
-          localStorage.setItem('token', response.data.accessToken)
+      api.getEntity<Authentication>('users/refresh')
+        .then((data) => {
+          localStorage.setItem('token', data.accessToken)
           setAuthStatus(true)
-          setAccount(response.data.user)
+          setAccount(data.user)
           setIsAuthChecked(true)
         })
         .catch((error) => {

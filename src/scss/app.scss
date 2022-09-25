@@ -3,6 +3,7 @@
 @import 'primereact/resources/themes/vela-green/theme.css';
 // @import 'primereact/resources/themes/nova/theme.css';
 @import 'primereact/resources/primereact.min.css';
+@import 'primeflex/primeflex.min.css';
 @import 'primeicons/primeicons.css';
 @import './reset';
 @import './common';
@@ -54,7 +55,7 @@ body {
   display: grid;
   grid-template-columns: $sidebarWidth 1fr;
   grid-template-rows: $headerHeight 1fr;
-  grid-template-areas: 
+  grid-template-areas:
     "sidebar header"
     "sidebar main"
     "sidebar main";
@@ -69,5 +70,5 @@ body {
 
   .main {
     grid-area: main;
-  }  
+  }
 }

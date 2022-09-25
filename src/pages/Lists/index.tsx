@@ -9,10 +9,10 @@ import { Preloader } from '../../components/Preloader/Preloader';
 import { useApi } from '../../hooks/useApi';
 import { useLocale } from '../../hooks/useLocale';
 import { usePageConfig } from '../../hooks/usePageConfig';
-import { TCategoriesResponse, TCategoryBasic } from '../../types/Categories';
+import { TCategoryBasic } from '../../types/Categories';
 
 export const Lists = observer(() => {
-  const { post } = useApi()
+  const { api: { getPaginatedList } } = useApi()
   const { text } = useLocale()
   const [searchParams] = useSearchParams()
   const location = useLocation()
@@ -21,12 +21,9 @@ export const Lists = observer(() => {
   const [list, setList] = useState<TCategoryBasic[]>([])
 
   const fetchLists = () => {
-    post<TCategoriesResponse>('/api/lists', pageConfig)
-      .then((response) => {
-        setList(response.data.docs)
-        setListFetchedState(true)
-      })
-      .catch((error) => console.dir(error))
+    getPaginatedList<TCategoryBasic>('lists', pageConfig, setList)
+      .then(() => setListFetchedState(true))
+      .catch((error) => console.error(error))
   }
 
   useEffect(() => {

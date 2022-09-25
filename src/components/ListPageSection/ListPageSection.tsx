@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite';
 import { TListSection } from '../../types/List';
 import { ListPageSectionRow } from './ListPageSectionRow';
 import { useLocale } from '../../hooks/useLocale';
-import './ListPageSection.scss';
 import { Button } from 'primereact/button';
+import './ListPageSection.scss';
 
 type TListPageViewProps = {
   section: TListSection

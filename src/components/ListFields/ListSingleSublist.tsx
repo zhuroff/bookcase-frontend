@@ -1,15 +1,14 @@
-import { observer } from 'mobx-react-lite';
 import { Dropdown, DropdownProps } from 'primereact/dropdown';
-import { TCategoryMin } from '../../types/Categories';
+import { TEntityBasic } from '../../types/Common';
 import { Button } from 'primereact/button';
 
 type TListSingleSublistProps = {
   listId: string
   sublistPlaceholder: string
   sublistLength: number
-  sublistOptions: TCategoryMin[]
-  currentValue: TCategoryMin
-  setSublist: (listId: string, oldValue: string, newValue: TCategoryMin) => void
+  sublistOptions: TEntityBasic[]
+  currentValue: TEntityBasic
+  setSublist: (listId: string, oldValue: string, newValue: TEntityBasic) => void
   removeSublist: (listId: string, sublistId: string) => void
 }
 

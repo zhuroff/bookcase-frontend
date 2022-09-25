@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
-class Account {
+export class Account {
   id: string = ''
   email: string = ''
   role: string = ''

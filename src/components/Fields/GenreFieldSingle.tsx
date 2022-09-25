@@ -2,7 +2,7 @@ import { Button } from 'primereact/button'
 import { Card } from 'primereact/card'
 import { TCategoryBasic } from '../../types/Categories'
 
-type TGenreSingleFieldProps = {
+type TGenreFieldSingleProps = {
   genre: TCategoryBasic
   isDeleted?: boolean
   isUndeletable: boolean
@@ -11,14 +11,14 @@ type TGenreSingleFieldProps = {
   deleteOrRestore: (key: 'genres') => void
 }
 
-export const GenreSingleField = ({
+export const GenreFieldSingle = ({
   genre,
   isDeleted,
   isUndeletable,
   fetchGenres,
   setGenreId,
   deleteOrRestore
-}: TGenreSingleFieldProps) => {
+}: TGenreFieldSingleProps) => {
   return (
     <Card className={isDeleted ? '--deleted' : ''}>
       {isDeleted &&

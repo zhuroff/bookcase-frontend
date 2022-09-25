@@ -1,6 +1,7 @@
 import { TCategoryAuthor, TCategoryAuthorBook, TCategoryBasic, TCategoryPublisherBook } from "./Categories"
 import { TPaginatorResponse } from "./Common"
 import { TBookList } from "./List"
+import { TNote } from "./Note"
 
 export type TBookStatus = {
   start: string | null
@@ -40,6 +41,7 @@ export type TBookPage = Omit<TBooksListItem, 'authors' | 'lists'> & {
   rating?: number
   series: TCategoryBasic
   summary?: string
+  notes: TNote[]
 }
 
 export type TBooksResponse = {
