@@ -50,11 +50,14 @@ export const Root = observer(() => {
 
   useEffect(() => {
     checkAuthentication()
-  })
+    // setAuthStatus(true)
+    // setAccount(data.user)
+    // setIsAuthChecked(true)
+  }, [])
 
   useLayoutEffect(() => {
     setLocale(localStorage.getItem('locale') as LocaleCodes || 'ru')
-  })
+  }, [])
 
   return (
     <>
